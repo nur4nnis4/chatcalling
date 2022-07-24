@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "820559575255",
+    "firebase_url": "https://chatcalling-63eb0-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "chatcalling-63eb0",
+    "storage_bucket": "chatcalling-63eb0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:820559575255:android:8bcab3b44c6d691c1b5892",
+        "android_client_info": {
+          "package_name": "com.example.chatcalling"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "820559575255-b0m5kdhal8826dvt37djs6kkqj51hj9k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chatcalling",
+            "certificate_hash": "ba967751f7e4ac09a76a7f550543e55a820aa038"
+          }
+        },
+        {
+          "client_id": "820559575255-gnusbqf7fkff5j0n5a5qfb3msaihk255.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQ6LJkksdnEbuz5QI967822pCoqRADp2M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "820559575255-gnusbqf7fkff5j0n5a5qfb3msaihk255.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
