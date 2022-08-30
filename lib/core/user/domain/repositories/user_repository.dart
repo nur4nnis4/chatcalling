@@ -4,6 +4,6 @@ import 'package:chatcalling/core/user/domain/entities/user_private_data.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class UserRepository {
-  Future<Either<Failure, User>> getUserData(String userId);
-  Future<Either<Failure, UserPrivateData>> getUserPrivateData(String userId);
+  Stream<Either<Failure, User>> getUserData(String userId);
+  Stream<Either<Failure, UserPrivateData>> getUserPrivateData(String userId);
 }

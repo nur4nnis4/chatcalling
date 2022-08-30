@@ -1,9 +1,9 @@
 {
-    "messageId": "messageQ3BMyS8o1LVSHYyWQFQf",
-    "conversationId": "conversationId",
+    "messageId": "messageId",
+    "conversationId": "user1Id-user2Id",
     "text":"Hello",
-    "senderId":"userG8HSGydbbds",
-    "receiverId":"userG8HSGydbbds",
+    "senderId":"user1Id",
+    "receiverId":"user2Id",
     "timeStamp":"2022-07-18T16:37:47.475845Z", 
     "isRead":false,
     "attachmentUrl":"http://image1.jpg"

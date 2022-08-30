@@ -21,12 +21,13 @@ void main() {
 
   test('Should get messages from the repository', () async {
     // Arrange
-    when(mockMessageRepository.getMessages(any))
-        .thenAnswer((_) async => Right(tMessageList));
+    when(mockMessageRepository.getMessages(any)).thenAnswer((_) async* {
+      yield Right(tMessageList);
+    });
     // Act
-    final result = await usecase(conversationId: tConversationId);
+    final actual = await usecase(conversationId: tConversationId).first;
     //Assert
-    expect(result, equals(Right(tMessageList)));
+    expect(actual, Right(tMessageList));
     verify(mockMessageRepository.getMessages(tConversationId));
     verifyNoMoreInteractions(mockMessageRepository);
   });

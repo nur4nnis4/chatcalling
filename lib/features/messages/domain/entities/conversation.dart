@@ -1,16 +1,17 @@
 import 'package:equatable/equatable.dart';
 
+// ignore: must_be_immutable
 class Conversation extends Equatable {
   final String conversationId;
-  final String contactId;
-  final String lastText;
-  final DateTime lastMessageTime;
-  final String lastSenderId;
-  final int totalUnreadMessages;
+  String friendId;
+  String lastText;
+  DateTime lastMessageTime;
+  String lastSenderId;
+  int totalUnreadMessages;
 
   Conversation(
       {required this.conversationId,
-      required this.contactId,
+      required this.friendId,
       required this.lastText,
       required this.lastMessageTime,
       required this.lastSenderId,
@@ -19,7 +20,7 @@ class Conversation extends Equatable {
   @override
   List<Object?> get props => [
         conversationId,
-        contactId,
+        friendId,
         lastText,
         lastMessageTime,
         lastSenderId,

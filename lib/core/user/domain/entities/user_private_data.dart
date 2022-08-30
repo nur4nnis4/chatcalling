@@ -4,7 +4,7 @@ class UserPrivateData extends Equatable {
   final String userId;
   final String email;
   final String phoneNumber;
-  final DateTime gender;
+  final String gender;
   final DateTime dateOfBirth;
 
   const UserPrivateData({

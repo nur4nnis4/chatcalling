@@ -5,7 +5,9 @@ import '../../../../core/error/failures.dart';
 import '../entities/message.dart';
 
 abstract class MessageRepository {
-  Future<Either<Failure, List<Message>>> getMessages(String conversationId);
-  Future<Either<Failure, void>> sendMessage(Message message);
-  Future<Either<Failure, List<Conversation>>> getConversations(String userId);
+  Stream<Either<Failure, List<Message>>> getMessages(String conversationId);
+  Future<Either<Failure, String>> sendMessage(Message message);
+  Stream<Either<Failure, List<Conversation>>> getConversations(String userId);
+  Future<Either<Failure, String>> updateReadStatus(
+      String userId, String conversationId);
 }

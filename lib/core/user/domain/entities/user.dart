@@ -7,8 +7,8 @@ class User extends Equatable {
   final DateTime signUpTime;
   final bool isOnline;
   final DateTime lastOnline;
-  final String? about;
-  final String? photoUrl;
+  final String about;
+  final String photoUrl;
 
   const User({
     required this.userId,
@@ -17,8 +17,8 @@ class User extends Equatable {
     required this.signUpTime,
     required this.isOnline,
     required this.lastOnline,
-    this.about,
-    this.photoUrl,
+    required this.about,
+    required this.photoUrl,
   });
 
   @override

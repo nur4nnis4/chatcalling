@@ -8,7 +8,7 @@ class GetUserData {
 
   GetUserData(this.repository);
 
-  Future<Either<Failure, User>> call({required String userId}) async {
-    return await repository.getUserData(userId);
+  Stream<Either<Failure, User>> call({required String userId}) async* {
+    yield* repository.getUserData(userId);
   }
 }

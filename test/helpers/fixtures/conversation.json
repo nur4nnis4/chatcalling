@@ -1,8 +1,10 @@
 {
-  "conversationId": "conversationId",
-  "contactId": "contactId",
-  "lastText": "lastText",
+  "conversationId": "user1Id-user2Id",
+  "lastText": "Hello",
   "lastMessageTime": "2022-07-18T16:37:47.475845Z",
-  "lastSenderId": "lastSenderId",
-  "totalUnreadMessages": 1
+  "lastSenderId": "user1Id",
+  "members": {
+    "user1Id": {"totalUnread": 0, "friendId": "user2Id"},
+    "user2Id": {"totalUnread": 1, "friendId": "user1Id"}
+  }
 }

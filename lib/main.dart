@@ -1,10 +1,11 @@
-import 'package:chatcalling/features/main_screen.dart';
+import 'package:chatcalling/features/messages/presentation/pages/messages_screen.dart';
+import 'package:chatcalling/injector.dart' as Injector;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  Injector.init();
   runApp(ChatApp());
 }
 
@@ -20,7 +21,12 @@ class ChatApp extends StatelessWidget {
           primarySwatch: Colors.deepPurple,
           appBarTheme: AppBarTheme(
               backgroundColor: Theme.of(context).scaffoldBackgroundColor)),
-      home: MainScreen(),
+      home: Scaffold(
+        body: FutureBuilder(
+          future: Firebase.initializeApp(),
+          builder: (context, snapshot) => MessagesScreen(),
+        ),
+      ),
     );
   }
 }

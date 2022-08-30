@@ -1,7 +1,9 @@
-import 'package:chatcalling/core/error/exceptions.dart';
+import 'dart:async';
+
 import 'package:chatcalling/core/network/network_info.dart';
 import 'package:chatcalling/features/messages/data/datasources/message_local_datasource.dart';
 import 'package:chatcalling/features/messages/data/datasources/message_remote_datasource.dart';
+import 'package:chatcalling/features/messages/data/models/message_model.dart';
 import 'package:chatcalling/features/messages/domain/entities/message.dart';
 import 'package:chatcalling/features/messages/domain/entities/conversation.dart';
 import 'package:chatcalling/core/error/failures.dart';
@@ -19,53 +21,51 @@ class MessageRepositoryImpl implements MessageRepository {
       required this.networkInfo});
 
   @override
-  Future<Either<Failure, List<Message>>> getMessages(
-      String conversationId) async {
+  Stream<Either<Failure, List<MessageModel>>> getMessages(
+      String conversationId) async* {
     if (await networkInfo.isConnected) {
-      try {
-        final remoteMessageList =
-            await messageRemoteDatasource.getMessages(conversationId);
-        await messageLocalDatasource.cacheMessages(remoteMessageList);
-        return Right(remoteMessageList);
-      } on ServerException {
-        return Left(ServerFailure(''));
-      }
-    } else {
-      try {
-        final localMessageList = await messageLocalDatasource.getMessages();
-        return Right(localMessageList);
-      } on CacheException {
-        return Left(CacheFailure(''));
-      }
-    }
+      final messageListStream = messageRemoteDatasource
+          .getMessages(conversationId)
+          .asBroadcastStream();
+      messageListStream.listen((event) {
+        if (event.isRight())
+          messageLocalDatasource.cacheMessages(event.getOrElse(() => []));
+      });
+      yield* messageListStream;
+    } else
+      yield await messageLocalDatasource.getMessages();
   }
 
   @override
-  Future<Either<Failure, List<Conversation>>> getConversations(
-      String userId) async {
+  Stream<Either<Failure, List<Conversation>>> getConversations(
+      String userId) async* {
     if (await networkInfo.isConnected) {
-      try {
-        final remoteConversationList =
-            await messageRemoteDatasource.getConversations(userId);
-        await messageLocalDatasource.cacheConversations(remoteConversationList);
-        return Right(remoteConversationList);
-      } on ServerException {
-        return Left(ServerFailure(''));
-      }
-    } else {
-      try {
-        final localConversationList =
-            await messageLocalDatasource.getConversations();
-        return Right(localConversationList);
-      } on CacheException {
-        return Left(CacheFailure(''));
-      }
-    }
+      final conversationListStream =
+          messageRemoteDatasource.getConversations(userId).asBroadcastStream();
+      conversationListStream.listen((event) {
+        if (event.isRight())
+          messageLocalDatasource.cacheConversations(event.getOrElse(() => []));
+      });
+      yield* conversationListStream;
+    } else
+      yield await messageLocalDatasource.getConversations();
   }
 
   @override
-  Future<Either<Failure, void>> sendMessage(Message message) async {
-    // TODO: implement sendMessage
-    throw UnimplementedError();
+  Future<Either<Failure, String>> sendMessage(Message message) async {
+    if (await networkInfo.isConnected)
+      return messageRemoteDatasource
+          .sendMessage(MessageModel.fromEntity(message));
+    else
+      return Left(ConnectionFailure(''));
+  }
+
+  @override
+  Future<Either<Failure, String>> updateReadStatus(
+      String userId, String conversationId) async {
+    if (await networkInfo.isConnected) {
+      return messageRemoteDatasource.updateReadStatus(userId, conversationId);
+    } else
+      return Left(ConnectionFailure(''));
   }
 }

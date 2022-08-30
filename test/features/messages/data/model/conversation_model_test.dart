@@ -14,11 +14,13 @@ void main() {
   });
 
   final tConversationJson = jsonDecode(fixture("conversation.json"));
+  final String tUserId = 'user1Id';
 
   group('fromJson', () {
     test('should return a valid model', () async {
       // Act
-      final result = ConversationModel.fromJson(tConversationJson);
+      final result =
+          ConversationModel.fromJson(json: tConversationJson, userId: tUserId);
 
       //Assert
       expect(result, FakeObject.tConversationModel);
@@ -29,7 +31,8 @@ void main() {
         "should retun JSON map containing proper data when FakeObject.tConversationModel.lastMessageTime is UTC",
         () async {
       // Act
-      final result = FakeObject.tConversationModel.toJson();
+      final result = FakeObject.tConversationModel
+          .toJson(userId: tUserId, friendTotalUnread: 1);
 
       // Assert
       expect(result, tConversationJson);
@@ -39,10 +42,22 @@ void main() {
         "should retun JSON map containing proper data when FakeObject.tConversationModel.lastMessageTime is not UTC",
         () async {
       // Act
-      final result = FakeObject.tConversationModelNotUTC.toJson();
+      final result = FakeObject.tConversationModelNotUTC
+          .toJson(userId: tUserId, friendTotalUnread: 1);
 
       // Assert
       expect(result, tConversationJson);
+    });
+  });
+
+  group('fromJson', () {
+    test('should return a valid model', () async {
+      // Act
+      final result =
+          ConversationModel.fromMessage(message: FakeObject.tMessageModel);
+
+      //Assert
+      expect(result, FakeObject.tConversationModel);
     });
   });
 }

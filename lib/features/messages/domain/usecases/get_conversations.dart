@@ -4,12 +4,12 @@ import '../../../../core/error/failures.dart';
 import '../entities/conversation.dart';
 import '../repositories/message_repository.dart';
 
-class GetConversation {
+class GetConversations {
   final MessageRepository repository;
-  GetConversation(this.repository);
+  GetConversations(this.repository);
 
-  Future<Either<Failure, List<Conversation>>> call(
-      {required String userId}) async {
-    return await repository.getConversations(userId);
+  Stream<Either<Failure, List<Conversation>>> call(
+      {required String userId}) async* {
+    yield* repository.getConversations(userId);
   }
 }

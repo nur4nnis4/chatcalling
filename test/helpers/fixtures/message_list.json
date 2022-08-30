@@ -1,10 +1,47 @@
 [{
-    "messageId": "messageQ3BMyS8o1LVSHYyWQFQf",
-    "conversationId": "conversationId",
+    "messageId": "message1Id",
+    "conversationId": "user1Id-user2Id",
     "text":"Hello",
-    "senderId":"userG8HSGydbbds",
-    "receiverId":"userG8HSGydbbds",
+    "senderId":"user1Id",
+    "receiverId":"user2Id",
     "timeStamp":"2022-07-18T16:37:47.475845Z", 
     "isRead":false,
     "attachmentUrl":"http://image1.jpg"
-}]
+},{
+    "messageId": "message2Id",
+    "conversationId": "user1Id-user2Id",
+    "text":"Hello",
+    "senderId":"user2Id",
+    "receiverId":"user1Id",
+    "timeStamp":"2022-07-08T16:37:47.475845Z", 
+    "isRead":true,
+    "attachmentUrl":"http://image1.jpg"
+},{
+    "messageId": "message3Id",
+    "conversationId": "user1Id-user2Id",
+    "text":"Hello",
+    "senderId":"user1Id",
+    "receiverId":"user2Id",
+    "timeStamp":"2022-07-05T16:37:47.475845Z", 
+    "isRead":false,
+    "attachmentUrl":"http://image1.jpg"
+},{
+    "messageId": "message4Id",
+    "conversationId": "user1Id-user2Id",
+    "text":"Hello",
+    "senderId":"user2Id",
+    "receiverId":"user1Id",
+    "timeStamp":"2022-07-27T16:37:47.475845Z", 
+    "isRead":false,
+    "attachmentUrl":"http://image1.jpg"
+},{
+    "messageId": "message5Id",
+    "conversationId": "user1Id-user2Id",
+    "text":"Hello",
+    "senderId":"user2Id",
+    "receiverId":"user1Id",
+    "timeStamp":"2022-07-02T16:37:47.475845Z", 
+    "isRead":false,
+    "attachmentUrl":"http://image1.jpg"
+}
+]
