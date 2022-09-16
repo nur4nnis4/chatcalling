@@ -16,10 +16,13 @@ import 'package:chatcalling/features/messages/presentation/utils/message_input_c
 import 'package:mockito/annotations.dart';
 
 @GenerateMocks([
+  // CORE - User
   UserRepository,
   UserRemoteDatasource,
   UserLocalDatasource,
   GetUserData,
+
+  // Features - Messages
   MessageRepository,
   MessageRemoteDatasource,
   MessageLocalDatasource,
@@ -28,7 +31,11 @@ import 'package:mockito/annotations.dart';
   SendMessage,
   UpdateReadStatus,
   MessageInputConverter,
+
+  // Core - Network
   NetworkInfo,
+
+  // Core - Helpers
   Time,
   UniqueId,
 ])

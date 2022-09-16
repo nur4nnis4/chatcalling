@@ -417,13 +417,8 @@ class MockTime extends _i1.Mock implements _i6.Time {
   }
 
   @override
-  DateTime getCurrent() =>
-      (super.noSuchMethod(Invocation.method(#getCurrent, []),
-          returnValue: _FakeDateTime_6()) as DateTime);
-  @override
-  String humanize(DateTime? time) =>
-      (super.noSuchMethod(Invocation.method(#humanize, [time]), returnValue: '')
-          as String);
+  DateTime now() => (super.noSuchMethod(Invocation.method(#getCurrent, []),
+      returnValue: _FakeDateTime_6()) as DateTime);
 }
 
 /// A class which mocks [UniqueId].

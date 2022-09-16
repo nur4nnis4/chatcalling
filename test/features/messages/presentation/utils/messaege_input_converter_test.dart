@@ -22,7 +22,7 @@ void main() {
       // Arrange
       when(mockUniqueId.random()).thenReturn(tMessage.messageId);
       when(mockUniqueId.concat(any, any)).thenReturn(tMessage.conversationId);
-      when(mockTime.getCurrent()).thenReturn(tMessage.timeStamp);
+      when(mockTime.now()).thenReturn(tMessage.timeStamp);
       // Act
       final actual = converter.toMessage(tMessage.text, tMessage.senderId,
           tMessage.receiverId, tMessage.attachmentUrl);
@@ -32,7 +32,7 @@ void main() {
       verify(mockUniqueId.random()).called(1);
       verify(mockUniqueId.concat(tMessage.senderId, tMessage.receiverId))
           .called(1);
-      verify(mockTime.getCurrent()).called(1);
+      verify(mockTime.now()).called(1);
     });
   });
 }

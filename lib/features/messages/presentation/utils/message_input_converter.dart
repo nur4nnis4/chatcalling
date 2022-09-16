@@ -15,7 +15,7 @@ class MessageInputConverter {
         senderId: userId,
         receiverId: receiverId,
         text: text,
-        timeStamp: time.getCurrent(),
+        timeStamp: time.now(),
         attachmentUrl: attachmentPath,
         isRead: false,
         conversationId: uniqueId.concat(userId, receiverId));
