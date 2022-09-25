@@ -14,11 +14,11 @@ import 'package:chatcalling/features/messages/domain/repositories/message_reposi
 import 'package:chatcalling/features/messages/domain/usecases/get_conversations.dart';
 import 'package:chatcalling/features/messages/domain/usecases/send_message.dart';
 import 'package:chatcalling/features/messages/domain/usecases/update_read_status.dart';
-import 'package:chatcalling/features/messages/presentation/bloc/messages_bloc.dart';
+import 'package:chatcalling/features/messages/presentation/bloc/conversation_list_bloc/conversation_list_bloc.dart';
+import 'package:chatcalling/features/messages/presentation/bloc/message_list_bloc.dart/message_list_bloc.dart';
 import 'package:chatcalling/features/messages/presentation/utils/message_input_converter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 import 'features/messages/domain/usecases/get_messages.dart';
 
@@ -29,25 +29,26 @@ void init() {
   initMessage();
 
   // CORE - Network
-  sLocator
-      .registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sLocator()));
+  sLocator.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl());
 
   // CORE - User
   initUser();
 
   // Core - Helpers
   sLocator.registerLazySingleton<UniqueId>(() => UniqueIdImpl());
+  sLocator.registerLazySingleton(() => TimeFormat(time: sLocator()));
   sLocator.registerLazySingleton<Time>(() => TimeImpl());
 
   // EXTERNAL
-  sLocator.registerLazySingleton(() => InternetConnectionChecker());
-  sLocator.registerSingleton(() => FirebaseFirestore.instance);
+
+  sLocator.registerLazySingleton<FirebaseFirestore>(
+      () => FirebaseFirestore.instance);
 }
 
 void initMessage() {
   // Bloc
   sLocator.registerFactory(
-    () => MessagesBloc(
+    () => MessageListBloc(
       getConversations: sLocator(),
       getMessages: sLocator(),
       sendMessage: sLocator(),
@@ -55,6 +56,9 @@ void initMessage() {
       messageInputConverter: sLocator(),
     ),
   );
+
+  sLocator.registerFactory(
+      () => ConversationListBloc(getConversations: sLocator()));
 
   // Use cases
   sLocator.registerLazySingleton(() => GetMessages(sLocator()));
@@ -64,9 +68,9 @@ void initMessage() {
 
   // Repository
   sLocator.registerLazySingleton<MessageRepository>(() => MessageRepositoryImpl(
-      messageLocalDatasource: sLocator(),
-      messageRemoteDatasource: sLocator(),
-      networkInfo: sLocator()));
+        messageLocalDatasource: sLocator(),
+        messageRemoteDatasource: sLocator(),
+      ));
 
   // Data sources
   sLocator.registerLazySingleton<MessageRemoteDatasource>(

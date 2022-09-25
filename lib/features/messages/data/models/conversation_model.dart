@@ -22,35 +22,33 @@ class ConversationModel extends Conversation {
           {required Map<String, dynamic>? json, required String userId}) =>
       ConversationModel(
         conversationId: json?['conversationId'],
-        friendId: json?['members'][userId]['friendId'],
+        friendId: json?['member_details'][userId]['friendId'],
         lastText: json?['lastText'],
-        lastMessageTime: DateTime.parse(json?['lastMessageTime']),
+        lastMessageTime: DateTime.parse(json?['lastMessageTime']).toLocal(),
         lastSenderId: json?['lastSenderId'],
-        totalUnreadMessages: json?['members'][userId]['totalUnread'],
+        totalUnreadMessages: json?['member_details'][userId]['totalUnread'],
       );
 
   Map<String, dynamic> toJson(
-      {required String userId, int? friendTotalUnread}) {
-    return {
-      'conversationId': conversationId,
-      'lastText': lastText,
-      'lastMessageTime': lastMessageTime.isUtc
-          ? lastMessageTime.toIso8601String()
-          : lastMessageTime.toUtc().toIso8601String(),
-      'lastSenderId': lastSenderId,
-      'members': {
-        userId: {"totalUnread": totalUnreadMessages, "friendId": friendId},
-        friendId: {"totalUnread": friendTotalUnread ?? 1, "friendId": userId}
-      }
-    };
-  }
+          {required String userId, int? friendTotalUnread}) =>
+      {
+        'conversationId': conversationId,
+        'lastText': lastText,
+        'lastMessageTime': lastMessageTime.toUtc().toIso8601String(),
+        'lastSenderId': lastSenderId,
+        'members': [userId, friendId],
+        'member_details': {
+          userId: {"totalUnread": totalUnreadMessages, "friendId": friendId},
+          friendId: {"totalUnread": friendTotalUnread ?? 1, "friendId": userId}
+        }
+      };
 
   factory ConversationModel.fromMessage({required Message message}) {
     return ConversationModel(
         conversationId: message.conversationId,
         friendId: message.receiverId,
         lastText: message.text,
-        lastMessageTime: message.timeStamp,
+        lastMessageTime: message.timeStamp.toLocal(),
         lastSenderId: message.senderId,
         totalUnreadMessages: 0);
   }

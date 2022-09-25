@@ -1,53 +1,57 @@
-import 'package:chatcalling/core/widgets/custom_icon_button.dart';
-import 'package:chatcalling/features/messages/presentation/widgets/conversations_tile.dart';
-import 'package:chatcalling/l10n/l10n.dart';
 import 'package:flutter/material.dart ';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MessagesPage extends StatelessWidget {
+import '../bloc/conversation_list_bloc/conversation_list_bloc.dart';
+import '../widgets/conversations_tile.dart';
+import '../widgets/empty_conversation.dart';
+import '../widgets/m_page_app_bar.dart';
+
+class MessagesPage extends StatefulWidget {
   const MessagesPage({Key? key}) : super(key: key);
+
+  @override
+  State<MessagesPage> createState() => _MessagesPageState();
+}
+
+class _MessagesPageState extends State<MessagesPage> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => BlocProvider.of<ConversationListBloc>(context)
+        .add(ConversationListEvent()));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leadingWidth: 65,
-        leading: SolidIconButton(
-          icon: FontAwesomeIcons.magnifyingGlass,
-          iconSize: 12,
-        ),
-        title: Text(L10n.of(context).message,
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.onBackground,
-                fontSize: 15,
-                fontWeight: FontWeight.w600)),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-            child: CircleAvatar(
-              maxRadius: 17,
-              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-              // TODO : fix Network Image url
-              // foregroundImage: NetworkImage(
-              //   '',
-              // ),
-            ),
-          )
-        ],
-      ),
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        child: ListView.builder(
-          scrollDirection: Axis.vertical,
-          padding: const EdgeInsets.all(10),
-          itemCount: 14,
-          itemBuilder: (_, index) => ConversationsTile(
-              friendName: 'Haris Roundback',
-              lastText: 'Wanna go outside?',
-              lastMessageTime: "10:20",
-              totalUnreadMessages: '1',
-              friendPhotoUrl: ''),
-        ),
+      appBar: MessagePageAppBar(),
+      body: BlocBuilder<ConversationListBloc, ConversationListState>(
+        builder: (context, state) {
+          if (state is ConversationListEmpty) {
+            return EmptyConversation();
+          } else if (state is ConversationListLoading) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is ConversationListError) {
+            return Container(
+              child: Text("ERROR : ${state.errorMessage}"),
+            );
+          } else if (state is ConversationListLoaded)
+            return ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              padding: const EdgeInsets.all(10),
+              itemCount: state.conversationList.length,
+              itemBuilder: (_, index) => ConversationsTile(
+                  conversation: state.conversationList[index]),
+            );
+          else {
+            return Center(
+              child: Text('Something went wrong...'),
+            );
+          }
+        },
       ),
     );
   }

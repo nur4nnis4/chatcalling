@@ -1,11 +1,8 @@
-import 'dart:convert';
-
 import 'package:chatcalling/core/user/data/models/user_model.dart';
 import 'package:chatcalling/core/user/domain/entities/user.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../../../helpers/fixtures/dummy_objects.dart';
-import '../../../../helpers/fixtures/fixture_reader/fixture_reader.dart';
+import '../../../../helpers/fixtures/user_dummy.dart';
 
 void main() {
   test('UserModel Should be a subclass of User entity', () {
@@ -13,7 +10,6 @@ void main() {
     expect(tUserModel, isA<User>());
   });
 
-  final tUserJson = jsonDecode(fixture("user.json"));
   group('fromJson', () {
     test('Should return a valid model', () async {
       // Act

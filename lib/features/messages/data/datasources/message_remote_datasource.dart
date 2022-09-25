@@ -17,15 +17,15 @@ abstract class MessageRemoteDatasource {
 }
 
 class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
-  final FirebaseFirestore instance;
+  final FirebaseFirestore firestore;
 
-  MessageRemoteDatasourceImpl(this.instance);
+  MessageRemoteDatasourceImpl(this.firestore);
 
   @override
   Stream<Either<Failure, List<MessageModel>>> getMessages(
       String conversationId) async* {
     try {
-      yield* instance
+      yield* firestore
           .collection('conversations')
           .doc(conversationId)
           .collection('messages')
@@ -43,9 +43,9 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
   Stream<Either<Failure, List<ConversationModel>>> getConversations(
       String userId) async* {
     try {
-      yield* instance
+      yield* firestore
           .collection('conversations')
-          .where('members.$userId', isNotEqualTo: Null)
+          .where('members', arrayContains: userId)
           .orderBy('lastMessageTime', descending: true)
           .snapshots()
           .map((snapshot) => Right(snapshot.docs
@@ -53,7 +53,7 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
                   ConversationModel.fromJson(json: doc.data(), userId: userId))
               .toList()));
     } on PlatformException catch (e) {
-      yield Left(PlatformFailure(e.toString()));
+      yield Left(PlatformFailure("Platform Failure" + e.toString()));
     }
   }
 
@@ -61,7 +61,7 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
   Future<Either<Failure, String>> updateReadStatus(
       String userId, String conversationId) async {
     final conversationDocRef =
-        instance.collection('conversations').doc(conversationId);
+        firestore.collection('conversations').doc(conversationId);
 
     try {
       final unreadMessagesSnapshots = await conversationDocRef
@@ -75,7 +75,7 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
             .doc(element.id)
             .update({'isRead': true});
       });
-      conversationDocRef.update({'members.$userId.totalUnread': 0});
+      conversationDocRef.update({'member_details.$userId.totalUnread': 0});
     } on PlatformException catch (e) {
       return Left(PlatformFailure(e.toString()));
     }
@@ -91,17 +91,18 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
     } on PlatformException catch (e) {
       return Left(PlatformFailure(e.toString()));
     }
+
     return Right('Message has been sent');
   }
 
-  Future<void> updateOrAddConversation(ConversationModel conversation) {
+  Future<void> updateOrAddConversation(ConversationModel conversation) async {
     final conversationDocRef =
-        instance.collection('conversations').doc(conversation.conversationId);
-    return instance.runTransaction((transaction) async {
+        firestore.collection('conversations').doc(conversation.conversationId);
+    return firestore.runTransaction((transaction) async {
       final conversationSnapshot = await transaction.get(conversationDocRef);
       if (conversationSnapshot.exists) {
         final int friendTotalUnread = conversationSnapshot
-                .get('members.${conversation.friendId}.totalUnread') +
+                .get('member_details.${conversation.friendId}.totalUnread') +
             1;
         transaction.update(
             conversationDocRef,
@@ -115,8 +116,8 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
     });
   }
 
-  Future<void> addMessage(MessageModel message) {
-    return instance
+  Future<void> addMessage(MessageModel message) async {
+    return firestore
         .collection('conversations')
         .doc(message.conversationId)
         .collection('messages')

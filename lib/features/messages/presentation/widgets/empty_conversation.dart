@@ -6,7 +6,7 @@ class EmptyConversation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 17),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
@@ -17,9 +17,9 @@ class EmptyConversation extends StatelessWidget {
             style: TextStyle(
                 color: Theme.of(context).colorScheme.onBackground,
                 fontWeight: FontWeight.w800,
-                fontSize: 35),
+                fontSize: 38),
           ),
-          SizedBox(height: 5),
+          SizedBox(height: 10),
           Text(
             'Looks like you have not initiated any conversation yet.',
             style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
@@ -35,7 +35,7 @@ class EmptyConversation extends StatelessWidget {
                             width: 1.7,
                             color: Theme.of(context).colorScheme.primary)))),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
               child: Text(
                 'Write a Message',
                 style: TextStyle(

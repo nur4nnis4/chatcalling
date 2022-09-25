@@ -4,7 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
-import '../../../../helpers/fixtures/dummy_objects.dart' as FakeObject;
+import '../../../../helpers/fixtures/conversations_dummy.dart';
 import '../../../../helpers/mocks/test.mocks.dart';
 
 void main() {
@@ -17,7 +17,7 @@ void main() {
   });
 
   const String tUserId = 'user1';
-  List<Conversation> tConversationList = [FakeObject.tConversation];
+  List<Conversation> tConversationList = [tConversation];
 
   test('Should get conversations from the repository', () async {
     // Arrange

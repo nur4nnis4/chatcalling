@@ -1,22 +1,13 @@
-part of 'messages_bloc.dart';
+part of 'message_list_bloc.dart';
 
-abstract class MessagesEvent extends Equatable {
-  const MessagesEvent();
+abstract class MessageListEvent extends Equatable {
+  const MessageListEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class GetConversationsEvent extends MessagesEvent {
-  final String userId;
-
-  GetConversationsEvent(this.userId);
-
-  @override
-  List<Object> get props => [userId];
-}
-
-class GetMessagesEvent extends MessagesEvent {
+class GetMessagesEvent extends MessageListEvent {
   final String conversationId;
 
   GetMessagesEvent(this.conversationId);
@@ -25,7 +16,7 @@ class GetMessagesEvent extends MessagesEvent {
   List<Object> get props => [conversationId];
 }
 
-class SendMessagesEvent extends MessagesEvent {
+class SendMessagesEvent extends MessageListEvent {
   final String text;
   final String receiverId;
   final String attachmentPath;
@@ -39,7 +30,7 @@ class SendMessagesEvent extends MessagesEvent {
   List<Object> get props => [text, receiverId, attachmentPath];
 }
 
-class UpdateReadStatusEvent extends MessagesEvent {
+class UpdateReadStatusEvent extends MessageListEvent {
   final String conversationId;
 
   UpdateReadStatusEvent(this.conversationId);

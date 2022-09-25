@@ -6,13 +6,15 @@ class RadiatingActionButton extends StatelessWidget {
   final int splashAlpha;
   final bool mini;
   final Icon icon;
+  final Function() onPressed;
 
   const RadiatingActionButton(
       {this.color,
       required this.icon,
       this.mini = true,
       this.shadowAlpha = 100,
-      this.splashAlpha = 8})
+      this.splashAlpha = 8,
+      required this.onPressed})
       : super();
 
   @override
@@ -40,7 +42,6 @@ class RadiatingActionButton extends StatelessWidget {
         ),
         backgroundColor: _color,
         elevation: 2,
-        splashColor: _color.withAlpha(splashAlpha),
-        onPressed: () {});
+        onPressed: onPressed);
   }
 }

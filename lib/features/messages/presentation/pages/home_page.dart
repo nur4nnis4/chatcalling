@@ -26,11 +26,13 @@ class _HomePageState extends State<HomePage> {
             showSelectedLabels: false,
             showUnselectedLabels: false,
             type: BottomNavigationBarType.fixed,
-            iconSize: 14,
+            iconSize: 15,
+            selectedFontSize: 9,
+            onTap: (_) {},
             backgroundColor: Theme.of(context).colorScheme.primaryContainer,
             items: [
               BottomNavigationBarItem(
-                icon: Icon(FontAwesomeIcons.solidComments),
+                icon: Icon(FontAwesomeIcons.solidComment),
                 label: L10n.of(context).message,
                 tooltip: L10n.of(context).message,
               ),
@@ -41,8 +43,10 @@ class _HomePageState extends State<HomePage> {
               ),
               BottomNavigationBarItem(
                   icon: RadiatingActionButton(
-                      icon: Icon(Icons.add_rounded, size: 20),
-                      color: Theme.of(context).colorScheme.primary),
+                    icon: Icon(Icons.add_rounded),
+                    color: Theme.of(context).colorScheme.primary,
+                    onPressed: () {},
+                  ),
                   label: L10n.of(context).newMessage,
                   tooltip: L10n.of(context).newMessage),
               BottomNavigationBarItem(

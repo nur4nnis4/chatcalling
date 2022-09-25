@@ -26,7 +26,7 @@ class MessageModel extends Message {
         text: json?['text'],
         senderId: json?['senderId'],
         receiverId: json?['receiverId'],
-        timeStamp: DateTime.parse(json?['timeStamp']),
+        timeStamp: DateTime.parse(json?['timeStamp']).toLocal(),
         isRead: json?['isRead'],
         attachmentUrl: json?['attachmentUrl'],
       );
@@ -38,9 +38,7 @@ class MessageModel extends Message {
       'text': text,
       'senderId': senderId,
       'receiverId': receiverId,
-      'timeStamp': timeStamp.isUtc
-          ? timeStamp.toIso8601String()
-          : timeStamp.toUtc().toIso8601String(),
+      'timeStamp': timeStamp.toUtc().toIso8601String(),
       'isRead': isRead,
       'attachmentUrl': attachmentUrl
     };

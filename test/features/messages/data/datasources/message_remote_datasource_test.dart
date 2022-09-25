@@ -1,36 +1,32 @@
-import 'dart:convert';
-
-import 'package:chatcalling/core/error/failures.dart';
 import 'package:chatcalling/features/messages/data/datasources/message_remote_datasource.dart';
 import 'package:chatcalling/features/messages/data/models/conversation_model.dart';
 import 'package:chatcalling/features/messages/data/models/message_model.dart';
-import 'package:dartz/dartz.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../../../helpers/fixtures/dummy_objects.dart';
-import '../../../../helpers/fixtures/fixture_reader/fixture_reader.dart';
+import '../../../../helpers/fixtures/conversations_dummy.dart';
+import '../../../../helpers/fixtures/message_dummy.dart';
 
 void main() {
-  late FakeFirebaseFirestore instance;
+  late FakeFirebaseFirestore fakeFirebase;
   late MessageRemoteDatasourceImpl dataSource;
 
   final String tUserId = 'user1Id';
   final tConversationId = 'user1Id-user2Id';
 
   setUp(() {
-    instance = FakeFirebaseFirestore();
-    dataSource = MessageRemoteDatasourceImpl(instance);
+    fakeFirebase = FakeFirebaseFirestore();
+    dataSource = MessageRemoteDatasourceImpl(fakeFirebase);
 
-    jsonDecode(fixture('conversation_list.json')).forEach((element) {
-      instance
+    tConversationListJson.forEach((element) {
+      fakeFirebase
           .collection('conversations')
           .doc(element['conversationId'])
           .set(element);
     });
 
-    jsonDecode(fixture('message_list.json')).forEach((element) {
-      instance
+    tMessageListJson.forEach((element) {
+      fakeFirebase
           .collection('conversations')
           .doc(tConversationId)
           .collection('messages')
@@ -43,22 +39,6 @@ void main() {
     test(
         'Should returns Stream containing List of MessageModel objects ordered by timeStamp',
         () async {
-      // Arrange
-      final snapshot = instance
-          .collection('conversations')
-          .doc(tMessageModel.conversationId)
-          .collection('messages')
-          .orderBy('timeStamp', descending: true)
-          .snapshots();
-
-      Stream<Either<Failure, List<MessageModel>>> expectedMessageListStream =
-          snapshot.map((snapshot) => Right(snapshot.docs
-              .map((doc) => MessageModel.fromJson(doc.data()))
-              .toList()));
-
-      final expectedMessageList = await expectedMessageListStream.first
-          .then((value) => value.getOrElse(() => []));
-
       // Act
       final actualMessageList = await dataSource
           .getMessages(tMessageModel.conversationId)
@@ -66,7 +46,7 @@ void main() {
           .then((value) => value.getOrElse(() => []));
 
       // Assert
-      expect(actualMessageList, expectedMessageList);
+      expect(actualMessageList, tExpectedDescendingMessageList);
     });
   });
 
@@ -74,24 +54,6 @@ void main() {
     test(
         'Should returns stream containing List of ConversationModel objects ordered by lastMessageTime',
         () async {
-      // Arrange
-      final snapshot = instance
-          .collection('conversations')
-          .where('members.$tUserId', isNotEqualTo: Null)
-          .orderBy('lastMessageTime', descending: true)
-          .snapshots();
-
-      Stream<Either<Failure, List<ConversationModel>>>
-          expectedConversationListStream =
-          snapshot.map((snapshot) => Right(snapshot.docs
-              .map((doc) =>
-                  ConversationModel.fromJson(json: doc.data(), userId: tUserId))
-              .toList()));
-
-      final expectedConversationList = await expectedConversationListStream
-          .first
-          .then((value) => value.getOrElse(() => []));
-
       // Act
       final actualConversationList = await dataSource
           .getConversations(tUserId)
@@ -99,7 +61,7 @@ void main() {
           .then((value) => value.getOrElse(() => []));
 
       // Assert
-      expect(actualConversationList, expectedConversationList);
+      expect(actualConversationList, tExpectedConversationList);
     });
   });
 
@@ -110,7 +72,7 @@ void main() {
       // Act
       await dataSource.sendMessage(tNewMessageModel2);
 
-      final actualConversationMap = await instance
+      final actualConversationMap = await fakeFirebase
           .collection('conversations')
           .doc(tNewMessageModel2.conversationId)
           .get()
@@ -128,7 +90,7 @@ void main() {
       // Act
       await dataSource.sendMessage(tNewMessageModel);
 
-      final actualConversationMap = await instance
+      final actualConversationMap = await fakeFirebase
           .collection('conversations')
           .doc(tNewMessageModel.conversationId)
           .get()
@@ -144,7 +106,7 @@ void main() {
       // Act
       await dataSource.sendMessage(tNewMessageModel);
 
-      final actualMessage = await instance
+      final actualMessage = await fakeFirebase
           .collection('conversations')
           .doc(tNewMessageModel.conversationId)
           .collection('messages')
@@ -163,7 +125,7 @@ void main() {
       // Act
       await dataSource.updateReadStatus(tUserId, tConversationId);
 
-      final allMessageReadStatusAreTrue = await instance
+      final allMessageReadStatusAreTrue = await fakeFirebase
           .collection('conversations')
           .doc(tConversationId)
           .collection('messages')
@@ -179,11 +141,11 @@ void main() {
     test('Should update totalUnread of current user to 0', () async {
       // Act
       await dataSource.updateReadStatus(tUserId, tConversationId);
-      final int actualUserTotalUnread = await instance
+      final int actualUserTotalUnread = await fakeFirebase
           .collection('conversations')
           .doc(tConversationId)
           .get()
-          .then((value) => value.get('members.$tUserId.totalUnread'));
+          .then((value) => value.get('member_details.$tUserId.totalUnread'));
       // Assert
       expect(actualUserTotalUnread, 0);
     });

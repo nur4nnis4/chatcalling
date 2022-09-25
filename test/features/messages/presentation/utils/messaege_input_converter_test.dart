@@ -2,7 +2,7 @@ import 'package:chatcalling/features/messages/presentation/utils/message_input_c
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
-import '../../../../helpers/fixtures/dummy_objects.dart';
+import '../../../../helpers/fixtures/message_dummy.dart';
 import '../../../../helpers/mocks/test.mocks.dart';
 
 void main() {

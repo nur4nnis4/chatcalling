@@ -1,9 +1,10 @@
 {
-    "message" : "Message",
+    "message" : "Messages",
     "calls" : "Calls",
     "newMessage" : "New Message",
     "contacts" : "Contacts",
     "settings" : "Settings",
     "search" : "Search",
-    "typeSomething" : "Type Something"
+    "typeSomething" : "Type Something",
+    "noRecents" : "No Recents"
 }

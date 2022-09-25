@@ -3,7 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
-import '../../../../helpers/fixtures/dummy_objects.dart';
+import '../../../../helpers/fixtures/user_dummy.dart';
 import '../../../../helpers/mocks/test.mocks.dart';
 
 void main() {

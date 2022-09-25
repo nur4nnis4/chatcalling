@@ -13,59 +13,36 @@ import 'package:dartz/dartz.dart';
 class MessageRepositoryImpl implements MessageRepository {
   final MessageRemoteDatasource messageRemoteDatasource;
   final MessageLocalDatasource messageLocalDatasource;
-  final NetworkInfo networkInfo;
 
-  MessageRepositoryImpl(
-      {required this.messageRemoteDatasource,
-      required this.messageLocalDatasource,
-      required this.networkInfo});
+  MessageRepositoryImpl({
+    required this.messageRemoteDatasource,
+    required this.messageLocalDatasource,
+  });
 
   @override
   Stream<Either<Failure, List<MessageModel>>> getMessages(
       String conversationId) async* {
-    if (await networkInfo.isConnected) {
-      final messageListStream = messageRemoteDatasource
-          .getMessages(conversationId)
-          .asBroadcastStream();
-      messageListStream.listen((event) {
-        if (event.isRight())
-          messageLocalDatasource.cacheMessages(event.getOrElse(() => []));
-      });
-      yield* messageListStream;
-    } else
-      yield await messageLocalDatasource.getMessages();
+    yield* messageRemoteDatasource
+        .getMessages(conversationId)
+        .asBroadcastStream();
   }
 
   @override
   Stream<Either<Failure, List<Conversation>>> getConversations(
       String userId) async* {
-    if (await networkInfo.isConnected) {
-      final conversationListStream =
-          messageRemoteDatasource.getConversations(userId).asBroadcastStream();
-      conversationListStream.listen((event) {
-        if (event.isRight())
-          messageLocalDatasource.cacheConversations(event.getOrElse(() => []));
-      });
-      yield* conversationListStream;
-    } else
-      yield await messageLocalDatasource.getConversations();
+    // TODO : FIX networkinfo (Device has connection is True but return false)
+    yield* messageRemoteDatasource.getConversations(userId).asBroadcastStream();
   }
 
   @override
   Future<Either<Failure, String>> sendMessage(Message message) async {
-    if (await networkInfo.isConnected)
-      return messageRemoteDatasource
-          .sendMessage(MessageModel.fromEntity(message));
-    else
-      return Left(ConnectionFailure(''));
+    return messageRemoteDatasource
+        .sendMessage(MessageModel.fromEntity(message));
   }
 
   @override
   Future<Either<Failure, String>> updateReadStatus(
       String userId, String conversationId) async {
-    if (await networkInfo.isConnected) {
-      return messageRemoteDatasource.updateReadStatus(userId, conversationId);
-    } else
-      return Left(ConnectionFailure(''));
+    return messageRemoteDatasource.updateReadStatus(userId, conversationId);
   }
 }

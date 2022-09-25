@@ -16,27 +16,27 @@ abstract class MessageLocalDatasource {
 class MessageLocalDatasourceImpl extends MessageLocalDatasource {
   @override
   Future<Either<Failure, String>> cacheConversations(
-      List<ConversationModel> conversationsToCache) {
+      List<ConversationModel> conversationsToCache) async {
     // TODO: implement cacheConversations
-    throw UnimplementedError();
+    return Right('');
   }
 
   @override
   Future<Either<Failure, String>> cacheMessages(
-      List<MessageModel> messagesToCache) {
+      List<MessageModel> messagesToCache) async {
     // TODO: implement cacheMessages
-    throw UnimplementedError();
+    return Right('');
   }
 
   @override
-  Future<Either<Failure, List<ConversationModel>>> getConversations() {
+  Future<Either<Failure, List<ConversationModel>>> getConversations() async {
     // TODO: implement getConversations
-    throw UnimplementedError();
+    return Left(CacheFailure('CacheFailure yow'));
   }
 
   @override
-  Future<Either<Failure, List<MessageModel>>> getMessages() {
+  Future<Either<Failure, List<MessageModel>>> getMessages() async {
     // TODO: implement getMessages
-    throw UnimplementedError();
+    return Left(CacheFailure('CacheFailure'));
   }
 }

@@ -9,45 +9,39 @@ class TimeImpl implements Time {
   DateTime now() => DateTime.now();
 }
 
-class SimpleTime {
+class TimeFormat {
   final Time time;
 
-  SimpleTime({required this.time});
+  TimeFormat({required this.time});
 
-  @override
-  String format(DateTime date) {
+  String simplify(DateTime date) {
     final now = time.now();
     bool isSameDay = date.day == now.day;
     bool isSameMonth = date.month == now.month;
     bool isSameYear = date.year == now.year;
 
-    List<String> month = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sept",
-      "Oct",
-      "Nov",
-      "Dec"
-    ];
-
-    List<String> day = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-
     if (isSameYear) {
       if (isSameMonth) {
         if (isSameDay) {
-          return "${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}"; // [hh:mm]
+          return DateFormat.Hm().format(date);
         } else
-          return "${day[date.weekday - 1]}";
+          return DateFormat.E().format(date);
       } else
-        return "${month[date.month - 1]} ${date.day.toString().padLeft(2, '0')}";
+        return DateFormat.MMMd().format(date);
     } else
-      return "${date.year.toString()}/${date.month.toString().padLeft(2, '0')}/${date.day.toString().padLeft(2, '0')}";
-    ;
+      return DateFormat.yMd().format(date);
+  }
+
+  // ignore: non_constant_identifier_names
+  String Hm(DateTime date) {
+    return DateFormat.Hm().format(date);
+  }
+
+  String yMd(DateTime date) {
+    return DateFormat.yMd().format(date);
+  }
+
+  String yMMMMd(DateTime date) {
+    return DateFormat.yMMMMd().format(date);
   }
 }
