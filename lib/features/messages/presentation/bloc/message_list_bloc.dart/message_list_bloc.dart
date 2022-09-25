@@ -28,7 +28,7 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> {
       required this.messageInputConverter})
       : super(MessagesEmpty()) {
     // TODO : change the code below after FirebaseAUTH
-    final String _userId = 'user1Id';
+    final String _userId = 'user2Id';
 
     on<MessageListEvent>((event, emit) async {
       // GetMessageEvent

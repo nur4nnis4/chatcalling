@@ -1,5 +1,7 @@
 import 'package:chatcalling/core/helpers/time.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
 import 'package:mockito/mockito.dart';
 
 import '../../helpers/mocks/test.mocks.dart';
@@ -8,9 +10,10 @@ void main() {
   late MockTime mockTime;
   late TimeFormat simpleTime;
 
-  setUp(() {
+  setUp(() async {
     mockTime = MockTime();
     simpleTime = TimeFormat(time: mockTime);
+    await initializeDateFormatting();
   });
 
   group('format', () {
@@ -18,11 +21,13 @@ void main() {
         'Should return time in [YEAR_NUM_MONTH_DAY] format when the input date and current date do not have the same year  ',
         () async {
       // Arrange
+
       final inputDate = DateTime.parse('2021-09-15 20:23:09.798');
+
       when(mockTime.now())
           .thenReturn(DateTime.parse('2022-09-15 20:23:09.798'));
       // Act
-      final actual = simpleTime.simplify(inputDate);
+      final actual = simpleTime.simplify(inputDate, "en");
       // Assert
       expect(actual, "9/15/2021");
     });
@@ -34,7 +39,7 @@ void main() {
       when(mockTime.now())
           .thenReturn(DateTime.parse('2022-09-15 20:23:09.798'));
       // Act
-      final actual = simpleTime.simplify(inputDate);
+      final actual = simpleTime.simplify(inputDate, "en");
       // Assert
       expect(actual, "Aug 15");
     });
@@ -47,7 +52,7 @@ void main() {
       when(mockTime.now())
           .thenReturn(DateTime.parse('2022-09-15 20:23:09.798'));
       // Act
-      final actual = simpleTime.simplify(inputDate);
+      final actual = simpleTime.simplify(inputDate, "en");
       // Assert
       expect(actual, "Wed");
     });
@@ -59,7 +64,7 @@ void main() {
       when(mockTime.now())
           .thenReturn(DateTime.parse('2022-09-15 20:23:09.798'));
       // Act
-      final actual = simpleTime.simplify(inputDate);
+      final actual = simpleTime.simplify(inputDate, "en");
       // Assert
       expect(actual, "09:23");
     });
@@ -77,7 +82,7 @@ void main() {
     // Arrange
     final inputData = DateTime.parse('2022-09-15 19:23:09.798');
     // Act
-    final actual = simpleTime.yMd(inputData);
+    final actual = simpleTime.yMd(inputData, "en");
     // Assert
     expect(actual, "9/15/2022");
   });
@@ -85,9 +90,19 @@ void main() {
     // Arrange
     final inputData = DateTime.parse('2022-09-15 19:23:09.798');
     // Act
-    final actual = simpleTime.yMMMMd(inputData);
+    final actual = simpleTime.yMMMMd(inputData, "en");
     // Assert
 
     expect(actual, "September 15, 2022");
+  });
+
+  test('toYMD: Should return time in [yyyy-MM-dd] format', () async {
+    // Arrange
+    final inputData = DateTime.parse('2022-09-15 19:23:09.798');
+    // Act
+    final actual = simpleTime.toYMD(inputData);
+    // Assert
+
+    expect(actual, DateTime.parse('2022-09-15'));
   });
 }

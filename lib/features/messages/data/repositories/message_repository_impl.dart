@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:chatcalling/core/network/network_info.dart';
 import 'package:chatcalling/features/messages/data/datasources/message_local_datasource.dart';
 import 'package:chatcalling/features/messages/data/datasources/message_remote_datasource.dart';
 import 'package:chatcalling/features/messages/data/models/message_model.dart';
@@ -30,7 +29,6 @@ class MessageRepositoryImpl implements MessageRepository {
   @override
   Stream<Either<Failure, List<Conversation>>> getConversations(
       String userId) async* {
-    // TODO : FIX networkinfo (Device has connection is True but return false)
     yield* messageRemoteDatasource.getConversations(userId).asBroadcastStream();
   }
 

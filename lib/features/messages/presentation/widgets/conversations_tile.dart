@@ -4,6 +4,7 @@ import 'package:chatcalling/features/messages/domain/entities/conversation.dart'
 import 'package:chatcalling/features/messages/presentation/bloc/message_list_bloc.dart/message_list_bloc.dart';
 import 'package:chatcalling/features/messages/presentation/pages/message_room_page.dart';
 import 'package:chatcalling/injector.dart';
+import 'package:chatcalling/l10n/l10n.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
@@ -82,9 +83,9 @@ class ConversationsTile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    sLocator
-                        .get<TimeFormat>()
-                        .simplify(conversation.lastMessageTime),
+                    sLocator.get<TimeFormat>().simplify(
+                        conversation.lastMessageTime,
+                        L10n.getLocalLanguageCode(context)),
                     textAlign: TextAlign.end,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onTertiary,

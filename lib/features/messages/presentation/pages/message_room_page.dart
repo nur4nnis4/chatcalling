@@ -1,10 +1,15 @@
+import 'package:chatcalling/core/helpers/time.dart';
 import 'package:chatcalling/core/widgets/custom_icon_button.dart';
 import 'package:chatcalling/features/messages/domain/entities/conversation.dart';
+import 'package:chatcalling/features/messages/domain/entities/message.dart';
 import 'package:chatcalling/features/messages/presentation/bloc/message_list_bloc.dart/message_list_bloc.dart';
 import 'package:chatcalling/features/messages/presentation/widgets/m_room_bottom_bar.dart';
 import 'package:chatcalling/features/messages/presentation/widgets/message_bubble.dart';
+import 'package:chatcalling/injector.dart';
+import 'package:chatcalling/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:grouped_list/grouped_list.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -48,16 +53,24 @@ class _MessageRoomPageState extends State<MessageRoomPage> {
                   );
                 } else if (state is MessagesLoaded) {
                   final messageList = state.messageList;
-                  return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      reverse: true,
-                      padding: const EdgeInsets.all(10),
-                      itemCount: messageList.length,
-                      itemBuilder: (_, index) => messageList[index].senderId ==
-                              state.userId
-                          ? SentMessageBubble(message: messageList[index])
-                          : ReceivedMessageBubble(message: messageList[index]));
+                  return GroupedListView<Message, DateTime>(
+                    useStickyGroupSeparators: true,
+                    floatingHeader: true,
+                    stickyHeaderBackgroundColor: Colors.transparent,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    reverse: true,
+                    sort: false,
+                    padding: const EdgeInsets.all(10),
+                    elements: messageList,
+                    groupBy: (message) =>
+                        sLocator.get<TimeFormat>().toYMD(message.timeStamp),
+                    groupSeparatorBuilder: (date) => _listviewSeparator(date),
+                    itemBuilder: (_, message) =>
+                        message.senderId == state.userId
+                            ? SentMessageBubble(message: message)
+                            : ReceivedMessageBubble(message: message),
+                  );
                 } else {
                   return Center(
                     child: Text('Something went wrong...'),
@@ -68,6 +81,38 @@ class _MessageRoomPageState extends State<MessageRoomPage> {
           ),
           MRoomBottomBar(
             receiverId: widget.conversation.friendId,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Padding _listviewSeparator(DateTime date) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 18),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+            child: Text(
+              sLocator
+                  .get<TimeFormat>()
+                  .yMMMMd(date, L10n.getLocalLanguageCode(context)),
+              style: TextStyle(
+                  fontSize: 12,
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onPrimaryContainer
+                      .withAlpha(200)),
+            ),
+            decoration: BoxDecoration(
+                color: Theme.of(context)
+                    .colorScheme
+                    .primaryContainer
+                    .withAlpha(100),
+                borderRadius: BorderRadius.circular(10)),
           ),
         ],
       ),
