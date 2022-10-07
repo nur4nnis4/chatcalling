@@ -2,31 +2,36 @@ import 'package:chatcalling/features/messages/data/datasources/message_remote_da
 import 'package:chatcalling/features/messages/data/models/conversation_model.dart';
 import 'package:chatcalling/features/messages/data/models/message_model.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+import 'package:firebase_storage_mocks/firebase_storage_mocks.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../helpers/fixtures/conversations_dummy.dart';
 import '../../../../helpers/fixtures/message_dummy.dart';
 
 void main() {
-  late FakeFirebaseFirestore fakeFirebase;
+  late FakeFirebaseFirestore fakeFirebaseFirestore;
+  late MockFirebaseStorage mockFirebaseStorage;
   late MessageRemoteDatasourceImpl dataSource;
 
   final String tUserId = 'user1Id';
   final tConversationId = 'user1Id-user2Id';
 
   setUp(() {
-    fakeFirebase = FakeFirebaseFirestore();
-    dataSource = MessageRemoteDatasourceImpl(fakeFirebase);
+    fakeFirebaseFirestore = FakeFirebaseFirestore();
+    mockFirebaseStorage = MockFirebaseStorage();
+    dataSource = MessageRemoteDatasourceImpl(
+        firebaseFirestore: fakeFirebaseFirestore,
+        firebaseStorage: mockFirebaseStorage);
 
     tConversationListJson.forEach((element) {
-      fakeFirebase
+      fakeFirebaseFirestore
           .collection('conversations')
           .doc(element['conversationId'])
           .set(element);
     });
 
     tMessageListJson.forEach((element) {
-      fakeFirebase
+      fakeFirebaseFirestore
           .collection('conversations')
           .doc(tConversationId)
           .collection('messages')
@@ -72,7 +77,7 @@ void main() {
       // Act
       await dataSource.sendMessage(tNewMessageModel2);
 
-      final actualConversationMap = await fakeFirebase
+      final actualConversationMap = await fakeFirebaseFirestore
           .collection('conversations')
           .doc(tNewMessageModel2.conversationId)
           .get()
@@ -90,7 +95,7 @@ void main() {
       // Act
       await dataSource.sendMessage(tNewMessageModel);
 
-      final actualConversationMap = await fakeFirebase
+      final actualConversationMap = await fakeFirebaseFirestore
           .collection('conversations')
           .doc(tNewMessageModel.conversationId)
           .get()
@@ -102,11 +107,20 @@ void main() {
       expect(actualConversationMap, expectedConversationMap);
     });
 
+    test('Should upload attachments to database', () async {
+      // Arrange
+
+      // Act
+      await dataSource.sendMessage(tNewMessageModel);
+
+      // Assert
+    });
+
     test('Should add new message to database', () async {
       // Act
       await dataSource.sendMessage(tNewMessageModel);
 
-      final actualMessage = await fakeFirebase
+      final actualMessage = await fakeFirebaseFirestore
           .collection('conversations')
           .doc(tNewMessageModel.conversationId)
           .collection('messages')
@@ -125,7 +139,7 @@ void main() {
       // Act
       await dataSource.updateReadStatus(tUserId, tConversationId);
 
-      final allMessageReadStatusAreTrue = await fakeFirebase
+      final allMessageReadStatusAreTrue = await fakeFirebaseFirestore
           .collection('conversations')
           .doc(tConversationId)
           .collection('messages')
@@ -141,7 +155,7 @@ void main() {
     test('Should update totalUnread of current user to 0', () async {
       // Act
       await dataSource.updateReadStatus(tUserId, tConversationId);
-      final int actualUserTotalUnread = await fakeFirebase
+      final int actualUserTotalUnread = await fakeFirebaseFirestore
           .collection('conversations')
           .doc(tConversationId)
           .get()

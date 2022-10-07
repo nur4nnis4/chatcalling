@@ -1,20 +1,22 @@
 import 'package:chatcalling/core/constants/route_name.dart';
-import 'package:chatcalling/features/messages/domain/entities/conversation.dart';
-import 'package:chatcalling/features/messages/presentation/bloc/message_list_bloc.dart/message_list_bloc.dart';
-import 'package:chatcalling/features/messages/presentation/bloc/conversation_list_bloc/conversation_list_bloc.dart';
+import 'package:chatcalling/features/messages/presentation/bloc/pick_files_bloc.dart/pick_files_bloc.dart';
 import 'package:chatcalling/features/messages/presentation/pages/home_page.dart';
-import 'package:chatcalling/features/messages/presentation/pages/message_room_page.dart';
 import 'package:chatcalling/features/messages/presentation/pages/messages_page.dart';
-import 'package:chatcalling/l10n/l10n.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import 'core/constants/theme.dart' as Theme;
-import 'firebase_options.dart';
-import 'injector.dart' as Injector;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+import 'core/constants/theme.dart' as Theme;
+import 'features/messages/domain/entities/conversation.dart';
+import 'features/messages/presentation/bloc/conversation_list_bloc/conversation_list_bloc.dart';
+import 'features/messages/presentation/bloc/message_list_bloc.dart/message_list_bloc.dart';
+import 'features/messages/presentation/bloc/send_message_bloc.dart/send_message_bloc.dart';
+import 'features/messages/presentation/pages/message_room_page.dart';
+import 'firebase_options.dart';
+import 'injector.dart' as Injector;
+import 'l10n/l10n.dart';
 
 void main() async {
   Injector.init();
@@ -38,11 +40,17 @@ class ChatApp extends StatelessWidget {
         BlocProvider(
           create: (_) => Injector.sLocator<ConversationListBloc>(),
         ),
+        BlocProvider(
+          create: (_) => Injector.sLocator<SendMessageBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => PickFilesBloc(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'ChatCalling',
-        theme: Theme.dark,
+        theme: Theme.light,
         darkTheme: Theme.dark,
         supportedLocales: L10n.all,
         localizationsDelegates: [
@@ -51,6 +59,9 @@ class ChatApp extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
+        // home: MessageRoomPage(
+        //   conversation: conversation,
+        // ),
         navigatorObservers: [RouteObserver<ModalRoute>()],
         onGenerateRoute: (RouteSettings setting) {
           switch (setting.name) {
@@ -77,3 +88,12 @@ class ChatApp extends StatelessWidget {
     );
   }
 }
+
+final conversation = Conversation(
+  conversationId: 'user1Id-user2Id',
+  friendId: 'user2Id',
+  lastText: 'Hello',
+  lastMessageTime: DateTime.parse("2022-07-18T16:37:47.475845Z").toLocal(),
+  lastSenderId: 'user1Id',
+  totalUnreadMessages: 0,
+);

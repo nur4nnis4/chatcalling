@@ -1,5 +1,5 @@
-import 'package:chatcalling/core/user/data/models/user_model.dart';
-import 'package:chatcalling/core/user/domain/entities/user.dart';
+import 'package:chatcalling/core/common_features/user/data/models/user_model.dart';
+import 'package:chatcalling/core/common_features/user/domain/entities/user.dart';
 
 final tUser = User(
     userId: 'user1Id',

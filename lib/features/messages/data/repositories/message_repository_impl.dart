@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:chatcalling/features/messages/data/datasources/message_local_datasource.dart';
 import 'package:chatcalling/features/messages/data/datasources/message_remote_datasource.dart';
 import 'package:chatcalling/features/messages/data/models/message_model.dart';
 import 'package:chatcalling/features/messages/domain/entities/message.dart';
@@ -11,11 +10,9 @@ import 'package:dartz/dartz.dart';
 
 class MessageRepositoryImpl implements MessageRepository {
   final MessageRemoteDatasource messageRemoteDatasource;
-  final MessageLocalDatasource messageLocalDatasource;
 
   MessageRepositoryImpl({
     required this.messageRemoteDatasource,
-    required this.messageLocalDatasource,
   });
 
   @override

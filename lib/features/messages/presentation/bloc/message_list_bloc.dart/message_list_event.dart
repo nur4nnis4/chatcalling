@@ -16,20 +16,6 @@ class GetMessagesEvent extends MessageListEvent {
   List<Object> get props => [conversationId];
 }
 
-class SendMessagesEvent extends MessageListEvent {
-  final String text;
-  final String receiverId;
-  final String attachmentPath;
-
-  SendMessagesEvent(
-      {required this.text,
-      required this.receiverId,
-      required this.attachmentPath});
-
-  @override
-  List<Object> get props => [text, receiverId, attachmentPath];
-}
-
 class UpdateReadStatusEvent extends MessageListEvent {
   final String conversationId;
 

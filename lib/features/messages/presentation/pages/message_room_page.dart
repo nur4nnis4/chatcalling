@@ -1,9 +1,9 @@
 import 'package:chatcalling/core/helpers/time.dart';
-import 'package:chatcalling/core/widgets/custom_icon_button.dart';
+import 'package:chatcalling/core/common_widgets/custom_icon_button.dart';
 import 'package:chatcalling/features/messages/domain/entities/conversation.dart';
 import 'package:chatcalling/features/messages/domain/entities/message.dart';
 import 'package:chatcalling/features/messages/presentation/bloc/message_list_bloc.dart/message_list_bloc.dart';
-import 'package:chatcalling/features/messages/presentation/widgets/m_room_bottom_bar.dart';
+import 'package:chatcalling/features/messages/presentation/widgets/send_message_bar.dart';
 import 'package:chatcalling/features/messages/presentation/widgets/message_bubble.dart';
 import 'package:chatcalling/injector.dart';
 import 'package:chatcalling/l10n/l10n.dart';
@@ -56,7 +56,6 @@ class _MessageRoomPageState extends State<MessageRoomPage> {
                   return GroupedListView<Message, DateTime>(
                     useStickyGroupSeparators: true,
                     floatingHeader: true,
-                    stickyHeaderBackgroundColor: Colors.transparent,
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     reverse: true,
@@ -79,9 +78,9 @@ class _MessageRoomPageState extends State<MessageRoomPage> {
               },
             ),
           ),
-          MRoomBottomBar(
-            receiverId: widget.conversation.friendId,
-          ),
+          // TODO: FIX send attachment
+          SendMessageBar(
+              receiverId: widget.conversation.friendId, attachmentPaths: []),
         ],
       ),
     );
@@ -111,7 +110,7 @@ class _MessageRoomPageState extends State<MessageRoomPage> {
                 color: Theme.of(context)
                     .colorScheme
                     .primaryContainer
-                    .withAlpha(100),
+                    .withAlpha(200),
                 borderRadius: BorderRadius.circular(10)),
           ),
         ],

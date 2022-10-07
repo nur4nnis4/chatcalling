@@ -6,5 +6,7 @@
     "settings" : "Pengaturan",
     "search" : "Pencarian",
     "typeSomething" : "Ketikkan sesuatu",
-    "noRecents" : "Tidak ada yang baru"
+    "noRecents" : "Tidak ada yang baru",
+    "addCaption": "Tambahkan deskripsi"
+
 }

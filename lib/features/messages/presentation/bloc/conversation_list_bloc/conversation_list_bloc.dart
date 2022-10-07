@@ -13,7 +13,7 @@ class ConversationListBloc
   final GetConversations getConversations;
 
 // TODO : change the code below after FirebaseAUTH
-  final String _userId = 'user2Id';
+  final String _userId = 'user1Id';
 
   ConversationListBloc({required this.getConversations})
       : super(ConversationListEmpty()) {

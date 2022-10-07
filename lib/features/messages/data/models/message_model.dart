@@ -1,3 +1,5 @@
+import 'package:chatcalling/core/common_features/attachment/data/models/attachment_model.dart';
+import 'package:chatcalling/core/common_features/attachment/domain/entities/attachment.dart';
 import 'package:chatcalling/features/messages/domain/entities/message.dart';
 
 // ignore: must_be_immutable
@@ -10,7 +12,7 @@ class MessageModel extends Message {
     required String receiverId,
     required DateTime timeStamp,
     required bool isRead,
-    required String attachmentUrl,
+    required List<Attachment> attachments,
   }) : super(
             messageId: messageId,
             conversationId: conversationId,
@@ -19,17 +21,24 @@ class MessageModel extends Message {
             receiverId: receiverId,
             timeStamp: timeStamp,
             isRead: isRead,
-            attachmentUrl: attachmentUrl);
-  factory MessageModel.fromJson(Map<String, dynamic>? json) => MessageModel(
-        messageId: json?['messageId'],
-        conversationId: json?['conversationId'],
-        text: json?['text'],
-        senderId: json?['senderId'],
-        receiverId: json?['receiverId'],
-        timeStamp: DateTime.parse(json?['timeStamp']).toLocal(),
-        isRead: json?['isRead'],
-        attachmentUrl: json?['attachmentUrl'],
-      );
+            attachments: attachments);
+  factory MessageModel.fromJson(Map<String, dynamic>? json) {
+    final List<dynamic> attachmentListJson = json?['attachments'];
+    return MessageModel(
+      messageId: json?['messageId'],
+      conversationId: json?['conversationId'],
+      text: json?['text'],
+      senderId: json?['senderId'],
+      receiverId: json?['receiverId'],
+      timeStamp: DateTime.parse(json?['timeStamp']).toLocal(),
+      isRead: json?['isRead'],
+      attachments: attachmentListJson.length > 0
+          ? attachmentListJson
+              .map((attachment) => AttachmentModel.fromJson(json: attachment))
+              .toList()
+          : [],
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {
@@ -40,7 +49,11 @@ class MessageModel extends Message {
       'receiverId': receiverId,
       'timeStamp': timeStamp.toUtc().toIso8601String(),
       'isRead': isRead,
-      'attachmentUrl': attachmentUrl
+      'attachments': attachments.length > 0
+          ? attachments
+              .map((e) => AttachmentModel.fromEntity(attachment: e).toJson())
+              .toList()
+          : []
     };
   }
 
@@ -53,7 +66,9 @@ class MessageModel extends Message {
         receiverId: message.receiverId,
         timeStamp: message.timeStamp,
         isRead: message.isRead,
-        attachmentUrl: message.attachmentUrl);
+        attachments: message.attachments
+            .map((e) => AttachmentModel.fromEntity(attachment: e))
+            .toList());
   }
 
   Message toEntity(MessageModel message) {
@@ -65,6 +80,6 @@ class MessageModel extends Message {
         receiverId: message.receiverId,
         timeStamp: message.timeStamp,
         isRead: message.isRead,
-        attachmentUrl: message.attachmentUrl);
+        attachments: message.attachments);
   }
 }

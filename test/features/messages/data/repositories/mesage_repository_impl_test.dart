@@ -12,16 +12,13 @@ import '../../../../helpers/mocks/test.mocks.dart';
 
 void main() {
   late MockMessageRemoteDatasource mockMessageRemoteDatasource;
-  late MockMessageLocalDatasource mockMessageLocalDatasource;
   late MessageRepositoryImpl repository;
 
   setUp(() {
     mockMessageRemoteDatasource = MockMessageRemoteDatasource();
-    mockMessageLocalDatasource = MockMessageLocalDatasource();
 
     repository = MessageRepositoryImpl(
       messageRemoteDatasource: mockMessageRemoteDatasource,
-      messageLocalDatasource: mockMessageLocalDatasource,
     );
   });
 
@@ -66,8 +63,7 @@ void main() {
   });
 
   group('sendMessage', () {
-    test('When the device is online should send data to remote database',
-        () async {
+    test('Should send data to remote database', () async {
       // Arrange
       when(mockMessageRemoteDatasource.sendMessage(tMessageModel))
           .thenAnswer((_) async => Right(''));
@@ -82,9 +78,7 @@ void main() {
     String tUserId = 'user1Id';
     String tConversationId = 'user1Id-user2Id';
 
-    test(
-        'When the device is online should update messages read status in remote database',
-        () async {
+    test('Should update messages read status in remote database', () async {
       // Arrange
       when(mockMessageRemoteDatasource.updateReadStatus(
               tUserId, tConversationId))

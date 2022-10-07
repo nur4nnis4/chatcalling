@@ -9,11 +9,8 @@ import '../../../../helpers/fixtures/message_dummy.dart';
 import '../../../../helpers/mocks/test.mocks.dart';
 
 void main() {
-  late MockGetConversations mockGetConversations;
   late MockGetMessages mockGetMessages;
-  late MockSendMessage mockSendMessage;
   late MockUpdateReadStatus mockUpdateReadStatus;
-  late MockMessageInputConverter messageInputConverter;
 
   late MessageListBloc messagesBloc;
 
@@ -21,17 +18,12 @@ void main() {
   final String tUserId = 'user1Id';
 
   setUp(() {
-    mockGetConversations = MockGetConversations();
     mockGetMessages = MockGetMessages();
-    mockSendMessage = MockSendMessage();
     mockUpdateReadStatus = MockUpdateReadStatus();
-    messageInputConverter = MockMessageInputConverter();
     messagesBloc = MessageListBloc(
-        getConversations: mockGetConversations,
-        getMessages: mockGetMessages,
-        sendMessage: mockSendMessage,
-        updateReadStatus: mockUpdateReadStatus,
-        messageInputConverter: messageInputConverter);
+      getMessages: mockGetMessages,
+      updateReadStatus: mockUpdateReadStatus,
+    );
   });
 
   test('Initial state should be empty', () {
@@ -91,50 +83,9 @@ void main() {
             verify(mockGetMessages(conversationId: tConversationId)));
   });
 
-  group('sendMessageEvent', () {
-    setUp(() {
-      when(messageInputConverter.toMessage(any, any, any, any))
-          .thenReturn(tMessage);
-    });
-    blocTest<MessageListBloc, MessageListState>(
-      'emits [Loading, MessagesSucces] when message is sent successfully.',
-      build: () {
-        when(mockSendMessage(message: tMessage))
-            .thenAnswer((_) async => Right('Success'));
-        return messagesBloc;
-      },
-      act: (bloc) => bloc.add(SendMessagesEvent(
-          text: tMessage.text,
-          receiverId: tMessage.receiverId,
-          attachmentPath: tMessage.attachmentUrl)),
-      expect: () => <MessageListState>[
-        MessagesLoading(),
-        MessagesSuccess(successMessage: 'Success')
-      ],
-    );
-
-    blocTest<MessageListBloc, MessageListState>(
-      'emits [Loading, MessagesSucces] when sending message fails.',
-      build: () {
-        when(mockSendMessage(message: tMessage))
-            .thenAnswer((_) async => Left(PlatformFailure('PlatformFailure')));
-
-        return messagesBloc;
-      },
-      act: (bloc) => bloc.add(SendMessagesEvent(
-          text: tMessage.text,
-          receiverId: tMessage.receiverId,
-          attachmentPath: tMessage.attachmentUrl)),
-      expect: () => <MessageListState>[
-        MessagesLoading(),
-        MessagesError(errorMessage: 'PlatformFailure')
-      ],
-    );
-  });
-
   group('updateReadStatusEvent', () {
     blocTest<MessageListBloc, MessageListState>(
-      'emits [Loading, MessagesSucces] when read status is updated successfully.',
+      'Should call UpdateReadStatus usecase   ',
       build: () {
         when(mockUpdateReadStatus(
                 conversationId: tConversationId, userId: tUserId))
@@ -142,26 +93,8 @@ void main() {
         return messagesBloc;
       },
       act: (bloc) => bloc.add(UpdateReadStatusEvent(tConversationId)),
-      expect: () => <MessageListState>[
-        MessagesLoading(),
-        MessagesSuccess(successMessage: 'Success')
-      ],
-    );
-
-    blocTest<MessageListBloc, MessageListState>(
-      'emits [Loading, MessagesSucces] when updating read status fails.',
-      build: () {
-        when(mockUpdateReadStatus(
-                conversationId: tConversationId, userId: tUserId))
-            .thenAnswer((_) async => Left(PlatformFailure('PlatformFailure')));
-
-        return messagesBloc;
-      },
-      act: (bloc) => bloc.add(UpdateReadStatusEvent(tConversationId)),
-      expect: () => <MessageListState>[
-        MessagesLoading(),
-        MessagesError(errorMessage: 'PlatformFailure')
-      ],
+      verify: (bloc) => mockUpdateReadStatus(
+          conversationId: tConversationId, userId: tUserId),
     );
   });
 }

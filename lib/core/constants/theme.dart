@@ -9,6 +9,9 @@ final ThemeData light = ThemeData(
         color: Colors.white70,
         foregroundColor: Colors.black87,
         centerTitle: true),
+    bottomSheetTheme: BottomSheetThemeData(
+      backgroundColor: Color.fromARGB(255, 254, 254, 254),
+    ),
     colorScheme: ColorScheme.light(
       background: Colors.white,
       onBackground: Color.fromARGB(255, 60, 60, 60),
@@ -33,6 +36,8 @@ final ThemeData dark = ThemeData(
       color: Color.fromARGB(0, 255, 255, 255),
       foregroundColor: Colors.black87,
       centerTitle: true),
+  bottomSheetTheme:
+      BottomSheetThemeData(backgroundColor: Color.fromARGB(255, 22, 22, 22)),
   colorScheme: ColorScheme.dark(
     background: Color.fromARGB(255, 21, 21, 21),
     onBackground: Color.fromARGB(255, 218, 218, 218),

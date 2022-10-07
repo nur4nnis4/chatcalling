@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:chatcalling/core/error/exceptions.dart';
 import 'package:chatcalling/core/error/failures.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import '../models/conversation_model.dart';
 import '../models/message_model.dart';
@@ -17,15 +20,17 @@ abstract class MessageRemoteDatasource {
 }
 
 class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
-  final FirebaseFirestore firestore;
+  final FirebaseFirestore firebaseFirestore;
+  final FirebaseStorage firebaseStorage;
 
-  MessageRemoteDatasourceImpl(this.firestore);
+  MessageRemoteDatasourceImpl(
+      {required this.firebaseFirestore, required this.firebaseStorage});
 
   @override
   Stream<Either<Failure, List<MessageModel>>> getMessages(
       String conversationId) async* {
     try {
-      yield* firestore
+      yield* firebaseFirestore
           .collection('conversations')
           .doc(conversationId)
           .collection('messages')
@@ -43,7 +48,7 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
   Stream<Either<Failure, List<ConversationModel>>> getConversations(
       String userId) async* {
     try {
-      yield* firestore
+      yield* firebaseFirestore
           .collection('conversations')
           .where('members', arrayContains: userId)
           .orderBy('lastMessageTime', descending: true)
@@ -61,7 +66,7 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
   Future<Either<Failure, String>> updateReadStatus(
       String userId, String conversationId) async {
     final conversationDocRef =
-        firestore.collection('conversations').doc(conversationId);
+        firebaseFirestore.collection('conversations').doc(conversationId);
 
     try {
       final unreadMessagesSnapshots = await conversationDocRef
@@ -86,8 +91,12 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
   Future<Either<Failure, String>> sendMessage(MessageModel message) async {
     try {
       await updateOrAddConversation(
-              ConversationModel.fromMessage(message: message))
-          .then((_) async => await addMessage(message));
+          ConversationModel.fromMessage(message: message));
+    } on PlatformException catch (e) {
+      return Left(PlatformFailure(e.toString()));
+    }
+    try {
+      await addMessage(message);
     } on PlatformException catch (e) {
       return Left(PlatformFailure(e.toString()));
     }
@@ -96,9 +105,10 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
   }
 
   Future<void> updateOrAddConversation(ConversationModel conversation) async {
-    final conversationDocRef =
-        firestore.collection('conversations').doc(conversation.conversationId);
-    return firestore.runTransaction((transaction) async {
+    final conversationDocRef = firebaseFirestore
+        .collection('conversations')
+        .doc(conversation.conversationId);
+    return firebaseFirestore.runTransaction((transaction) async {
       final conversationSnapshot = await transaction.get(conversationDocRef);
       if (conversationSnapshot.exists) {
         final int friendTotalUnread = conversationSnapshot
@@ -116,8 +126,21 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
     });
   }
 
+  List<String> uploadAttachments(MessageModel message) {
+    if (message.attachments.length != 0) {
+      final List<String> downloadUrls = [];
+      final storageRef = firebaseStorage.ref();
+      for (int i = 0; i < message.attachments.length; i++) {
+        storageRef
+            .child("${message.messageId}-$i")
+            .putFile(File(message.attachments[i].url));
+      }
+    }
+    return [];
+  }
+
   Future<void> addMessage(MessageModel message) async {
-    return firestore
+    return firebaseFirestore
         .collection('conversations')
         .doc(message.conversationId)
         .collection('messages')

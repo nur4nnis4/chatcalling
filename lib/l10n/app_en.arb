@@ -6,5 +6,6 @@
     "settings" : "Settings",
     "search" : "Search",
     "typeSomething" : "Type Something",
-    "noRecents" : "No Recents"
+    "noRecents" : "No Recents",
+    "addCaption" : "Add caption"
 }

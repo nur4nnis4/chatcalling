@@ -4,31 +4,22 @@ import 'package:equatable/equatable.dart';
 
 import '../../../../../core/error/failures.dart';
 import '../../../domain/entities/message.dart';
-import '../../../domain/usecases/get_conversations.dart';
 import '../../../domain/usecases/get_messages.dart';
-import '../../../domain/usecases/send_message.dart';
 import '../../../domain/usecases/update_read_status.dart';
-import '../../utils/message_input_converter.dart';
 
 part 'message_list_event.dart';
 part 'message_list_state.dart';
 
 class MessageListBloc extends Bloc<MessageListEvent, MessageListState> {
-  final GetConversations getConversations;
   final GetMessages getMessages;
-  final SendMessage sendMessage;
   final UpdateReadStatus updateReadStatus;
-  final MessageInputConverter messageInputConverter;
 
-  MessageListBloc(
-      {required this.getConversations,
-      required this.getMessages,
-      required this.sendMessage,
-      required this.updateReadStatus,
-      required this.messageInputConverter})
-      : super(MessagesEmpty()) {
+  MessageListBloc({
+    required this.getMessages,
+    required this.updateReadStatus,
+  }) : super(MessagesEmpty()) {
     // TODO : change the code below after FirebaseAUTH
-    final String _userId = 'user2Id';
+    final String _userId = 'user1Id';
 
     on<MessageListEvent>((event, emit) async {
       // GetMessageEvent
@@ -49,25 +40,10 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> {
         });
       }
 
-      // SendMessageEvent
-      else if (event is SendMessagesEvent) {
-        final result = await sendMessage(
-            message: messageInputConverter.toMessage(
-                event.text, _userId, event.receiverId, event.attachmentPath));
-        // result.fold(
-        //     (error) => emit(MessagesError(errorMessage: error.message)),
-        //     (successMessage) =>
-        //         emit(MessagesSuccess(successMessage: successMessage)));
-      }
-
       // UpdateReadStatusEvent
       else if (event is UpdateReadStatusEvent) {
-        final result = await updateReadStatus(
+        await updateReadStatus(
             conversationId: event.conversationId, userId: _userId);
-        // result.fold(
-        //     (error) => emit(MessagesError(errorMessage: error.message)),
-        //     (successMessage) =>
-        //         emit(MessagesSuccess(successMessage: successMessage)));
       }
     });
   }

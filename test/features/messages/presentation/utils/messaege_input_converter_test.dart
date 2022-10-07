@@ -24,8 +24,11 @@ void main() {
       when(mockUniqueId.concat(any, any)).thenReturn(tMessage.conversationId);
       when(mockTime.now()).thenReturn(tMessage.timeStamp);
       // Act
-      final actual = converter.toMessage(tMessage.text, tMessage.senderId,
-          tMessage.receiverId, tMessage.attachmentUrl);
+      final actual = converter.toMessage(
+          text: tMessage.text,
+          userId: tMessage.senderId,
+          receiverId: tMessage.receiverId,
+          attachments: tMessage.attachments);
       // Assert
       expect(actual, tMessage);
 

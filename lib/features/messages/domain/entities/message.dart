@@ -1,3 +1,4 @@
+import 'package:chatcalling/core/common_features/attachment/domain/entities/attachment.dart';
 import 'package:equatable/equatable.dart';
 
 // ignore: must_be_immutable
@@ -7,9 +8,9 @@ class Message extends Equatable {
   final String senderId;
   final String receiverId;
   final DateTime timeStamp;
-  String conversationId;
-  bool isRead;
-  String attachmentUrl;
+  final String conversationId;
+  final bool isRead;
+  List<Attachment> attachments;
 
   Message({
     required this.messageId,
@@ -19,7 +20,7 @@ class Message extends Equatable {
     required this.timeStamp,
     required this.conversationId,
     required this.isRead,
-    required this.attachmentUrl,
+    required this.attachments,
   });
 
   @override
@@ -31,6 +32,6 @@ class Message extends Equatable {
         receiverId,
         timeStamp,
         isRead,
-        attachmentUrl,
+        attachments,
       ];
 }

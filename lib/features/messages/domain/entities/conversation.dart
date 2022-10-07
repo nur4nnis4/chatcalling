@@ -1,13 +1,12 @@
 import 'package:equatable/equatable.dart';
 
-// ignore: must_be_immutable
 class Conversation extends Equatable {
   final String conversationId;
-  String friendId;
-  String lastText;
-  DateTime lastMessageTime;
-  String lastSenderId;
-  int totalUnreadMessages;
+  final String friendId;
+  final String lastText;
+  final DateTime lastMessageTime;
+  final String lastSenderId;
+  final int totalUnreadMessages;
 
   Conversation(
       {required this.conversationId,
