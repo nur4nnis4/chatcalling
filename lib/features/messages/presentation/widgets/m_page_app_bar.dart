@@ -1,6 +1,6 @@
-import 'package:chatcalling/core/common_widgets/custom_icon_button.dart';
-import 'package:chatcalling/core/controllers/visibility_controller.dart';
-import 'package:chatcalling/l10n/l10n.dart';
+import '../../../../core/common_widgets/custom_icon_button.dart';
+import '../../../../core/controllers/visibility_controller.dart';
+import '../../../../l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -105,9 +105,9 @@ class _MessagePageAppBarState extends State<MessagePageAppBar> {
                   backgroundColor:
                       Theme.of(context).colorScheme.primaryContainer,
                   // TODO : fix Network Image url
-                  // foregroundImage: NetworkImage(
-                  //   '',
-                  // ),
+                  foregroundImage: NetworkImage(
+                    'https://firebasestorage.googleapis.com/v0/b/chatcalling-63eb0.appspot.com/o/users%2Ffemale-avatar.png?alt=media&token=6d3a06b1-6ff9-4562-a1c0-eae1fa75126b',
+                  ),
                 ),
               ],
             );

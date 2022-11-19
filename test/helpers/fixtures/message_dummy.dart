@@ -3,6 +3,8 @@ import 'package:chatcalling/features/messages/data/models/message_model.dart';
 import 'package:chatcalling/core/common_features/attachment/domain/entities/attachment.dart';
 import 'package:chatcalling/features/messages/domain/entities/message.dart';
 
+import 'attachment_dummy.dart';
+
 final tMessage = Message(
     messageId: "messageId",
     conversationId: "user1Id-user2Id",
@@ -44,6 +46,27 @@ final tNewMessageModel2 = MessageModel(
     timeStamp: DateTime.parse("2022-10-31T16:59:32.905450Z"),
     isRead: false,
     attachments: []);
+
+final tNewMessageWithAttachment = MessageModel(
+    messageId: 'newMessageId',
+    conversationId: 'user1Id-user2Id',
+    text: 'How are you?',
+    senderId: 'user1Id',
+    receiverId: 'user2Id',
+    timeStamp: DateTime.parse("2022-10-31T16:59:32.905450Z").toLocal(),
+    isRead: false,
+    attachments: tAttachmentModelList);
+
+final tExpectedMessageWithAttachment = MessageModel(
+    messageId: 'newMessageId',
+    conversationId: 'user1Id-user2Id',
+    text: 'How are you?',
+    senderId: 'user1Id',
+    receiverId: 'user2Id',
+    timeStamp: DateTime.parse("2022-10-31T16:59:32.905450Z").toLocal(),
+    isRead: false,
+    attachments: tExpectedAttachmentModelList);
+
 final Map<String, dynamic> tMessageJson = {
   "messageId": "messageId",
   "conversationId": "user1Id-user2Id",

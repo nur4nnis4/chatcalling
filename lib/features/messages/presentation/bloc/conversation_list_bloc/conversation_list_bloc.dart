@@ -1,9 +1,10 @@
 import 'package:bloc/bloc.dart';
-import 'package:chatcalling/core/error/failures.dart';
-import 'package:chatcalling/features/messages/domain/entities/conversation.dart';
-import 'package:chatcalling/features/messages/domain/usecases/get_conversations.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+
+import '../../../../../core/error/failures.dart';
+import '../../../domain/entities/conversation.dart';
+import '../../../domain/usecases/get_conversations.dart';
 
 part 'conversation_list_event.dart';
 part 'conversation_list_state.dart';

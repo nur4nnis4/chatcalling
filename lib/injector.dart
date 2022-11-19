@@ -1,6 +1,14 @@
+import 'core/common_features/attachment/data/datasources/attachment_local_datasource.dart';
+import 'core/common_features/attachment/data/repositories/attachment_repository_impl.dart';
+import 'core/common_features/attachment/domain/repositories/attachment_repository.dart';
+import 'core/common_features/attachment/domain/usecases/get_lost_attachments.dart';
+import 'core/common_features/attachment/domain/usecases/pick_attachments.dart';
+import 'core/common_features/attachment/presentations/bloc/pick_attachments_bloc.dart';
+import 'core/helpers/check_platform.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'core/helpers/time.dart';
 import 'core/helpers/unique_id.dart';
@@ -29,11 +37,13 @@ void init() {
 
   // CORE - User
   initUser();
+  initAttachment();
 
   // Core - Helpers
   sLocator.registerLazySingleton<UniqueId>(() => UniqueIdImpl());
   sLocator.registerLazySingleton(() => TimeFormat(time: sLocator()));
   sLocator.registerLazySingleton<Time>(() => TimeImpl());
+  sLocator.registerLazySingleton<CheckPlatform>(() => CheckPlatformImpl());
 
   // EXTERNAL
 
@@ -41,6 +51,26 @@ void init() {
       () => FirebaseFirestore.instance);
   sLocator
       .registerLazySingleton<FirebaseStorage>(() => FirebaseStorage.instance);
+
+  sLocator.registerLazySingleton(() => ImagePicker());
+}
+
+void initAttachment() {
+  // Bloc
+  sLocator.registerFactory(() => PickAttachmentsBloc(
+      pickAttachments: sLocator(), getLostAttachments: sLocator()));
+
+  // Use case
+  sLocator.registerLazySingleton(() => PickAttachments(sLocator()));
+  sLocator.registerLazySingleton(() => GetLostAttachments(sLocator()));
+
+  // Repository
+  sLocator.registerLazySingleton<AttachmentRepository>(
+      () => AttachmentRepositoryImpl(attachmentLocalDatasource: sLocator()));
+
+  // Data sources
+  sLocator.registerLazySingleton<AttachmentLocalDatasource>(
+      () => AttachmentLocalDatasourceImpl(imagePicker: sLocator()));
 }
 
 void initMessage() {
@@ -66,7 +96,9 @@ void initMessage() {
   // Data sources
   sLocator.registerLazySingleton<MessageRemoteDatasource>(() =>
       MessageRemoteDatasourceImpl(
-          firebaseFirestore: sLocator(), firebaseStorage: sLocator()));
+          firebaseFirestore: sLocator(),
+          firebaseStorage: sLocator(),
+          checkPlatform: sLocator()));
 
   // Utils
   sLocator.registerLazySingleton(

@@ -1,6 +1,6 @@
-import 'package:chatcalling/core/error/failures.dart';
-import 'package:chatcalling/core/common_features/user/domain/entities/user.dart';
-import 'package:chatcalling/core/common_features/user/domain/entities/user_private_data.dart';
+import '../../../../error/failures.dart';
+import '../entities/user.dart';
+import '../entities/user_private_data.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class UserRepository {

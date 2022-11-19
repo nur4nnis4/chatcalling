@@ -1,60 +1,70 @@
-import 'package:chatcalling/core/common_widgets/image_preview.dart';
-import 'package:chatcalling/core/common_widgets/radiating_action_button.dart';
-import 'package:chatcalling/core/common_features/attachment/domain/entities/attachment.dart';
-import 'package:chatcalling/features/messages/presentation/bloc/pick_files_bloc.dart/pick_files_bloc.dart';
-import 'package:chatcalling/features/messages/presentation/bloc/pick_files_bloc.dart/pick_files_state.dart';
-import 'package:chatcalling/features/messages/presentation/bloc/send_message_bloc.dart/send_message_bloc.dart';
-import 'package:chatcalling/l10n/l10n.dart';
+import '../../../../core/common_features/attachment/presentations/bloc/pick_attachments_bloc.dart';
+import '../../../../core/common_widgets/image_gallery.dart';
+import '../../../../core/common_widgets/image_preview.dart';
+import '../../../../core/common_widgets/radiating_action_button.dart';
+import '../../../../core/common_features/attachment/domain/entities/attachment.dart';
+import '../bloc/send_message_bloc.dart/send_message_bloc.dart';
+import '../../../../l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SendImageSheet extends StatelessWidget {
   final String receiverId;
+  final List<Attachment> pickedImageList;
 
-  const SendImageSheet({Key? key, required this.receiverId}) : super(key: key);
+  const SendImageSheet(
+      {Key? key, required this.receiverId, required this.pickedImageList})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.6,
       width: double.infinity,
-      child: BlocBuilder<PickFilesBloc, PickFilesState>(
-        builder: (context, state) {
-          return Column(children: [
-            IconButton(
-              onPressed: () {
-                Navigator.pop(context);
+      child: Column(children: [
+        IconButton(
+          onPressed: () {
+            context.read<PickAttachmentsBloc>().add(ResetAttachmentEvent());
+            Navigator.pop(context);
+          },
+          splashRadius: 8,
+          padding: EdgeInsets.all(0),
+          icon: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: Theme.of(context).colorScheme.onPrimaryContainer,
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 17),
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 150,
+                crossAxisSpacing: 5,
+                mainAxisSpacing: 5,
+              ),
+              itemCount: pickedImageList.length,
+              shrinkWrap: true,
+              itemBuilder: (_, i) {
+                return InkWell(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ImageGallery(
+                          galleryItems: pickedImageList, initialPage: i),
+                    ),
+                  ),
+                  child: ImagePreview(
+                    imageUrl: pickedImageList[i].url,
+                  ),
+                );
               },
-              splashRadius: 8,
-              padding: EdgeInsets.all(0),
-              icon: Icon(
-                Icons.keyboard_arrow_down_rounded,
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
-              ),
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 17),
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 150,
-                    crossAxisSpacing: 5,
-                    mainAxisSpacing: 5,
-                  ),
-                  itemCount: state.pickedImageList.length,
-                  shrinkWrap: true,
-                  itemBuilder: (_, i) => ImagePreview(
-                    imageUrl: state.pickedImageList[i].url,
-                  ),
-                ),
-              ),
-            ),
-            SendImageBar(
-                pickedImageList: state.pickedImageList, receiverId: receiverId),
-          ]);
-        },
-      ),
+          ),
+        ),
+        SendImageBar(pickedImageList: pickedImageList, receiverId: receiverId),
+      ]),
     );
   }
 }

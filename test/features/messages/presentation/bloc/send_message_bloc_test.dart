@@ -1,5 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:chatcalling/core/error/failures.dart';
+import 'package:chatcalling/features/messages/data/models/message_model.dart';
 import 'package:chatcalling/features/messages/presentation/bloc/send_message_bloc.dart/send_message_bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -38,7 +39,7 @@ void main() {
         receiverId: tMessage.receiverId,
         attachments: tMessage.attachments)),
     expect: () => <SendMessageState>[
-      SendMessageLoading(),
+      SendMessageLoading(message: MessageModel.fromEntity(tMessage)),
       SendMessageSuccess(successMessage: 'Success')
     ],
     verify: (_) {
@@ -64,7 +65,7 @@ void main() {
         receiverId: tMessage.receiverId,
         attachments: tMessage.attachments)),
     expect: () => <SendMessageState>[
-      SendMessageLoading(),
+      SendMessageLoading(message: MessageModel.fromEntity(tMessage)),
       SendMessageError(errorMessage: 'PlatformFailure')
     ],
     verify: (_) {

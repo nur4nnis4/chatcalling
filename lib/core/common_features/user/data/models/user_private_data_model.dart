@@ -1,4 +1,4 @@
-import 'package:chatcalling/core/common_features/user/domain/entities/user_private_data.dart';
+import '../../domain/entities/user_private_data.dart';
 
 class UserPrivateDataModel extends UserPrivateData {
   UserPrivateDataModel(

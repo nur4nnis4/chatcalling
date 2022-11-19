@@ -1,4 +1,4 @@
-import 'package:chatcalling/features/messages/domain/entities/conversation.dart';
+import '../entities/conversation.dart';
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/error/failures.dart';

@@ -14,3 +14,5 @@ class TakeCameraImageEvent extends PickAttachmentsEvent {}
 class AttachVideoEvent extends PickAttachmentsEvent {}
 
 class TakeCameraVideoEvent extends PickAttachmentsEvent {}
+
+class ResetAttachmentEvent extends PickAttachmentsEvent {}

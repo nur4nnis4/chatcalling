@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:chatcalling/core/error/failures.dart';
-import 'package:chatcalling/core/common_features/user/domain/entities/user.dart';
-import 'package:chatcalling/core/common_features/user/domain/usecases/get_user_data.dart';
+import '../../../../error/failures.dart';
+import '../../domain/entities/user.dart';
+import '../../domain/usecases/get_user_data.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 

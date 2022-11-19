@@ -1,6 +1,6 @@
-import 'package:chatcalling/core/error/failures.dart';
-import 'package:chatcalling/features/messages/domain/entities/message.dart';
-import 'package:chatcalling/features/messages/domain/repositories/message_repository.dart';
+import '../../../../core/error/failures.dart';
+import '../entities/message.dart';
+import '../repositories/message_repository.dart';
 import 'package:dartz/dartz.dart';
 
 class SendMessage {

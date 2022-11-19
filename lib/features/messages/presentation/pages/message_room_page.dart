@@ -1,15 +1,12 @@
-import 'package:chatcalling/core/helpers/time.dart';
-import 'package:chatcalling/core/common_widgets/custom_icon_button.dart';
-import 'package:chatcalling/features/messages/domain/entities/conversation.dart';
-import 'package:chatcalling/features/messages/domain/entities/message.dart';
-import 'package:chatcalling/features/messages/presentation/bloc/message_list_bloc.dart/message_list_bloc.dart';
-import 'package:chatcalling/features/messages/presentation/widgets/send_message_bar.dart';
-import 'package:chatcalling/features/messages/presentation/widgets/message_bubble.dart';
-import 'package:chatcalling/injector.dart';
-import 'package:chatcalling/l10n/l10n.dart';
+import 'dart:async';
+
+import '../../../../core/common_widgets/custom_icon_button.dart';
+import '../../domain/entities/conversation.dart';
+import '../bloc/message_list_bloc.dart/message_list_bloc.dart';
+import '../widgets/message_list_view.dart';
+import '../widgets/send_message_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:grouped_list/grouped_list.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -29,6 +26,8 @@ class _MessageRoomPageState extends State<MessageRoomPage> {
     Future.microtask(() {
       Provider.of<MessageListBloc>(context, listen: false)
           .add(GetMessagesEvent(widget.conversation.conversationId));
+      Provider.of<MessageListBloc>(context, listen: false)
+          .add(UpdateReadStatusEvent(widget.conversation.conversationId));
     });
   }
 
@@ -40,36 +39,21 @@ class _MessageRoomPageState extends State<MessageRoomPage> {
         children: [
           Expanded(
             child: BlocBuilder<MessageListBloc, MessageListState>(
-              builder: (context, state) {
-                if (state is MessagesEmpty) {
+              builder: (context, messageListState) {
+                if (messageListState is MessagesEmpty) {
                   return Container();
-                } else if (state is MessagesLoading) {
+                } else if (messageListState is MessagesLoading) {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
-                } else if (state is MessagesError) {
+                } else if (messageListState is MessagesError) {
                   return Container(
-                    child: Text("ERROR : ${state.errorMessage}"),
+                    child: Text("OOPS! Something went wrong."),
                   );
-                } else if (state is MessagesLoaded) {
-                  final messageList = state.messageList;
-                  return GroupedListView<Message, DateTime>(
-                    useStickyGroupSeparators: true,
-                    floatingHeader: true,
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    reverse: true,
-                    sort: false,
-                    padding: const EdgeInsets.all(10),
-                    elements: messageList,
-                    groupBy: (message) =>
-                        sLocator.get<TimeFormat>().toYMD(message.timeStamp),
-                    groupSeparatorBuilder: (date) => _listviewSeparator(date),
-                    itemBuilder: (_, message) =>
-                        message.senderId == state.userId
-                            ? SentMessageBubble(message: message)
-                            : ReceivedMessageBubble(message: message),
-                  );
+                } else if (messageListState is MessagesLoaded) {
+                  return MessageListView(
+                      messageList: messageListState.messageList,
+                      userId: messageListState.userId);
                 } else {
                   return Center(
                     child: Text('Something went wrong...'),
@@ -78,41 +62,7 @@ class _MessageRoomPageState extends State<MessageRoomPage> {
               },
             ),
           ),
-          // TODO: FIX send attachment
-          SendMessageBar(
-              receiverId: widget.conversation.friendId, attachmentPaths: []),
-        ],
-      ),
-    );
-  }
-
-  Padding _listviewSeparator(DateTime date) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 18),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 6, vertical: 1),
-            child: Text(
-              sLocator
-                  .get<TimeFormat>()
-                  .yMMMMd(date, L10n.getLocalLanguageCode(context)),
-              style: TextStyle(
-                  fontSize: 12,
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onPrimaryContainer
-                      .withAlpha(200)),
-            ),
-            decoration: BoxDecoration(
-                color: Theme.of(context)
-                    .colorScheme
-                    .primaryContainer
-                    .withAlpha(200),
-                borderRadius: BorderRadius.circular(10)),
-          ),
+          SendMessageBar(receiverId: widget.conversation.friendId),
         ],
       ),
     );
@@ -134,6 +84,8 @@ class _MessageRoomPageState extends State<MessageRoomPage> {
           ),
           CircleAvatar(
             maxRadius: 17,
+            foregroundImage: NetworkImage(
+                "https://firebasestorage.googleapis.com/v0/b/chatcalling-63eb0.appspot.com/o/users%2Fmale-avatar.png?alt=media&token=67018152-17cc-4a70-a0c6-764679ce6acb"),
             backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           ),
           SizedBox(width: 12),

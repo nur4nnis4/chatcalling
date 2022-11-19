@@ -7,5 +7,7 @@
     "search" : "Search",
     "typeSomething" : "Type Something",
     "noRecents" : "No Recents",
-    "addCaption" : "Add caption"
+    "addCaption" : "Add caption",
+    "showMore" : "Show More",
+    "showLess" : "Show Less"
 }

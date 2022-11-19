@@ -7,6 +7,7 @@
     "search" : "Pencarian",
     "typeSomething" : "Ketikkan sesuatu",
     "noRecents" : "Tidak ada yang baru",
-    "addCaption": "Tambahkan deskripsi"
-
+    "addCaption": "Tambahkan deskripsi",
+    "showMore" : "Tampilkan lebih",
+    "showLess" : "Tampilkan sedikit"
 }

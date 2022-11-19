@@ -1,7 +1,7 @@
-import 'package:chatcalling/core/common_features/attachment/data/datasources/attachment_local_datasource.dart';
-import 'package:chatcalling/core/common_features/attachment/domain/entities/attachment.dart';
-import 'package:chatcalling/core/common_features/attachment/domain/repositories/attachment_repository.dart';
-import 'package:chatcalling/core/error/failures.dart';
+import '../datasources/attachment_local_datasource.dart';
+import '../../domain/entities/attachment.dart';
+import '../../domain/repositories/attachment_repository.dart';
+import '../../../../error/failures.dart';
 import 'package:dartz/dartz.dart';
 
 class AttachmentRepositoryImpl extends AttachmentRepository {

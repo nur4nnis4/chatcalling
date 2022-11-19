@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:chatcalling/features/messages/data/datasources/message_remote_datasource.dart';
-import 'package:chatcalling/features/messages/data/models/message_model.dart';
-import 'package:chatcalling/features/messages/domain/entities/message.dart';
-import 'package:chatcalling/features/messages/domain/entities/conversation.dart';
-import 'package:chatcalling/core/error/failures.dart';
-import 'package:chatcalling/features/messages/domain/repositories/message_repository.dart';
+import '../datasources/message_remote_datasource.dart';
+import '../models/message_model.dart';
+import '../../domain/entities/message.dart';
+import '../../domain/entities/conversation.dart';
+import '../../../../core/error/failures.dart';
+import '../../domain/repositories/message_repository.dart';
 import 'package:dartz/dartz.dart';
 
 class MessageRepositoryImpl implements MessageRepository {

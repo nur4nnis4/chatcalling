@@ -1,5 +1,5 @@
-import 'package:chatcalling/core/common_features/attachment/domain/entities/attachment.dart';
-import 'package:chatcalling/core/common_features/attachment/domain/repositories/attachment_repository.dart';
+import '../entities/attachment.dart';
+import '../repositories/attachment_repository.dart';
 import 'package:dartz/dartz.dart';
 
 import '../../../../error/failures.dart';

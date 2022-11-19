@@ -18,6 +18,8 @@ import 'package:chatcalling/core/common_features/user/data/datasources/user_remo
     as _i14;
 import 'package:chatcalling/core/common_features/user/data/models/user_model.dart'
     as _i15;
+import 'package:chatcalling/core/common_features/user/data/models/user_private_data_model.dart'
+    as _i16;
 import 'package:chatcalling/core/common_features/user/domain/entities/user.dart'
     as _i12;
 import 'package:chatcalling/core/common_features/user/domain/entities/user_private_data.dart'
@@ -27,6 +29,7 @@ import 'package:chatcalling/core/common_features/user/domain/repositories/user_r
 import 'package:chatcalling/core/common_features/user/domain/usecases/get_user_data.dart'
     as _i16;
 import 'package:chatcalling/core/error/failures.dart' as _i11;
+import 'package:chatcalling/core/helpers/check_platform.dart' as _i30;
 import 'package:chatcalling/core/helpers/time.dart' as _i7;
 import 'package:chatcalling/core/helpers/unique_id.dart' as _i6;
 import 'package:chatcalling/features/messages/data/datasources/message_remote_datasource.dart'
@@ -128,12 +131,12 @@ class MockUserRemoteDatasource extends _i1.Mock
                   Stream<_i3.Either<_i11.Failure, _i15.UserModel>>.empty())
           as _i10.Stream<_i3.Either<_i11.Failure, _i15.UserModel>>);
   @override
-  _i10.Stream<_i3.Either<_i11.Failure, _i15.UserModel>> getUserPrivateData(
-          String? userId) =>
-      (super.noSuchMethod(Invocation.method(#getUserPrivateData, [userId]),
-              returnValue:
-                  Stream<_i3.Either<_i11.Failure, _i15.UserModel>>.empty())
-          as _i10.Stream<_i3.Either<_i11.Failure, _i15.UserModel>>);
+  _i10.Stream<_i3.Either<_i11.Failure, _i16.UserPrivateDataModel>>
+      getUserPrivateData(String? userId) => (super.noSuchMethod(
+              Invocation.method(#getUserPrivateData, [userId]),
+              returnValue: Stream<
+                  _i3.Either<_i11.Failure, _i16.UserPrivateDataModel>>.empty())
+          as _i10.Stream<_i3.Either<_i11.Failure, _i16.UserPrivateDataModel>>);
 }
 
 /// A class which mocks [GetUserData].
@@ -505,6 +508,20 @@ class MockUniqueId extends _i1.Mock implements _i6.UniqueId {
   String concat(String? uuid1, String? uuid2) =>
       (super.noSuchMethod(Invocation.method(#concat, [uuid1, uuid2]),
           returnValue: '') as String);
+}
+
+/// A class which mocks [CheckPlatform].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCheckPlatform extends _i1.Mock implements _i30.CheckPlatform {
+  MockCheckPlatform() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  bool isWeb() =>
+      (super.noSuchMethod(Invocation.method(#isWeb, []), returnValue: false)
+          as bool);
 }
 
 /// A class which mocks [ImagePicker].

@@ -1,31 +1,28 @@
 import 'package:flutter/material.dart';
 
 class RadiatingActionButton extends StatelessWidget {
-  final Color? color;
-  final String? heroTag;
-  final int shadowAlpha;
-  final int splashAlpha;
-  final bool mini;
   final Icon icon;
   final Function() onPressed;
+  final Color? color;
+  final bool? mini;
+  final int? shadowAlpha;
+  final String? heroTag;
 
   const RadiatingActionButton(
-      {this.color,
-      required this.icon,
-      this.mini = true,
-      this.shadowAlpha = 100,
-      this.splashAlpha = 8,
+      {required this.icon,
       required this.onPressed,
+      this.color,
+      this.mini,
+      this.shadowAlpha,
       this.heroTag})
       : super();
 
   @override
   Widget build(BuildContext context) {
-    final _color =
-        color != null ? color! : Theme.of(context).colorScheme.secondary;
+    final _color = color ?? Theme.of(context).colorScheme.secondary;
     return FloatingActionButton(
         heroTag: heroTag,
-        mini: mini,
+        mini: mini ?? true,
         child: Container(
           height: 70,
           width: 70,
@@ -34,7 +31,7 @@ class RadiatingActionButton extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(50)),
             boxShadow: [
               BoxShadow(
-                color: _color.withAlpha(shadowAlpha),
+                color: _color.withAlpha(shadowAlpha ?? 100),
                 spreadRadius: 5,
                 blurRadius: 5,
                 offset: Offset.zero,

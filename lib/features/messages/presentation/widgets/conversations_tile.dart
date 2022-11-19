@@ -1,11 +1,9 @@
 import 'package:badges/badges.dart';
-import 'package:chatcalling/core/helpers/time.dart';
-import 'package:chatcalling/features/messages/domain/entities/conversation.dart';
-import 'package:chatcalling/features/messages/presentation/bloc/message_list_bloc.dart/message_list_bloc.dart';
-import 'package:chatcalling/features/messages/presentation/pages/message_room_page.dart';
-import 'package:chatcalling/injector.dart';
-import 'package:chatcalling/l10n/l10n.dart';
-import 'package:provider/provider.dart';
+import '../../../../core/helpers/time.dart';
+import '../../domain/entities/conversation.dart';
+import '../pages/message_room_page.dart';
+import '../../../../injector.dart';
+import '../../../../l10n/l10n.dart';
 
 import 'package:flutter/material.dart';
 
@@ -20,8 +18,6 @@ class ConversationsTile extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        Provider.of<MessageListBloc>(context, listen: false)
-            .add(UpdateReadStatusEvent(conversation.conversationId));
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -36,11 +32,8 @@ class ConversationsTile extends StatelessWidget {
               CircleAvatar(
                 maxRadius: 24,
                 backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                // foregroundImage: friendPhotoUrl.isNotEmpty
-                //     ? NetworkImage(
-                //         friendPhotoUrl,
-                //       )
-                //     : null,
+                foregroundImage: NetworkImage(
+                    "https://firebasestorage.googleapis.com/v0/b/chatcalling-63eb0.appspot.com/o/users%2Fmale-avatar.png?alt=media&token=67018152-17cc-4a70-a0c6-764679ce6acb"),
               ),
               Expanded(
                 child: Padding(
@@ -51,7 +44,7 @@ class ConversationsTile extends StatelessWidget {
                     children: [
                       Text(
                         // conversation.friendId,
-                        "Nur Annisa",
+                        "Haris Roundback",
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(

@@ -1,11 +1,24 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.chatcalling">
+
+    <!--Permission-->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- Features-->
+    <uses-feature android:name="android.hardware.camera.any" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.flash" android:required="false" />
+    <uses-feature android:name="android.hardware.microphone" />
+    <uses-feature android:name="android.hardware.audio.low_latency" />
+    <uses-feature android:name="android.hardware.audio.output" />
+    
+    <!-- SDK -->
+    <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="33" />
    <application
         android:label="ChatCalling"
         android:icon="@mipmap/ic_launcher">

@@ -1,10 +1,12 @@
 import 'dart:io';
 
-import 'package:chatcalling/core/error/exceptions.dart';
-import 'package:chatcalling/core/error/failures.dart';
+import '../../../../core/common_features/attachment/data/models/attachment_model.dart';
+import '../../../../core/error/failures.dart';
+import '../../../../core/helpers/check_platform.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../models/conversation_model.dart';
 import '../models/message_model.dart';
@@ -22,9 +24,13 @@ abstract class MessageRemoteDatasource {
 class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
   final FirebaseFirestore firebaseFirestore;
   final FirebaseStorage firebaseStorage;
+  final CheckPlatform checkPlatform;
 
-  MessageRemoteDatasourceImpl(
-      {required this.firebaseFirestore, required this.firebaseStorage});
+  MessageRemoteDatasourceImpl({
+    required this.firebaseFirestore,
+    required this.firebaseStorage,
+    required this.checkPlatform,
+  });
 
   @override
   Stream<Either<Failure, List<MessageModel>>> getMessages(
@@ -39,7 +45,7 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
           .map((snapshot) => Right(snapshot.docs
               .map((doc) => MessageModel.fromJson(doc.data()))
               .toList()));
-    } on PlatformException catch (e) {
+    } catch (e) {
       yield Left(PlatformFailure(e.toString()));
     }
   }
@@ -57,7 +63,7 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
               .map((doc) =>
                   ConversationModel.fromJson(json: doc.data(), userId: userId))
               .toList()));
-    } on PlatformException catch (e) {
+    } catch (e) {
       yield Left(PlatformFailure("Platform Failure" + e.toString()));
     }
   }
@@ -81,7 +87,7 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
             .update({'isRead': true});
       });
       conversationDocRef.update({'member_details.$userId.totalUnread': 0});
-    } on PlatformException catch (e) {
+    } catch (e) {
       return Left(PlatformFailure(e.toString()));
     }
     return Right('Message read status has been updated');
@@ -92,12 +98,12 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
     try {
       await updateOrAddConversation(
           ConversationModel.fromMessage(message: message));
-    } on PlatformException catch (e) {
+    } catch (e) {
       return Left(PlatformFailure(e.toString()));
     }
     try {
       await addMessage(message);
-    } on PlatformException catch (e) {
+    } catch (e) {
       return Left(PlatformFailure(e.toString()));
     }
 
@@ -126,25 +132,36 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
     });
   }
 
-  List<String> uploadAttachments(MessageModel message) {
-    if (message.attachments.length != 0) {
-      final List<String> downloadUrls = [];
-      final storageRef = firebaseStorage.ref();
-      for (int i = 0; i < message.attachments.length; i++) {
-        storageRef
-            .child("${message.messageId}-$i")
-            .putFile(File(message.attachments[i].url));
-      }
-    }
-    return [];
-  }
-
   Future<void> addMessage(MessageModel message) async {
+    if (message.attachments.length > 0) {
+      final attachments = await uploadAttachments(message);
+      message.attachments = attachments;
+    }
     return firebaseFirestore
         .collection('conversations')
         .doc(message.conversationId)
         .collection('messages')
         .doc(message.messageId)
         .set(message.toJson());
+  }
+
+  Future<List<AttachmentModel>> uploadAttachments(MessageModel message) async {
+    List<AttachmentModel> attachments = [];
+    for (int i = 0; i < message.attachments.length; i++) {
+      final storageRef = firebaseStorage.ref().child("messages").child(
+          "/${message.messageId}-$i.${message.attachments[i].contentType.split('/').last}");
+      final UploadTask uploadTask;
+      if (checkPlatform.isWeb()) {
+        uploadTask = storageRef
+            .putData(await XFile(message.attachments[i].url).readAsBytes());
+      } else {
+        uploadTask = storageRef.putFile(File(message.attachments[i].url));
+      }
+      final downloadUrl =
+          await uploadTask.then((_) => storageRef.getDownloadURL());
+      attachments.add(AttachmentModel(
+          url: downloadUrl, contentType: message.attachments[i].contentType));
+    }
+    return attachments;
   }
 }

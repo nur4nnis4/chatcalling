@@ -1,5 +1,5 @@
-import 'package:chatcalling/core/common_features/attachment/domain/entities/attachment.dart';
-import 'package:chatcalling/core/error/failures.dart';
+import '../entities/attachment.dart';
+import '../../../../error/failures.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class AttachmentRepository {

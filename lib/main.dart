@@ -1,7 +1,7 @@
-import 'package:chatcalling/core/constants/route_name.dart';
-import 'package:chatcalling/features/messages/presentation/bloc/pick_files_bloc.dart/pick_files_bloc.dart';
-import 'package:chatcalling/features/messages/presentation/pages/home_page.dart';
-import 'package:chatcalling/features/messages/presentation/pages/messages_page.dart';
+import 'core/common_features/attachment/presentations/bloc/pick_attachments_bloc.dart';
+import 'core/constants/route_name.dart';
+import 'features/messages/presentation/pages/home_page.dart';
+import 'features/messages/presentation/pages/messages_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,7 +44,7 @@ class ChatApp extends StatelessWidget {
           create: (_) => Injector.sLocator<SendMessageBloc>(),
         ),
         BlocProvider(
-          create: (_) => PickFilesBloc(),
+          create: (_) => Injector.sLocator<PickAttachmentsBloc>(),
         ),
       ],
       child: MaterialApp(
@@ -59,9 +59,6 @@ class ChatApp extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        // home: MessageRoomPage(
-        //   conversation: conversation,
-        // ),
         navigatorObservers: [RouteObserver<ModalRoute>()],
         onGenerateRoute: (RouteSettings setting) {
           switch (setting.name) {
@@ -88,12 +85,3 @@ class ChatApp extends StatelessWidget {
     );
   }
 }
-
-final conversation = Conversation(
-  conversationId: 'user1Id-user2Id',
-  friendId: 'user2Id',
-  lastText: 'Hello',
-  lastMessageTime: DateTime.parse("2022-07-18T16:37:47.475845Z").toLocal(),
-  lastSenderId: 'user1Id',
-  totalUnreadMessages: 0,
-);

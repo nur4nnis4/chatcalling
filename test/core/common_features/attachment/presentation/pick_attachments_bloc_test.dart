@@ -1,4 +1,4 @@
-import 'package:chatcalling/core/common_features/attachment/presentations/bloc/bloc/pick_attachments_bloc.dart';
+import 'package:chatcalling/core/common_features/attachment/presentations/bloc/pick_attachments_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../helpers/mocks/test.mocks.dart';

@@ -1,5 +1,5 @@
-import 'package:chatcalling/core/error/failures.dart';
-import 'package:chatcalling/features/messages/domain/repositories/message_repository.dart';
+import '../../../../core/error/failures.dart';
+import '../repositories/message_repository.dart';
 import 'package:dartz/dartz.dart';
 
 class UpdateReadStatus {

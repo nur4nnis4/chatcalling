@@ -1,4 +1,4 @@
-import 'package:chatcalling/core/common_features/attachment/domain/entities/attachment.dart';
+import '../../domain/entities/attachment.dart';
 
 class AttachmentModel extends Attachment {
   AttachmentModel({required String url, required String contentType})

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart ';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/conversation_list_bloc/conversation_list_bloc.dart';

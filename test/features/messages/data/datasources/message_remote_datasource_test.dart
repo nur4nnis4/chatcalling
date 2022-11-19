@@ -4,14 +4,17 @@ import 'package:chatcalling/features/messages/data/models/message_model.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_storage_mocks/firebase_storage_mocks.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 
 import '../../../../helpers/fixtures/conversations_dummy.dart';
 import '../../../../helpers/fixtures/message_dummy.dart';
+import '../../../../helpers/mocks/test.mocks.dart';
 
 void main() {
   late FakeFirebaseFirestore fakeFirebaseFirestore;
   late MockFirebaseStorage mockFirebaseStorage;
   late MessageRemoteDatasourceImpl dataSource;
+  late MockCheckPlatform mockCheckPlatform;
 
   final String tUserId = 'user1Id';
   final tConversationId = 'user1Id-user2Id';
@@ -19,9 +22,11 @@ void main() {
   setUp(() {
     fakeFirebaseFirestore = FakeFirebaseFirestore();
     mockFirebaseStorage = MockFirebaseStorage();
+    mockCheckPlatform = MockCheckPlatform();
     dataSource = MessageRemoteDatasourceImpl(
         firebaseFirestore: fakeFirebaseFirestore,
-        firebaseStorage: mockFirebaseStorage);
+        firebaseStorage: mockFirebaseStorage,
+        checkPlatform: mockCheckPlatform);
 
     tConversationListJson.forEach((element) {
       fakeFirebaseFirestore
@@ -107,13 +112,20 @@ void main() {
       expect(actualConversationMap, expectedConversationMap);
     });
 
-    test('Should upload attachments to database', () async {
+    test('Should upload attachments to database if exist', () async {
       // Arrange
-
+      when(mockCheckPlatform.isWeb()).thenReturn(true);
       // Act
-      await dataSource.sendMessage(tNewMessageModel);
-
+      await dataSource.sendMessage(tNewMessageWithAttachment);
+      final actualMessage = await fakeFirebaseFirestore
+          .collection('conversations')
+          .doc(tNewMessageModel.conversationId)
+          .collection('messages')
+          .doc(tNewMessageModel.messageId)
+          .get()
+          .then((value) => MessageModel.fromJson(value.data()));
       // Assert
+      expect(actualMessage, tExpectedMessageWithAttachment);
     });
 
     test('Should add new message to database', () async {

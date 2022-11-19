@@ -9,7 +9,11 @@ abstract class SendMessageState extends Equatable {
 
 class SendMessageInitial extends SendMessageState {}
 
-class SendMessageLoading extends SendMessageState {}
+class SendMessageLoading extends SendMessageState {
+  final MessageModel message;
+
+  SendMessageLoading({required this.message});
+}
 
 class SendMessageSuccess extends SendMessageState {
   final String successMessage;

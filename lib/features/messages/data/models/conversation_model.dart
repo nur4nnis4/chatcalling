@@ -1,5 +1,5 @@
-import 'package:chatcalling/features/messages/domain/entities/conversation.dart';
-import 'package:chatcalling/features/messages/domain/entities/message.dart';
+import '../../domain/entities/conversation.dart';
+import '../../domain/entities/message.dart';
 
 // ignore: must_be_immutable
 class ConversationModel extends Conversation {

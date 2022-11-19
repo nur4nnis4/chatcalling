@@ -1,6 +1,6 @@
-import 'package:chatcalling/core/common_features/attachment/data/models/attachment_model.dart';
-import 'package:chatcalling/core/common_features/attachment/domain/entities/attachment.dart';
-import 'package:chatcalling/features/messages/domain/entities/message.dart';
+import '../../../../core/common_features/attachment/data/models/attachment_model.dart';
+import '../../../../core/common_features/attachment/domain/entities/attachment.dart';
+import '../../domain/entities/message.dart';
 
 // ignore: must_be_immutable
 class MessageModel extends Message {

@@ -1,7 +1,7 @@
-import 'package:chatcalling/core/helpers/time.dart';
-import 'package:chatcalling/core/helpers/unique_id.dart';
-import 'package:chatcalling/core/common_features/attachment/domain/entities/attachment.dart';
-import 'package:chatcalling/features/messages/domain/entities/message.dart';
+import '../../../../core/helpers/time.dart';
+import '../../../../core/helpers/unique_id.dart';
+import '../../../../core/common_features/attachment/domain/entities/attachment.dart';
+import '../../domain/entities/message.dart';
 
 class MessageInputConverter {
   final UniqueId uniqueId;

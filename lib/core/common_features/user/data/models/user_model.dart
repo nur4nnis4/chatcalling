@@ -1,4 +1,4 @@
-import 'package:chatcalling/core/common_features/user/domain/entities/user.dart';
+import '../../domain/entities/user.dart';
 
 class UserModel extends User {
   UserModel(

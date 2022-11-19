@@ -9,12 +9,14 @@ abstract class PickAttachmentsState extends Equatable {
 
 class PickAttachmentsEmpty extends PickAttachmentsState {}
 
-class PickAttachmentsLoading extends PickAttachmentsState {}
-
-class PickAttachmentsLoaded extends PickAttachmentsState {
+class MultipleImagesLoaded extends PickAttachmentsState {
   final List<Attachment> attachments;
 
-  PickAttachmentsLoaded({required this.attachments});
+  MultipleImagesLoaded({required this.attachments});
+
+  static MultipleImagesLoaded copyWith(
+          {required List<Attachment> attachments}) =>
+      MultipleImagesLoaded(attachments: attachments);
 
   @override
   List<Object> get props => [attachments];

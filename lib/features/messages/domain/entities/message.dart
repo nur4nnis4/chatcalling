@@ -1,4 +1,4 @@
-import 'package:chatcalling/core/common_features/attachment/domain/entities/attachment.dart';
+import '../../../../core/common_features/attachment/domain/entities/attachment.dart';
 import 'package:equatable/equatable.dart';
 
 // ignore: must_be_immutable
@@ -34,4 +34,10 @@ class Message extends Equatable {
         isRead,
         attachments,
       ];
+}
+
+enum MessageSentStatus {
+  sent,
+  failed,
+  sending,
 }
