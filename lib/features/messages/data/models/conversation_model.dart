@@ -1,3 +1,7 @@
+import 'package:chatcalling/core/common_features/user/data/models/user_model.dart';
+import 'package:chatcalling/core/common_features/user/domain/entities/user.dart';
+import 'package:chatcalling/features/messages/data/models/message_model.dart';
+
 import '../../domain/entities/conversation.dart';
 import '../../domain/entities/message.dart';
 
@@ -5,27 +9,25 @@ import '../../domain/entities/message.dart';
 class ConversationModel extends Conversation {
   ConversationModel({
     required String conversationId,
-    required String friendId,
-    required String lastText,
-    required DateTime lastMessageTime,
-    required String lastSenderId,
+    required User friendUser,
+    required Message lastMessage,
     required int totalUnreadMessages,
   }) : super(
             conversationId: conversationId,
-            friendId: friendId,
-            lastText: lastText,
-            lastMessageTime: lastMessageTime,
-            lastSenderId: lastSenderId,
+            friendUser: friendUser,
+            lastMessage: lastMessage,
             totalUnreadMessages: totalUnreadMessages);
 
-  factory ConversationModel.fromJson(
-          {required Map<String, dynamic>? json, required String userId}) =>
+  factory ConversationModel.fromJson({
+    required Map<String, dynamic>? json,
+    required Map<String, dynamic> lastMessageJson,
+    required Map<String, dynamic> friendUserJson,
+    required String userId,
+  }) =>
       ConversationModel(
         conversationId: json?['conversationId'],
-        friendId: json?['member_details'][userId]['friendId'],
-        lastText: json?['lastText'],
-        lastMessageTime: DateTime.parse(json?['lastMessageTime']).toLocal(),
-        lastSenderId: json?['lastSenderId'],
+        friendUser: UserModel.fromJson(friendUserJson),
+        lastMessage: MessageModel.fromJson(lastMessageJson),
         totalUnreadMessages: json?['member_details'][userId]['totalUnread'],
       );
 
@@ -33,23 +35,18 @@ class ConversationModel extends Conversation {
           {required String userId, int? friendTotalUnread}) =>
       {
         'conversationId': conversationId,
-        'lastText': lastText,
-        'lastMessageTime': lastMessageTime.toUtc().toIso8601String(),
-        'lastSenderId': lastSenderId,
-        'members': [userId, friendId],
+        'lastMessageId': lastMessage.messageId,
+        'lastMessageTime': lastMessage.timeStamp.toUtc().toIso8601String(),
+        'members': [userId, friendUser.userId],
         'member_details': {
-          userId: {"totalUnread": totalUnreadMessages, "friendId": friendId},
-          friendId: {"totalUnread": friendTotalUnread ?? 1, "friendId": userId}
+          userId: {
+            "totalUnread": totalUnreadMessages,
+            "friendId": friendUser.userId
+          },
+          friendUser.userId: {
+            "totalUnread": friendTotalUnread ?? 1,
+            "friendId": userId
+          }
         }
       };
-
-  factory ConversationModel.fromMessage({required Message message}) {
-    return ConversationModel(
-        conversationId: message.conversationId,
-        friendId: message.receiverId,
-        lastText: message.text,
-        lastMessageTime: message.timeStamp.toLocal(),
-        lastSenderId: message.senderId,
-        totalUnreadMessages: 0);
-  }
 }

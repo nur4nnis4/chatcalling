@@ -1,5 +1,4 @@
 import 'package:chatcalling/features/messages/data/datasources/message_remote_datasource.dart';
-import 'package:chatcalling/features/messages/data/models/conversation_model.dart';
 import 'package:chatcalling/features/messages/data/models/message_model.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_storage_mocks/firebase_storage_mocks.dart';
@@ -8,6 +7,7 @@ import 'package:mockito/mockito.dart';
 
 import '../../../../helpers/fixtures/conversations_dummy.dart';
 import '../../../../helpers/fixtures/message_dummy.dart';
+import '../../../../helpers/fixtures/user_dummy.dart';
 import '../../../../helpers/mocks/test.mocks.dart';
 
 void main() {
@@ -43,6 +43,13 @@ void main() {
           .doc(element['messageId'])
           .set(element);
     });
+
+    tUserModelList.forEach((userModel) {
+      fakeFirebaseFirestore
+          .collection('users')
+          .doc(userModel.userId)
+          .set(userModel.toJson());
+    });
   });
 
   group('getMessages', () {
@@ -50,13 +57,11 @@ void main() {
         'Should returns Stream containing List of MessageModel objects ordered by timeStamp',
         () async {
       // Act
-      final actualMessageList = await dataSource
-          .getMessages(tMessageModel.conversationId)
-          .first
-          .then((value) => value.getOrElse(() => []));
+      final actualMessageList =
+          dataSource.getMessages(tMessageModel.conversationId);
 
       // Assert
-      expect(actualMessageList, tExpectedDescendingMessageList);
+      expect(actualMessageList, emits(tExpectedDescendingMessageList));
     });
   });
 
@@ -65,13 +70,10 @@ void main() {
         'Should returns stream containing List of ConversationModel objects ordered by lastMessageTime',
         () async {
       // Act
-      final actualConversationList = await dataSource
-          .getConversations(tUserId)
-          .first
-          .then((value) => value.getOrElse(() => []));
+      final actualConversationList = dataSource.getConversations(tUserId);
 
       // Assert
-      expect(actualConversationList, tExpectedConversationList);
+      expect(actualConversationList, emits(tExpectedConversationList));
     });
   });
 
@@ -89,8 +91,10 @@ void main() {
           .then((value) => value.data());
 
       final expectedConversationMap =
-          ConversationModel.fromMessage(message: tNewMessageModel2)
-              .toJson(userId: tUserId, friendTotalUnread: 1);
+          tNewMessageModel2.toConversationJson(receiverTotalUnread: 1);
+      // MessageModel
+      // ConversationModel.fromMessage(message: tNewMessageModel2)
+      //     .toJson(userId: tUserId, friendTotalUnread: 1);
       // Assert
       expect(actualConversationMap, expectedConversationMap);
     });
@@ -106,8 +110,9 @@ void main() {
           .get()
           .then((value) => value.data());
       final expectedConversationMap =
-          ConversationModel.fromMessage(message: tNewMessageModel)
-              .toJson(userId: tUserId, friendTotalUnread: 5);
+          tNewMessageModel.toConversationJson(receiverTotalUnread: 2);
+      // ConversationModel.fromMessage(message: tNewMessageModel)
+      //     .toJson(userId: tUserId, friendTotalUnread: 5);
       // Assert
       expect(actualConversationMap, expectedConversationMap);
     });
@@ -144,6 +149,7 @@ void main() {
       expect(actualMessage, tNewMessageModel);
     });
   });
+
   group('updateReadStatus', () {
     test(
         'Should update read status of all unread messages received by current user to true',

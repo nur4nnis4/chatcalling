@@ -1,22 +1,28 @@
+import 'package:chatcalling/core/common_features/user/domain/entities/personal_information.dart';
+import 'package:chatcalling/core/common_features/user/domain/usecases/get_personal_information.dart';
+import 'package:chatcalling/core/common_features/user/presentation/bloc/other_user_bloc/other_user_bloc.dart';
+import 'package:chatcalling/core/common_features/user/presentation/bloc/personal_information_bloc/personal_information_bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:get_it/get_it.dart';
+import 'package:image_picker/image_picker.dart';
+
 import 'core/common_features/attachment/data/datasources/attachment_local_datasource.dart';
 import 'core/common_features/attachment/data/repositories/attachment_repository_impl.dart';
 import 'core/common_features/attachment/domain/repositories/attachment_repository.dart';
 import 'core/common_features/attachment/domain/usecases/get_lost_attachments.dart';
 import 'core/common_features/attachment/domain/usecases/pick_attachments.dart';
 import 'core/common_features/attachment/presentations/bloc/pick_attachments_bloc.dart';
-import 'core/helpers/check_platform.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:get_it/get_it.dart';
-import 'package:image_picker/image_picker.dart';
-
-import 'core/helpers/time.dart';
-import 'core/helpers/unique_id.dart';
 import 'core/common_features/user/data/datasources/user_remote_datasource.dart';
 import 'core/common_features/user/data/repositories/user_repository_impl.dart';
 import 'core/common_features/user/domain/repositories/user_repository.dart';
+import 'core/common_features/user/domain/usecases/get_friend_list.dart';
 import 'core/common_features/user/domain/usecases/get_user_data.dart';
-import 'core/common_features/user/presentation/bloc/user_bloc.dart';
+import 'core/common_features/user/presentation/bloc/friend_list_bloc/friend_list_bloc.dart';
+import 'core/common_features/user/presentation/bloc/user_bloc/user_bloc.dart';
+import 'core/helpers/check_platform.dart';
+import 'core/helpers/time.dart';
+import 'core/helpers/unique_id.dart';
 import 'features/messages/data/datasources/message_remote_datasource.dart';
 import 'features/messages/data/repositories/message_repository_impl.dart';
 import 'features/messages/domain/repositories/message_repository.dart';
@@ -75,8 +81,10 @@ void initAttachment() {
 
 void initMessage() {
   // Bloc
-  sLocator.registerFactory(() =>
-      MessageListBloc(getMessages: sLocator(), updateReadStatus: sLocator()));
+  sLocator.registerFactory(() => MessageListBloc(
+      getMessages: sLocator(),
+      updateReadStatus: sLocator(),
+      uniqueId: sLocator()));
   sLocator.registerFactory(
       () => ConversationListBloc(getConversations: sLocator()));
   sLocator.registerFactory(() => SendMessageBloc(
@@ -108,9 +116,16 @@ void initMessage() {
 void initUser() {
   // Bloc
   sLocator.registerLazySingleton(() => UserBloc(getUserData: sLocator()));
+  sLocator.registerLazySingleton(() => OtherUserBloc(getUserData: sLocator()));
+  sLocator
+      .registerLazySingleton(() => FriendListBloc(getFriendList: sLocator()));
+  sLocator.registerLazySingleton(
+      () => PersonalInformationBloc(getPersonalInformation: sLocator()));
 
   // Use cases
   sLocator.registerLazySingleton(() => GetUserData(sLocator()));
+  sLocator.registerLazySingleton(() => GetPersonalInformation(sLocator()));
+  sLocator.registerLazySingleton(() => GetFriendList(sLocator()));
 
   // Repository
   sLocator.registerLazySingleton<UserRepository>(

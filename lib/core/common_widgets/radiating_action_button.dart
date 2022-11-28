@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class RadiatingActionButton extends StatelessWidget {
   final Icon icon;
-  final Function() onPressed;
+  final Function()? onPressed;
   final Color? color;
   final bool? mini;
   final int? shadowAlpha;
@@ -10,7 +10,7 @@ class RadiatingActionButton extends StatelessWidget {
 
   const RadiatingActionButton(
       {required this.icon,
-      required this.onPressed,
+      this.onPressed,
       this.color,
       this.mini,
       this.shadowAlpha,
@@ -42,6 +42,6 @@ class RadiatingActionButton extends StatelessWidget {
         ),
         backgroundColor: _color,
         elevation: 2,
-        onPressed: onPressed);
+        onPressed: onPressed ?? null);
   }
 }

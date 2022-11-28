@@ -11,18 +11,22 @@ import '../../../../helpers/mocks/test.mocks.dart';
 void main() {
   late MockGetMessages mockGetMessages;
   late MockUpdateReadStatus mockUpdateReadStatus;
+  late MockUniqueId mockUniqueId;
 
   late MessageListBloc messagesBloc;
 
-  final String tConversationId = 'user1Id-user2Id';
   final String tUserId = 'user1Id';
+  final String tFriendId = 'user2Id';
+  final String tConversationId = '$tUserId-$tFriendId';
 
   setUp(() {
     mockGetMessages = MockGetMessages();
     mockUpdateReadStatus = MockUpdateReadStatus();
+    mockUniqueId = MockUniqueId();
     messagesBloc = MessageListBloc(
       getMessages: mockGetMessages,
       updateReadStatus: mockUpdateReadStatus,
+      uniqueId: mockUniqueId,
     );
   });
 
@@ -32,6 +36,9 @@ void main() {
   });
 
   group('getMessagesEvent', () {
+    setUp(() {
+      when(mockUniqueId.concat(any, any)).thenReturn(tConversationId);
+    });
     blocTest<MessageListBloc, MessageListState>(
         'should emit [Loading,MessagesLoaded] when data is gotten successfully and is not empty.',
         build: () {
@@ -46,8 +53,10 @@ void main() {
               MessagesLoading(),
               MessagesLoaded(messageList: [tMessage], userId: tUserId),
             ],
-        verify: (_) =>
-            verify(mockGetMessages(conversationId: tConversationId)));
+        verify: (_) => [
+              mockGetMessages(conversationId: tConversationId),
+              mockUniqueId.concat(tUserId, tFriendId),
+            ]);
     blocTest<MessageListBloc, MessageListState>(
         'emits [Loading, Empty] when data is gotten successfully and is empty',
         build: () {
@@ -62,8 +71,10 @@ void main() {
               MessagesLoading(),
               MessagesEmpty(),
             ],
-        verify: (_) =>
-            verify(mockGetMessages(conversationId: tConversationId)));
+        verify: (_) => [
+              mockGetMessages(conversationId: tConversationId),
+              mockUniqueId.concat(tUserId, tFriendId),
+            ]);
 
     blocTest<MessageListBloc, MessageListState>(
         'emits [Loading, Error] when getting data fails',
@@ -79,8 +90,10 @@ void main() {
               MessagesLoading(),
               MessagesError(errorMessage: 'Platform Failure'),
             ],
-        verify: (_) =>
-            verify(mockGetMessages(conversationId: tConversationId)));
+        verify: (_) => [
+              mockGetMessages(conversationId: tConversationId),
+              mockUniqueId.concat(tUserId, tFriendId),
+            ]);
   });
 
   group('updateReadStatusEvent', () {
@@ -90,11 +103,14 @@ void main() {
         when(mockUpdateReadStatus(
                 conversationId: tConversationId, userId: tUserId))
             .thenAnswer((_) async => Right('Success'));
+        when(mockUniqueId.concat(any, any)).thenReturn(tConversationId);
         return messagesBloc;
       },
       act: (bloc) => bloc.add(UpdateReadStatusEvent(tConversationId)),
-      verify: (bloc) => mockUpdateReadStatus(
-          conversationId: tConversationId, userId: tUserId),
+      verify: (bloc) => [
+        mockUpdateReadStatus(conversationId: tConversationId, userId: tUserId),
+        mockUniqueId.concat(tUserId, tFriendId),
+      ],
     );
   });
 }

@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:chatcalling/core/helpers/temp.dart';
 import 'package:chatcalling/features/messages/data/models/message_model.dart';
-import 'package:chatcalling/features/messages/domain/entities/message.dart';
 import '../../../../../core/common_features/attachment/domain/entities/attachment.dart';
 import '../../../domain/usecases/send_message.dart';
 import '../../utils/message_input_converter.dart';
@@ -13,16 +13,13 @@ class SendMessageBloc extends Bloc<SendMessageEvent, SendMessageState> {
   final SendMessage sendMessage;
   final MessageInputConverter messageInputConverter;
 
-  // TODO : change the code below after FirebaseAUTH
-  final String _userId = 'user1Id';
-
   SendMessageBloc(
       {required this.sendMessage, required this.messageInputConverter})
       : super(SendMessageInitial()) {
     on<SendMessageEvent>((event, emit) async {
       final message = messageInputConverter.toMessage(
           text: event.text,
-          userId: _userId,
+          userId: Temp.userId,
           receiverId: event.receiverId,
           attachments: event.attachments);
       emit(SendMessageLoading(message: MessageModel.fromEntity(message)));

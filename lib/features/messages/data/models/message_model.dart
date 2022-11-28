@@ -82,4 +82,20 @@ class MessageModel extends Message {
         isRead: message.isRead,
         attachments: message.attachments);
   }
+
+  Map<String, dynamic> toConversationJson({int? receiverTotalUnread}) {
+    return {
+      "conversationId": conversationId,
+      "lastMessageId": messageId,
+      "lastMessageTime": timeStamp.toUtc().toIso8601String(),
+      "members": [senderId, receiverId],
+      "member_details": {
+        senderId: {"totalUnread": 0, "friendId": receiverId},
+        receiverId: {
+          "totalUnread": receiverTotalUnread ?? 0,
+          "friendId": senderId
+        }
+      }
+    };
+  }
 }

@@ -10,33 +10,19 @@ void main() {
     expect(tUserModel, isA<User>());
   });
 
-  group('fromJson', () {
-    test('Should return a valid model', () async {
-      // Act
-      final result = UserModel.fromJson(tUserJson);
+  test('fromJson Should return a valid model', () async {
+    // Act
+    final result = UserModel.fromJson(tUserJson);
 
-      //Assert
-      expect(result, tUserModel);
-    });
+    //Assert
+    expect(result, tUserModel);
   });
-  group('toJson', () {
-    test(
-        'Should retun JSON map containing proper data when signUpTime and lastOnline is UTC',
-        () async {
-      // Act
-      final result = tUserModel.toJson();
 
-      // Assert
-      expect(result, tUserJson);
-    });
-    test(
-        'Should retun JSON map containing proper data when signUpTime and lastOnline is not UTC',
-        () async {
-      // Act
-      final result = tUserModelNotUTC.toJson();
+  test('toJson Should retun JSON map containing proper data', () async {
+    // Act
+    final result = tUserModel.toJson();
 
-      // Assert
-      expect(result, tUserJson);
-    });
+    // Assert
+    expect(result, tUserJson);
   });
 }

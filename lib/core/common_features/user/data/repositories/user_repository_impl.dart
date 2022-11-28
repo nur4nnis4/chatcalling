@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 
 import '../../../../error/failures.dart';
 import '../../domain/entities/user.dart';
-import '../../domain/entities/user_private_data.dart';
+import '../../domain/entities/personal_information.dart';
 import '../../domain/repositories/user_repository.dart';
 import '../datasources/user_remote_datasource.dart';
 
@@ -13,12 +13,41 @@ class UserRepositoryImpl extends UserRepository {
 
   @override
   Stream<Either<Failure, User>> getUserData(String userId) async* {
-    yield* userRemoteDatasource.getUserData(userId).asBroadcastStream();
+    try {
+      yield* userRemoteDatasource
+          .getUserData(userId)
+          .map((event) => Right(event));
+    } catch (e) {
+      yield Left(PlatformFailure(''));
+    }
   }
 
   @override
-  Stream<Either<Failure, UserPrivateData>> getUserPrivateData(String userId) {
-    // TODO: implement getUserPrivateData
+  Stream<Either<Failure, List<User>>> getFriendList(String userId) async* {
+    try {
+      yield* userRemoteDatasource
+          .getFriendList(userId)
+          .map((event) => Right(event));
+    } catch (e) {
+      yield Left(PlatformFailure(''));
+    }
+  }
+
+  @override
+  Stream<Either<Failure, PersonalInformation>> getPersonalInformation(
+      String userId) async* {
+    try {
+      yield* userRemoteDatasource
+          .getPersonalInformation(userId)
+          .map((event) => Right(event));
+    } catch (e) {
+      yield Left(PlatformFailure(''));
+    }
+  }
+
+  @override
+  Stream<Either<Failure, List<User>>> searchUser(String query) {
+    // TODO: implement searchUser
     throw UnimplementedError();
   }
 }

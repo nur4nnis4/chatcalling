@@ -1,10 +1,11 @@
 import 'dart:io';
 
+import 'package:chatcalling/core/common_features/user/data/models/user_model.dart';
+import 'package:rxdart/rxdart.dart';
+
 import '../../../../core/common_features/attachment/data/models/attachment_model.dart';
-import '../../../../core/error/failures.dart';
 import '../../../../core/helpers/check_platform.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dartz/dartz.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -12,13 +13,10 @@ import '../models/conversation_model.dart';
 import '../models/message_model.dart';
 
 abstract class MessageRemoteDatasource {
-  Future<Either<Failure, String>> sendMessage(MessageModel message);
-  Stream<Either<Failure, List<ConversationModel>>> getConversations(
-      String userId);
-  Stream<Either<Failure, List<MessageModel>>> getMessages(
-      String conversationId);
-  Future<Either<Failure, String>> updateReadStatus(
-      String userId, String conversationId);
+  Future<String> sendMessage(MessageModel message);
+  Stream<List<ConversationModel>> getConversations(String userId);
+  Stream<List<MessageModel>> getMessages(String conversationId);
+  Future<String> updateReadStatus(String userId, String conversationId);
 }
 
 class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
@@ -33,53 +31,77 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
   });
 
   @override
-  Stream<Either<Failure, List<MessageModel>>> getMessages(
-      String conversationId) async* {
-    try {
-      yield* firebaseFirestore
-          .collection('conversations')
-          .doc(conversationId)
-          .collection('messages')
-          .orderBy('timeStamp', descending: true)
-          .snapshots()
-          .map((snapshot) => Right(snapshot.docs
-              .map((doc) => MessageModel.fromJson(doc.data()))
-              .toList()));
-    } catch (e) {
-      yield Left(PlatformFailure(e.toString()));
-    }
+  Stream<List<MessageModel>> getMessages(String conversationId) async* {
+    yield* firebaseFirestore
+        .collection('conversations')
+        .doc(conversationId)
+        .collection('messages')
+        .orderBy('timeStamp', descending: true)
+        .snapshots()
+        .map((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        return snapshot.docs
+            .map((doc) => MessageModel.fromJson(doc.data()))
+            .toList();
+      } else
+        return [];
+    });
   }
 
   @override
-  Stream<Either<Failure, List<ConversationModel>>> getConversations(
-      String userId) async* {
-    try {
-      yield* firebaseFirestore
-          .collection('conversations')
-          .where('members', arrayContains: userId)
-          .orderBy('lastMessageTime', descending: true)
-          .snapshots()
-          .map((snapshot) => Right(snapshot.docs
-              .map((doc) =>
-                  ConversationModel.fromJson(json: doc.data(), userId: userId))
-              .toList()));
-    } catch (e) {
-      yield Left(PlatformFailure("Platform Failure" + e.toString()));
-    }
+  Stream<List<ConversationModel>> getConversations(String userId) async* {
+    final conversationRef = firebaseFirestore.collection('conversations');
+    yield* conversationRef
+        .where('members', arrayContains: userId)
+        .orderBy('lastMessageTime', descending: true)
+        .snapshots()
+        .flatMap((snapshot) => Rx.combineLatestList(snapshot.docs.map((doc) {
+              final String friendId =
+                  doc.data()['member_details'][userId]['friendId'] as String;
+              final String conversationId =
+                  doc.data()['conversationId'] as String;
+              final String lastMessageId =
+                  doc.data()['lastMessageId'] as String;
+              final int totalUnreadMessages =
+                  doc.data()['member_details'][userId]['totalUnread'];
+
+              final friendUserStream = firebaseFirestore
+                  .collection('users')
+                  .doc(friendId)
+                  .snapshots()
+                  .map((event) => event.data());
+
+              final lastMessageStream = conversationRef
+                  .doc(conversationId)
+                  .collection('messages')
+                  .doc(lastMessageId)
+                  .snapshots()
+                  .map((event) => event.data());
+
+              return Rx.combineLatest2(friendUserStream, lastMessageStream,
+                  (Map<String, dynamic>? friendUser,
+                      Map<String, dynamic>? message) {
+                return ConversationModel(
+                    conversationId: conversationId,
+                    lastMessage: MessageModel.fromJson(message),
+                    friendUser: UserModel.fromJson(friendUser),
+                    totalUnreadMessages: totalUnreadMessages);
+              });
+            }).toList()));
   }
 
   @override
-  Future<Either<Failure, String>> updateReadStatus(
-      String userId, String conversationId) async {
+  Future<String> updateReadStatus(String userId, String conversationId) async {
     final conversationDocRef =
         firebaseFirestore.collection('conversations').doc(conversationId);
 
-    try {
-      final unreadMessagesSnapshots = await conversationDocRef
-          .collection('messages')
-          .where('receiverId', isEqualTo: userId)
-          .where('isRead', isEqualTo: false)
-          .get();
+    final unreadMessagesSnapshots = await conversationDocRef
+        .collection('messages')
+        .where('receiverId', isEqualTo: userId)
+        .where('isRead', isEqualTo: false)
+        .get();
+
+    if (unreadMessagesSnapshots.docs.isNotEmpty) {
       unreadMessagesSnapshots.docs.forEach((element) {
         conversationDocRef
             .collection('messages')
@@ -87,47 +109,38 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
             .update({'isRead': true});
       });
       conversationDocRef.update({'member_details.$userId.totalUnread': 0});
-    } catch (e) {
-      return Left(PlatformFailure(e.toString()));
     }
-    return Right('Message read status has been updated');
+
+    return '';
   }
 
   @override
-  Future<Either<Failure, String>> sendMessage(MessageModel message) async {
-    try {
-      await updateOrAddConversation(
-          ConversationModel.fromMessage(message: message));
-    } catch (e) {
-      return Left(PlatformFailure(e.toString()));
-    }
-    try {
-      await addMessage(message);
-    } catch (e) {
-      return Left(PlatformFailure(e.toString()));
-    }
+  Future<String> sendMessage(MessageModel message) async {
+    await updateOrAddConversation(message);
+    await addMessage(message);
 
-    return Right('Message has been sent');
+    return '';
   }
 
-  Future<void> updateOrAddConversation(ConversationModel conversation) async {
+  Future<void> updateOrAddConversation(MessageModel message) async {
     final conversationDocRef = firebaseFirestore
         .collection('conversations')
-        .doc(conversation.conversationId);
+        .doc(message.conversationId);
     return firebaseFirestore.runTransaction((transaction) async {
       final conversationSnapshot = await transaction.get(conversationDocRef);
       if (conversationSnapshot.exists) {
-        final int friendTotalUnread = conversationSnapshot
-                .get('member_details.${conversation.friendId}.totalUnread') +
+        final int receiverTotalUnread = conversationSnapshot
+                .get('member_details.${message.receiverId}.totalUnread') +
             1;
         transaction.update(
             conversationDocRef,
-            conversation.toJson(
-                userId: conversation.lastSenderId,
-                friendTotalUnread: friendTotalUnread));
+            message.toConversationJson(
+                receiverTotalUnread: receiverTotalUnread));
       } else {
-        transaction.set(conversationDocRef,
-            conversation.toJson(userId: conversation.lastSenderId));
+        transaction.set(
+          conversationDocRef,
+          message.toConversationJson(receiverTotalUnread: 1),
+        );
       }
     });
   }

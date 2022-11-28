@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:chatcalling/core/common_features/user/domain/entities/user.dart';
+import 'package:chatcalling/core/common_features/user/presentation/bloc/other_user_bloc/other_user_bloc.dart';
+import 'package:chatcalling/core/common_features/user/presentation/pages/profile_page.dart';
+
 import '../../../../core/common_widgets/custom_icon_button.dart';
-import '../../domain/entities/conversation.dart';
 import '../bloc/message_list_bloc.dart/message_list_bloc.dart';
 import '../widgets/message_list_view.dart';
 import '../widgets/send_message_bar.dart';
@@ -11,9 +14,13 @@ import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MessageRoomPage extends StatefulWidget {
-  final Conversation conversation;
+  final String friendId;
+  final User friendUser;
 
-  const MessageRoomPage({required this.conversation});
+  const MessageRoomPage({
+    required this.friendId,
+    required this.friendUser,
+  });
 
   @override
   State<MessageRoomPage> createState() => _MessageRoomPageState();
@@ -25,16 +32,18 @@ class _MessageRoomPageState extends State<MessageRoomPage> {
     super.initState();
     Future.microtask(() {
       Provider.of<MessageListBloc>(context, listen: false)
-          .add(GetMessagesEvent(widget.conversation.conversationId));
+          .add(GetMessagesEvent(widget.friendId));
       Provider.of<MessageListBloc>(context, listen: false)
-          .add(UpdateReadStatusEvent(widget.conversation.conversationId));
+          .add(UpdateReadStatusEvent(widget.friendId));
+      BlocProvider.of<OtherUserBloc>(context)
+          .add(GetOtherUserEvent(userId: widget.friendUser.userId));
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(widget.friendUser),
       body: Column(
         children: [
           Expanded(
@@ -46,71 +55,83 @@ class _MessageRoomPageState extends State<MessageRoomPage> {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
-                } else if (messageListState is MessagesError) {
-                  return Container(
-                    child: Text("OOPS! Something went wrong."),
-                  );
                 } else if (messageListState is MessagesLoaded) {
                   return MessageListView(
                       messageList: messageListState.messageList,
                       userId: messageListState.userId);
                 } else {
                   return Center(
-                    child: Text('Something went wrong...'),
+                    child: Text("OOPS! Something went wrong."),
                   );
                 }
               },
             ),
           ),
-          SendMessageBar(receiverId: widget.conversation.friendId),
+          SendMessageBar(receiverId: widget.friendId),
         ],
       ),
     );
   }
 
-  AppBar _buildAppBar() {
+  AppBar _buildAppBar(User friendUser) {
+    late User user;
     return AppBar(
       titleSpacing: 0,
       toolbarHeight: 70,
       automaticallyImplyLeading: false,
-      title: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(17, 0, 10, 0),
-            child: SolidIconButton(
-              onTap: () => Navigator.pop(context),
-              icon: FontAwesomeIcons.angleLeft,
-            ),
-          ),
-          CircleAvatar(
-            maxRadius: 17,
-            foregroundImage: NetworkImage(
-                "https://firebasestorage.googleapis.com/v0/b/chatcalling-63eb0.appspot.com/o/users%2Fmale-avatar.png?alt=media&token=67018152-17cc-4a70-a0c6-764679ce6acb"),
-            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-          ),
-          SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Haris Roundback',
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: Theme.of(context).colorScheme.onBackground),
+      title: BlocBuilder<OtherUserBloc, OtherUserState>(
+        builder: (context, state) {
+          if (state is OtherUserLoaded) {
+            user = state.userData;
+          } else {
+            user = friendUser;
+          }
+          return Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(17, 0, 10, 0),
+                child: SolidIconButton(
+                  onTap: () => Navigator.pop(context),
+                  icon: FontAwesomeIcons.angleLeft,
                 ),
-                Text(
-                  'Online',
-                  style: TextStyle(
-                      fontSize: 11,
-                      color: Theme.of(context).colorScheme.primary),
-                )
-              ],
-            ),
-          )
-        ],
+              ),
+              GestureDetector(
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProfilePage(user: user))),
+                child: CircleAvatar(
+                  maxRadius: 17,
+                  foregroundImage: NetworkImage(friendUser.profilePhotoUrl),
+                  backgroundColor:
+                      Theme.of(context).colorScheme.primaryContainer,
+                ),
+              ),
+              SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      user.displayName,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Theme.of(context).colorScheme.onBackground),
+                    ),
+                    Text(
+                      user.isOnline ? 'Online' : 'Last seen ${user.lastOnline}',
+                      style: TextStyle(
+                          fontSize: 11,
+                          color: Theme.of(context).colorScheme.primary),
+                    )
+                  ],
+                ),
+              )
+            ],
+          );
+        },
       ),
       actionsIconTheme: IconThemeData(
           color: Theme.of(context).colorScheme.onPrimaryContainer),

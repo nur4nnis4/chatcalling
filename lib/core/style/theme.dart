@@ -24,8 +24,8 @@ final ThemeData light = ThemeData(
       onPrimaryContainer: Color.fromARGB(255, 92, 92, 92),
       secondaryContainer: Color.fromARGB(255, 215, 215, 215),
       onSecondaryContainer: Color.fromARGB(255, 155, 155, 155),
-      tertiaryContainer: Color.fromARGB(255, 45, 103, 185),
-      onTertiaryContainer: Color.fromARGB(157, 223, 236, 255),
+      tertiaryContainer: Color.fromARGB(255, 250, 250, 250),
+      onTertiaryContainer: Color.fromARGB(157, 73, 73, 73),
     ));
 final ThemeData dark = ThemeData(
   scaffoldBackgroundColor: Color(0xFF151515),
@@ -39,7 +39,7 @@ final ThemeData dark = ThemeData(
   bottomSheetTheme:
       BottomSheetThemeData(backgroundColor: Color.fromARGB(255, 22, 22, 22)),
   colorScheme: ColorScheme.dark(
-    background: Color.fromARGB(255, 21, 21, 21),
+    background: Color.fromARGB(255, 24, 24, 24),
     onBackground: Color.fromARGB(255, 218, 218, 218),
     primary: Color.fromARGB(255, 23, 86, 175),
     onPrimary: Colors.white,
@@ -50,5 +50,7 @@ final ThemeData dark = ThemeData(
     onPrimaryContainer: Color.fromARGB(255, 189, 189, 189),
     secondaryContainer: Color.fromARGB(255, 160, 160, 160),
     onSecondaryContainer: Color.fromARGB(255, 170, 170, 170),
+    tertiaryContainer: Color.fromARGB(255, 29, 29, 29),
+    onTertiaryContainer: Color.fromARGB(255, 189, 189, 189),
   ),
 );

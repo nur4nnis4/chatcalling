@@ -17,8 +17,6 @@ class _MessagesPageState extends State<MessagesPage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => BlocProvider.of<ConversationListBloc>(context)
-        .add(ConversationListEvent()));
   }
 
   @override

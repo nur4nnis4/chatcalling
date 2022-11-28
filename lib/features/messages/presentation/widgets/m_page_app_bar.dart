@@ -43,6 +43,18 @@ class _MessagePageAppBarState extends State<MessagePageAppBar> {
                   child: Expanded(
                     child: Row(
                       children: [
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 17),
+                            child: Text(L10n.of(context).message,
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 18)),
+                          ),
+                        ),
                         SolidIconButton(
                           onTap: () => _visibilityController.toggle(),
                           icon: FontAwesomeIcons.magnifyingGlass,
@@ -50,20 +62,6 @@ class _MessagePageAppBarState extends State<MessagePageAppBar> {
                           color: Theme.of(context).colorScheme.primaryContainer,
                           iconColor:
                               Theme.of(context).colorScheme.onPrimaryContainer,
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 17),
-                            child: Center(
-                              child: Text(L10n.of(context).message,
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onBackground,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18)),
-                            ),
-                          ),
                         ),
                       ],
                     ),
@@ -98,15 +96,6 @@ class _MessagePageAppBarState extends State<MessagePageAppBar> {
                         ),
                       ),
                     ),
-                  ),
-                ),
-                CircleAvatar(
-                  maxRadius: 17,
-                  backgroundColor:
-                      Theme.of(context).colorScheme.primaryContainer,
-                  // TODO : fix Network Image url
-                  foregroundImage: NetworkImage(
-                    'https://firebasestorage.googleapis.com/v0/b/chatcalling-63eb0.appspot.com/o/users%2Ffemale-avatar.png?alt=media&token=6d3a06b1-6ff9-4562-a1c0-eae1fa75126b',
                   ),
                 ),
               ],

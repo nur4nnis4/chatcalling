@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../../core/helpers/time.dart';
 import '../../domain/entities/conversation.dart';
 import '../pages/message_room_page.dart';
@@ -21,7 +22,10 @@ class ConversationsTile extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => MessageRoomPage(conversation: conversation),
+              builder: (context) => MessageRoomPage(
+                friendId: conversation.friendUser.userId,
+                friendUser: conversation.friendUser,
+              ),
             ));
       },
       child: Column(children: [
@@ -32,8 +36,8 @@ class ConversationsTile extends StatelessWidget {
               CircleAvatar(
                 maxRadius: 24,
                 backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                foregroundImage: NetworkImage(
-                    "https://firebasestorage.googleapis.com/v0/b/chatcalling-63eb0.appspot.com/o/users%2Fmale-avatar.png?alt=media&token=67018152-17cc-4a70-a0c6-764679ce6acb"),
+                foregroundImage:
+                    NetworkImage(conversation.friendUser.profilePhotoUrl),
               ),
               Expanded(
                 child: Padding(
@@ -43,8 +47,7 @@ class ConversationsTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        // conversation.friendId,
-                        "Haris Roundback",
+                        conversation.friendUser.displayName,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -53,20 +56,40 @@ class ConversationsTile extends StatelessWidget {
                             fontSize: 16),
                       ),
                       SizedBox(height: 10),
-                      Text(
-                          conversation.friendId != conversation.lastSenderId
-                              ? 'You: ${conversation.lastText}'
-                              : conversation.lastText,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: conversation.totalUnreadMessages > 0
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context)
-                                      .colorScheme
-                                      .onPrimaryContainer,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500))
+                      Row(
+                        children: [
+                          Offstage(
+                            offstage: conversation.friendUser.userId ==
+                                conversation.lastMessage.senderId,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 4),
+                              child: Icon(
+                                  conversation.lastMessage.isRead
+                                      ? FontAwesomeIcons.checkDouble
+                                      : FontAwesomeIcons.check,
+                                  size: 12,
+                                  color: conversation.lastMessage.isRead
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context)
+                                          .colorScheme
+                                          .onBackground),
+                            ),
+                          ),
+                          Text(
+                            conversation.lastMessage.text,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: conversation.totalUnreadMessages > 0
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .onPrimaryContainer,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500),
+                          )
+                        ],
+                      )
                     ],
                   ),
                 ),
@@ -77,7 +100,7 @@ class ConversationsTile extends StatelessWidget {
                 children: [
                   Text(
                     sLocator.get<TimeFormat>().simplify(
-                        conversation.lastMessageTime,
+                        conversation.lastMessage.timeStamp,
                         L10n.getLocalLanguageCode(context)),
                     textAlign: TextAlign.end,
                     style: TextStyle(

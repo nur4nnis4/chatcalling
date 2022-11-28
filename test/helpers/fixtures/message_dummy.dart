@@ -16,7 +16,7 @@ final tMessage = Message(
     attachments: [Attachment(url: "http://image1.jpg", contentType: 'Image')]);
 
 final tMessageModel = MessageModel(
-    messageId: "messageId",
+    messageId: "message1Id",
     conversationId: "user1Id-user2Id",
     text: "Hello",
     senderId: "user1Id",
@@ -26,6 +26,19 @@ final tMessageModel = MessageModel(
     attachments: [
       AttachmentModel(url: "http://image1.jpg", contentType: 'Image')
     ]);
+
+final Map<String, dynamic> tMessageJson = {
+  "messageId": "message1Id",
+  "conversationId": "user1Id-user2Id",
+  "text": "Hello",
+  "senderId": "user1Id",
+  "receiverId": "user2Id",
+  "timeStamp": "2022-07-18T16:37:47.475845Z",
+  "isRead": false,
+  "attachments": [
+    {"url": "http://image1.jpg", "contentType": "Image"}
+  ]
+};
 
 final tNewMessageModel = MessageModel(
     messageId: 'newMessageId',
@@ -66,19 +79,6 @@ final tExpectedMessageWithAttachment = MessageModel(
     timeStamp: DateTime.parse("2022-10-31T16:59:32.905450Z").toLocal(),
     isRead: false,
     attachments: tExpectedAttachmentModelList);
-
-final Map<String, dynamic> tMessageJson = {
-  "messageId": "messageId",
-  "conversationId": "user1Id-user2Id",
-  "text": "Hello",
-  "senderId": "user1Id",
-  "receiverId": "user2Id",
-  "timeStamp": "2022-07-18T16:37:47.475845Z",
-  "isRead": false,
-  "attachments": [
-    {"url": "http://image1.jpg", "contentType": "Image"}
-  ]
-};
 
 // For message_remote_datasource_test
 

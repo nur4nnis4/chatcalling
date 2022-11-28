@@ -8,19 +8,19 @@ abstract class MessageListEvent extends Equatable {
 }
 
 class GetMessagesEvent extends MessageListEvent {
-  final String conversationId;
+  final String friendId;
 
-  GetMessagesEvent(this.conversationId);
+  GetMessagesEvent(this.friendId);
 
   @override
-  List<Object> get props => [conversationId];
+  List<Object> get props => [friendId];
 }
 
 class UpdateReadStatusEvent extends MessageListEvent {
-  final String conversationId;
+  final String friendId;
 
-  UpdateReadStatusEvent(this.conversationId);
+  UpdateReadStatusEvent(this.friendId);
 
   @override
-  List<Object> get props => [conversationId];
+  List<Object> get props => [friendId];
 }

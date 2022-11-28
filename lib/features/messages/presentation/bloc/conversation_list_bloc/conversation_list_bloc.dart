@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:chatcalling/core/helpers/temp.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
@@ -13,24 +14,24 @@ class ConversationListBloc
     extends Bloc<ConversationListEvent, ConversationListState> {
   final GetConversations getConversations;
 
-// TODO : change the code below after FirebaseAUTH
-  final String _userId = 'user1Id';
-
   ConversationListBloc({required this.getConversations})
       : super(ConversationListEmpty()) {
     on<ConversationListEvent>((event, emit) async {
       emit(ConversationListLoading());
-      final result = getConversations(userId: _userId).asBroadcastStream();
-      await emit.forEach(result,
+      final conversationListStream =
+          getConversations(userId: Temp.userId).asBroadcastStream();
+
+      await emit.forEach(conversationListStream,
           onData: (Either<Failure, List<Conversation>> data) {
         return data.fold((error) {
           return ConversationListError(errorMessage: error.message);
         }, (conversationList) {
           if (conversationList.isEmpty)
             return ConversationListEmpty();
-          else
+          else {
             return ConversationListLoaded(
-                conversationList: conversationList, userId: _userId);
+                conversationList: conversationList, userId: Temp.userId);
+          }
         });
       });
     });

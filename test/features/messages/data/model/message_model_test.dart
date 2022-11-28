@@ -12,6 +12,8 @@ void main() {
 
   group('fromJson', () {
     test('Should return a valid model', () async {
+      final x = ['user1Id', 'user2Id'];
+      print(x.firstWhere((element) => element != 'user1Id'));
       // Act
       final result = MessageModel.fromJson(tMessageJson);
 
@@ -21,7 +23,17 @@ void main() {
   });
 
   group('toJson', () {
-    test('Should retun JSON map containing proper data', () async {
+    test('Should retun message JSON map containing proper data', () async {
+      // Act
+      final result = tMessageModel.toJson();
+
+      // Assert
+      expect(result, tMessageJson);
+    });
+  });
+
+  group('toConversationJson', () {
+    test('Should retun conversation JSON map containing proper data', () async {
       // Act
       final result = tMessageModel.toJson();
 

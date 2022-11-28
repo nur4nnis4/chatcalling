@@ -16,28 +16,48 @@ class MessageRepositoryImpl implements MessageRepository {
   });
 
   @override
-  Stream<Either<Failure, List<MessageModel>>> getMessages(
+  Stream<Either<Failure, List<Message>>> getMessages(
       String conversationId) async* {
-    yield* messageRemoteDatasource
-        .getMessages(conversationId)
-        .asBroadcastStream();
+    try {
+      yield* messageRemoteDatasource
+          .getMessages(conversationId)
+          .map((event) => Right(event));
+    } catch (e) {
+      yield Left(PlatformFailure(''));
+    }
   }
 
   @override
   Stream<Either<Failure, List<Conversation>>> getConversations(
       String userId) async* {
-    yield* messageRemoteDatasource.getConversations(userId).asBroadcastStream();
+    try {
+      yield* messageRemoteDatasource
+          .getConversations(userId)
+          .map((event) => Right(event));
+    } catch (e) {
+      yield Left(PlatformFailure(''));
+    }
   }
 
   @override
   Future<Either<Failure, String>> sendMessage(Message message) async {
-    return messageRemoteDatasource
-        .sendMessage(MessageModel.fromEntity(message));
+    try {
+      await messageRemoteDatasource
+          .sendMessage(MessageModel.fromEntity(message));
+      return Right('Message has been sent');
+    } catch (e) {
+      return Left(PlatformFailure(''));
+    }
   }
 
   @override
   Future<Either<Failure, String>> updateReadStatus(
       String userId, String conversationId) async {
-    return messageRemoteDatasource.updateReadStatus(userId, conversationId);
+    try {
+      await messageRemoteDatasource.updateReadStatus(userId, conversationId);
+      return Right('Message read status has been updated');
+    } catch (e) {
+      return Left(PlatformFailure(''));
+    }
   }
 }

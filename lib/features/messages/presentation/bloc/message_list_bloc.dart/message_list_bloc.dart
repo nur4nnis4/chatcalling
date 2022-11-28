@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:chatcalling/core/helpers/temp.dart';
+import 'package:chatcalling/core/helpers/unique_id.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
@@ -13,20 +15,21 @@ part 'message_list_state.dart';
 class MessageListBloc extends Bloc<MessageListEvent, MessageListState> {
   final GetMessages getMessages;
   final UpdateReadStatus updateReadStatus;
+  final UniqueId uniqueId;
 
   MessageListBloc({
     required this.getMessages,
     required this.updateReadStatus,
+    required this.uniqueId,
   }) : super(MessagesEmpty()) {
-    // TODO : change the code below after FirebaseAUTH
-    final String _userId = 'user1Id';
-
     on<MessageListEvent>((event, emit) async {
       // GetMessageEvent
       if (event is GetMessagesEvent) {
         emit(MessagesLoading());
-        final result = getMessages(conversationId: event.conversationId)
-            .asBroadcastStream();
+        final conversationId = uniqueId.concat(event.friendId, Temp.userId);
+
+        final result =
+            getMessages(conversationId: conversationId).asBroadcastStream();
         await emit.forEach(result,
             onData: (Either<Failure, List<Message>> data) {
           return data.fold((error) {
@@ -35,15 +38,18 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> {
             if (messageList.isEmpty)
               return MessagesEmpty();
             else
-              return MessagesLoaded(messageList: messageList, userId: _userId);
+              return MessagesLoaded(
+                  messageList: messageList, userId: Temp.userId);
           });
         });
       }
 
       // UpdateReadStatusEvent
       else if (event is UpdateReadStatusEvent) {
+        final conversationId = uniqueId.concat(event.friendId, Temp.userId);
+
         await updateReadStatus(
-            conversationId: event.conversationId, userId: _userId);
+            conversationId: conversationId, userId: Temp.userId);
       }
     });
   }

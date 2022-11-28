@@ -8,10 +8,9 @@ import 'package:photo_view/photo_view_gallery.dart';
 
 class ImageGallery extends StatefulWidget {
   final List<Attachment> galleryItems;
-  final int initialPage;
+  final int? initialPage;
 
-  const ImageGallery(
-      {Key? key, required this.galleryItems, required this.initialPage})
+  const ImageGallery({Key? key, required this.galleryItems, this.initialPage})
       : super(key: key);
 
   @override
@@ -19,9 +18,9 @@ class ImageGallery extends StatefulWidget {
 }
 
 class _ImageGalleryState extends State<ImageGallery> {
-  late int _currentPage = widget.initialPage;
+  late int _currentPage = widget.initialPage ?? 0;
   late PageController _pageController =
-      PageController(initialPage: widget.initialPage);
+      PageController(initialPage: widget.initialPage ?? 0);
 
   void _onPageChanged(int index) {
     setState(() {
@@ -49,7 +48,7 @@ class _ImageGalleryState extends State<ImageGallery> {
                               ? FileImage(File(widget.galleryItems[i].url))
                                   as ImageProvider
                               : NetworkImage(widget.galleryItems[i].url),
-                          initialScale: PhotoViewComputedScale.contained * 0.8,
+                          initialScale: PhotoViewComputedScale.contained,
                           // heroAttributes: PhotoViewHeroAttributes(tag: i),
                         );
                       },
