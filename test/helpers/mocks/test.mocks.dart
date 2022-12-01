@@ -185,7 +185,7 @@ class MockGetUserData extends _i1.Mock implements _i17.GetUserData {
           as _i10.Stream<_i3.Either<_i11.Failure, _i12.User>>);
 }
 
-/// A class which mocks [SearchUser].
+/// A class which mocks [matchedUserList].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockSearchUser extends _i1.Mock implements _i18.SearchUser {

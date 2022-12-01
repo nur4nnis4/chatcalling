@@ -1,31 +1,29 @@
 import 'package:flutter/material.dart';
 
 final ThemeData light = ThemeData(
-    scaffoldBackgroundColor: Colors.white,
+    scaffoldBackgroundColor: Color.fromARGB(255, 248, 248, 248),
     fontFamily: 'Poppins',
-    dividerColor: Color.fromRGBO(248, 248, 248, 1),
+    dividerColor: Color.fromARGB(255, 245, 245, 245),
     appBarTheme: AppBarTheme(
         elevation: 0,
-        color: Colors.white70,
         foregroundColor: Colors.black87,
+        backgroundColor: Color.fromARGB(255, 248, 248, 248),
         centerTitle: true),
     bottomSheetTheme: BottomSheetThemeData(
-      backgroundColor: Color.fromARGB(255, 254, 254, 254),
+      backgroundColor: Colors.white,
     ),
     colorScheme: ColorScheme.light(
-      background: Colors.white,
+      background: Color.fromARGB(255, 248, 248, 248),
       onBackground: Color.fromARGB(255, 60, 60, 60),
       primary: Color.fromARGB(255, 23, 81, 165),
       onPrimary: Colors.white,
       secondary: Color.fromARGB(255, 94, 0, 218),
       onSecondary: Colors.white,
       onTertiary: Color.fromARGB(255, 170, 170, 170),
-      primaryContainer: Color.fromARGB(255, 244, 244, 244),
+      primaryContainer: Colors.white,
       onPrimaryContainer: Color.fromARGB(255, 92, 92, 92),
       secondaryContainer: Color.fromARGB(255, 215, 215, 215),
       onSecondaryContainer: Color.fromARGB(255, 155, 155, 155),
-      tertiaryContainer: Color.fromARGB(255, 250, 250, 250),
-      onTertiaryContainer: Color.fromARGB(157, 73, 73, 73),
     ));
 final ThemeData dark = ThemeData(
   scaffoldBackgroundColor: Color(0xFF151515),
@@ -50,7 +48,5 @@ final ThemeData dark = ThemeData(
     onPrimaryContainer: Color.fromARGB(255, 189, 189, 189),
     secondaryContainer: Color.fromARGB(255, 160, 160, 160),
     onSecondaryContainer: Color.fromARGB(255, 170, 170, 170),
-    tertiaryContainer: Color.fromARGB(255, 29, 29, 29),
-    onTertiaryContainer: Color.fromARGB(255, 189, 189, 189),
   ),
 );

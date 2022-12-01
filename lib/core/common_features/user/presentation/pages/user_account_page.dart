@@ -1,6 +1,5 @@
 import 'package:chatcalling/core/common_features/user/presentation/bloc/personal_information_bloc/personal_information_bloc.dart';
 
-import '../../domain/entities/personal_information.dart';
 import '../bloc/user_bloc/user_bloc.dart';
 import '../widgets/profile_header.dart';
 import 'package:chatcalling/core/helpers/time.dart';
@@ -122,7 +121,7 @@ class UserTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 2.5),
       child: Card(
         elevation: 0.4,
-        color: Theme.of(context).colorScheme.background.withAlpha(248),
+        color: Theme.of(context).colorScheme.primaryContainer,
         margin: EdgeInsets.all(0),
         child: SizedBox(
           width: double.infinity,

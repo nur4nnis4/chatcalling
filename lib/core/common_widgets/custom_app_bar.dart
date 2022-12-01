@@ -67,10 +67,6 @@ class _AppBarChild extends StatelessWidget {
         CircleAvatar(
           maxRadius: 17,
           backgroundColor: Colors.white.withAlpha(40),
-          // TODO : fix Network Image url
-          // foregroundImage: NetworkImage(
-          //   '',
-          // ),
         ),
       ],
     );

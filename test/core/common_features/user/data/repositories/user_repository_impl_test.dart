@@ -18,6 +18,7 @@ void main() {
       userRemoteDatasource: mockUserRemoteDatasource,
     );
   });
+
   group('getFriendList', () {
     const String tUserId = 'user1Id';
 
@@ -51,6 +52,41 @@ void main() {
       expect(result, emits(Left(PlatformFailure(''))));
     });
   });
+
+  group('searchUser', () {
+    const String tQuery = 'Nur';
+
+    test(
+        'should return remote data when the call to remote data source is successful',
+        () async {
+      // Arrange
+      when(mockUserRemoteDatasource.searchUser(any)).thenAnswer((_) async* {
+        yield tUserModelList;
+      });
+      // Act
+      final result = repository.searchUser(tQuery).asBroadcastStream();
+      // Assert
+      result.listen((_) {
+        verify(mockUserRemoteDatasource.searchUser(tQuery));
+      });
+      expect(result, emits(Right(tUserModelList)));
+    });
+    test(
+        'should return platform failure when the call to remote data source is unsuccessful',
+        () async {
+      // Arrange
+      when(mockUserRemoteDatasource.searchUser(any))
+          .thenThrow(PlatformException());
+      // Act
+      final result = repository.searchUser(tQuery).asBroadcastStream();
+      // Assert
+      result.listen((_) {
+        verify(mockUserRemoteDatasource.searchUser(tQuery));
+      });
+      expect(result, emits(Left(PlatformFailure(''))));
+    });
+  });
+
   group('getUserData', () {
     const String tUserId = 'user1Id';
 

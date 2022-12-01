@@ -29,7 +29,7 @@ void main() {
 
   group('getUserDataEvent', () {
     blocTest<UserBloc, UserState>(
-        'should emit [Loading,UserLoaded] when data is gotten succesfully.',
+        'should emit [UserLoading,UserLoaded] when data is gotten succesfully.',
         build: () {
           when(mockGetUserData(userId: tUserId)).thenAnswer((_) async* {
             yield Right(tUser);
@@ -44,7 +44,7 @@ void main() {
         verify: (_) => verify(mockGetUserData(userId: tUserId)));
 
     blocTest<UserBloc, UserState>(
-        'emits [Loading, Error] when getting data fails',
+        'emits [UserLoading, UserError] when getting data fails',
         build: () {
           when(mockGetUserData(userId: tUserId)).thenAnswer((_) async* {
             yield Left(PlatformFailure('Platform Failure'));

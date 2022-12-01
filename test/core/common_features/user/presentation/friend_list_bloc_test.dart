@@ -26,7 +26,7 @@ void main() {
 
   group('friendListEvent', () {
     blocTest<FriendListBloc, FriendListState>(
-        'should emit [Loading,FriendListLoaded] when data is gotten successfully and is not empty.',
+        'should emit [FriendListLoading,FriendListLoaded] when data is gotten successfully and is not empty.',
         build: () {
           when(mockGetFriendList(userId: tUserId)).thenAnswer((_) async* {
             yield Right([tUser]);
@@ -40,7 +40,7 @@ void main() {
             ],
         verify: (_) => verify(mockGetFriendList(userId: tUserId)));
     blocTest<FriendListBloc, FriendListState>(
-        'emits [Loading, Empty] when data is gotten successfully and is empty',
+        'emits [FriendListLoading, FriendListEmpty] when data is gotten successfully and is empty',
         build: () {
           when(mockGetFriendList(userId: tUserId)).thenAnswer((_) async* {
             yield Right([]);
@@ -55,7 +55,7 @@ void main() {
         verify: (_) => verify(mockGetFriendList(userId: tUserId)));
 
     blocTest<FriendListBloc, FriendListState>(
-        'emits [Loading, Error] when getting data fails',
+        'emits [FriendListLoading, FriendListError] when getting data fails',
         build: () {
           when(mockGetFriendList(userId: tUserId)).thenAnswer((_) async* {
             yield Left(PlatformFailure('Platform Failure'));

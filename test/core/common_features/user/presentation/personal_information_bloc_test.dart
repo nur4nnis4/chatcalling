@@ -1,7 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:chatcalling/core/common_features/user/presentation/bloc/personal_information_bloc/personal_information_bloc.dart';
 import 'package:chatcalling/core/error/failures.dart';
-import 'package:chatcalling/core/common_features/user/presentation/bloc/user_bloc/user_bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -30,7 +29,7 @@ void main() {
 
   group('getPersonalInformationEvent', () {
     blocTest<PersonalInformationBloc, PersonalInformationState>(
-        'should emit [Loading,UserLoaded] when data is gotten succesfully.',
+        'should emit [PersonalInformationLoading,PersonalInformationLoaded] when data is gotten succesfully.',
         build: () {
           when(mockGetPersonalInformation(userId: tUserId))
               .thenAnswer((_) async* {
@@ -47,7 +46,7 @@ void main() {
         verify: (_) => verify(mockGetPersonalInformation(userId: tUserId)));
 
     blocTest<PersonalInformationBloc, PersonalInformationState>(
-        'emits [Loading, Error] when getting data fails',
+        'emits [PersonalInformationLoading, PersonalInformationError] when getting data fails',
         build: () {
           when(mockGetPersonalInformation(userId: tUserId))
               .thenAnswer((_) async* {

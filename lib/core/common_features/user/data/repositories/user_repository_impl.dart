@@ -46,8 +46,13 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Stream<Either<Failure, List<User>>> searchUser(String query) {
-    // TODO: implement searchUser
-    throw UnimplementedError();
+  Stream<Either<Failure, List<User>>> searchUser(String query) async* {
+    try {
+      yield* userRemoteDatasource
+          .searchUser(query)
+          .map((event) => Right(event));
+    } catch (e) {
+      yield Left(PlatformFailure(''));
+    }
   }
 }

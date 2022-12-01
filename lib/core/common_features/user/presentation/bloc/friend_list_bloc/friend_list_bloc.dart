@@ -18,17 +18,11 @@ class FriendListBloc extends Bloc<FriendListEvent, FriendListState> {
           getFriendList(userId: Temp.userId).asBroadcastStream();
 
       await emit.forEach(friendListStream,
-          onData: (Either<Failure, List<User>> data) {
-        return data.fold((error) {
-          return FriendListError(errorMessage: error.message);
-        }, (friendList) {
-          if (friendList.isEmpty)
-            return FriendListEmpty();
-          else {
-            return FriendListLoaded(friendList: friendList);
-          }
-        });
-      });
+          onData: (Either<Failure, List<User>> data) => data.fold(
+              (error) => FriendListError(errorMessage: error.message),
+              (friendList) => friendList.isEmpty
+                  ? FriendListEmpty()
+                  : FriendListLoaded(friendList: friendList)));
     });
   }
 }

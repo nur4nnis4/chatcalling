@@ -42,7 +42,7 @@ class _SendMessageBarState extends State<SendMessageBar> {
             content: Text('Oops! Something went wrong.'),
             duration: Duration(seconds: 1),
           ));
-        } else if (state is MultipleImagesLoaded) {
+        } else if (state is PickAttachmentsLoaded) {
           Scaffold.of(context).showBottomSheet((_) => SendImageSheet(
               receiverId: widget.receiverId,
               pickedImageList: state.attachments));
@@ -50,6 +50,7 @@ class _SendMessageBarState extends State<SendMessageBar> {
       },
       child: BottomAppBar(
         color: Theme.of(context).colorScheme.primaryContainer,
+        elevation: 0.7,
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
           child: AnimatedBuilder(

@@ -139,6 +139,8 @@ class SentMessageBubble extends MessageBubble {
                 constraints: BoxConstraints(
                     maxWidth: MediaQuery.of(context).size.width * 0.7),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     message.attachments.length > 0
                         ? MessageImage(attachments: message.attachments)
@@ -188,8 +190,8 @@ class SentMessageBubble extends MessageBubble {
   Row _sentDetail(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
-      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(width: 8),
         Text(

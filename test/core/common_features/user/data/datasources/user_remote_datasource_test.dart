@@ -32,12 +32,37 @@ void main() {
     });
   });
 
+  group('searchUser', () {
+    setUp(() {});
+    test('Should return stream containing list of all matching user data ',
+        () async {
+      // Act
+      final actualUserDataStream1 = dataSource.searchUser('nur annisa');
+      final actualUserDataStream2 = dataSource.searchUser('Annisa');
+      final actualUserDataStream3 = dataSource.searchUser('Annisa herman');
+      final actualUserDataStream4 = dataSource.searchUser('flutter');
+      // Assert
+      expect(actualUserDataStream1, emits([tUserModelList[3]]));
+      expect(actualUserDataStream2, emits([tUserModelList[3]]));
+      expect(actualUserDataStream3, emits([tUserModelList[3]]));
+      expect(actualUserDataStream4, emits([tUserModelList[3]]));
+    });
+
+    test('Should return stream containg empty list when no match is found',
+        () async {
+      // Act
+      final actualUserDataStream = dataSource.searchUser('utter');
+      // Assert
+      expect(actualUserDataStream, emits([]));
+    });
+  });
+
   group('getFriendList', () {
     test('Should return stream containing user friend list data', () async {
       // Act
       final actualUserDataStream = dataSource.getFriendList(tUserId);
       // Assert
-      expect(actualUserDataStream, emits(tUserModelList.skip(1)));
+      expect(actualUserDataStream, emits(tExpectedFriendList));
     });
   });
 

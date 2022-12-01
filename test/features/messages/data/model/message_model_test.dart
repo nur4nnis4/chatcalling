@@ -12,8 +12,6 @@ void main() {
 
   group('fromJson', () {
     test('Should return a valid model', () async {
-      final x = ['user1Id', 'user2Id'];
-      print(x.firstWhere((element) => element != 'user1Id'));
       // Act
       final result = MessageModel.fromJson(tMessageJson);
 

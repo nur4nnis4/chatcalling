@@ -1,8 +1,9 @@
-import 'package:chatcalling/core/common_features/user/domain/entities/user.dart';
 import 'package:chatcalling/core/common_features/user/presentation/bloc/friend_list_bloc/friend_list_bloc.dart';
 import 'package:chatcalling/core/common_features/user/presentation/pages/profile_page.dart';
+import 'package:chatcalling/core/common_features/user/presentation/pages/search_user_page.dart';
+import 'package:chatcalling/core/common_features/user/presentation/widgets/user_list_view_tile.dart';
+import 'package:chatcalling/core/common_widgets/custom_search_bar.dart';
 import 'package:chatcalling/features/messages/presentation/pages/message_room_page.dart';
-import 'package:chatcalling/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,7 +17,6 @@ class FriendsPage extends StatefulWidget {
 
 class _FriendsPageState extends State<FriendsPage> {
   late TextEditingController _searchController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
@@ -25,44 +25,38 @@ class _FriendsPageState extends State<FriendsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      children: [
-        _buildAppBar(widget.title ?? 'Friends'),
-        Expanded(
-          child: BlocBuilder<FriendListBloc, FriendListState>(
+      body: Column(
+        children: [
+          _buildAppBar(widget.title ?? 'Friends'),
+          Expanded(
+            child: BlocBuilder<FriendListBloc, FriendListState>(
               builder: (context, state) {
-            if (state is FriendListLoaded) {
-              return Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 17),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(9),
-                        color: Theme.of(context).colorScheme.primaryContainer,
-                      ),
-                      child: TextFormField(
-                        maxLines: 1,
-                        style: TextStyle(fontSize: 14),
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          isDense: true,
-                          filled: false,
-                          hintText: "${L10n.of(context).search}...",
-                          prefixIconConstraints:
-                              BoxConstraints(minHeight: 30, minWidth: 35),
-                          border: InputBorder.none,
+                if (state is FriendListLoaded) {
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: GestureDetector(
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    SearchUserPage(title: widget.title),
+                              )),
+                          child: SearchBar(
+                            controller: _searchController,
+                            enabled: false,
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: state.friendList.length,
-                        itemBuilder: (context, i) => FriendListViewTile(
-                              friend: state.friendList[i],
+                      Expanded(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: state.friendList.length,
+                          itemBuilder: (context, i) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 7),
+                            child: UserListViewTile(
+                              user: state.friendList[i],
                               onTap: () {
                                 Navigator.push(
                                     context,
@@ -77,23 +71,27 @@ class _FriendsPageState extends State<FriendsPage> {
                                             : ProfilePage(
                                                 user: state.friendList[i])));
                               },
-                            )),
-                  ),
-                ],
-              );
-            } else if (state is FriendListLoading) {
-              return Center(child: CircularProgressIndicator());
-            } else if (state is FriendListError) {
-              return Center(
-                child: Text("OOPS! Something went wrong."),
-              );
-            } else {
-              return Container();
-            }
-          }),
-        )
-      ],
-    ));
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                } else if (state is FriendListLoading) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (state is FriendListError) {
+                  return Center(
+                    child: Text("OOPS! Something went wrong."),
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   Container _buildAppBar(String title) {
@@ -118,45 +116,6 @@ class _FriendsPageState extends State<FriendsPage> {
                       fontSize: 18),
                 ),
               )),
-        ),
-      ),
-    );
-  }
-}
-
-class FriendListViewTile extends StatelessWidget {
-  final User friend;
-  final Function()? onTap;
-
-  const FriendListViewTile({Key? key, required this.friend, this.onTap})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: InkWell(
-        onTap: onTap ?? () {},
-        child: Card(
-          elevation: 0.6,
-          color: Theme.of(context).colorScheme.tertiaryContainer,
-          child: ListTile(
-            dense: true,
-            horizontalTitleGap: 10,
-            contentPadding: EdgeInsets.symmetric(horizontal: 10),
-            leading: CircleAvatar(
-                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                foregroundImage: NetworkImage(friend.profilePhotoUrl)),
-            title: Text(
-              friend.displayName,
-              style: TextStyle(fontSize: 14),
-            ),
-            subtitle: Text(
-              friend.about,
-              maxLines: 1,
-              style: TextStyle(fontSize: 13, overflow: TextOverflow.ellipsis),
-            ),
-          ),
         ),
       ),
     );

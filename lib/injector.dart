@@ -1,7 +1,8 @@
-import 'package:chatcalling/core/common_features/user/domain/entities/personal_information.dart';
 import 'package:chatcalling/core/common_features/user/domain/usecases/get_personal_information.dart';
+import 'package:chatcalling/core/common_features/user/domain/usecases/search_user.dart';
 import 'package:chatcalling/core/common_features/user/presentation/bloc/other_user_bloc/other_user_bloc.dart';
 import 'package:chatcalling/core/common_features/user/presentation/bloc/personal_information_bloc/personal_information_bloc.dart';
+import 'package:chatcalling/core/common_features/user/presentation/bloc/search_user_bloc/search_user_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
@@ -117,6 +118,7 @@ void initUser() {
   // Bloc
   sLocator.registerLazySingleton(() => UserBloc(getUserData: sLocator()));
   sLocator.registerLazySingleton(() => OtherUserBloc(getUserData: sLocator()));
+  sLocator.registerLazySingleton(() => SearchUserBloc(searchUser: sLocator()));
   sLocator
       .registerLazySingleton(() => FriendListBloc(getFriendList: sLocator()));
   sLocator.registerLazySingleton(
@@ -126,6 +128,7 @@ void initUser() {
   sLocator.registerLazySingleton(() => GetUserData(sLocator()));
   sLocator.registerLazySingleton(() => GetPersonalInformation(sLocator()));
   sLocator.registerLazySingleton(() => GetFriendList(sLocator()));
+  sLocator.registerLazySingleton(() => SearchUser(sLocator()));
 
   // Repository
   sLocator.registerLazySingleton<UserRepository>(

@@ -60,12 +60,12 @@ class _HomePageState extends State<HomePage> {
             type: BottomNavigationBarType.fixed,
             iconSize: 15,
             selectedFontSize: 9,
+            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
             onTap: (selected) {
               setState(() {
                 _selectedPageIndex = selected;
               });
             },
-            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
             items: _bottomNavigationBarItems(context)),
       ),
     );

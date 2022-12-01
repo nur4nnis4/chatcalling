@@ -35,17 +35,26 @@ class UserRemoteDatasourceImpl implements UserRemoteDatasource {
 
   @override
   Stream<List<UserModel>> searchUser(String query) async* {
-    yield* instance
-        .collection('users')
-        .where('displayName', isGreaterThanOrEqualTo: query)
-        .where('username', isGreaterThanOrEqualTo: query)
-        .orderBy('displayName')
-        .snapshots()
-        .map((event) {
+    yield* instance.collection('users').snapshots().map((event) {
       if (event.docs.isNotEmpty) {
-        return event.docs.map((e) => UserModel.fromJson(e.data())).toList();
-      }
-      return [];
+        return event.docs
+            .map((e) => UserModel.fromJson(e.data()))
+            .toList()
+            .where((user) => query
+                .toLowerCase()
+                .split(' ')
+                .map((queryWord) =>
+                    user.username.toLowerCase().startsWith(queryWord) ||
+                    user.displayName
+                        .toLowerCase()
+                        .split(' ')
+                        .map((e) => e.startsWith(queryWord))
+                        .toList()
+                        .reduce((value, element) => value || element))
+                .reduce((value, element) => value || element))
+            .toList();
+      } else
+        return [];
     });
   }
 
