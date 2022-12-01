@@ -1,24 +1,23 @@
-import 'package:chatcalling/features/messages/presentation/pages/messages_page.dart';
-import 'package:chatcalling/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'core/common_features/attachment/presentations/bloc/pick_attachments_bloc.dart';
+import 'core/common_features/attachment/presentations/bloc/attachments_bloc.dart';
 import 'core/common_features/user/presentation/bloc/friend_list_bloc/friend_list_bloc.dart';
-import 'core/common_features/user/presentation/bloc/search_user_bloc/search_user_bloc.dart';
-import 'core/common_features/user/presentation/bloc/personal_information_bloc/personal_information_bloc.dart';
-import 'core/common_features/user/presentation/bloc/user_bloc/user_bloc.dart';
 import 'core/common_features/user/presentation/bloc/other_user_bloc/other_user_bloc.dart';
+import 'core/common_features/user/presentation/bloc/personal_information_bloc/personal_information_bloc.dart';
+import 'core/common_features/user/presentation/bloc/search_user_bloc/search_user_bloc.dart';
+import 'core/common_features/user/presentation/bloc/user_bloc/user_bloc.dart';
 import 'core/common_features/user/presentation/pages/friends_page.dart';
 import 'core/style/theme.dart' as Theme;
 import 'features/messages/presentation/bloc/conversation_list_bloc/conversation_list_bloc.dart';
 import 'features/messages/presentation/bloc/message_list_bloc.dart/message_list_bloc.dart';
 import 'features/messages/presentation/bloc/send_message_bloc.dart/send_message_bloc.dart';
-
+import 'features/messages/presentation/pages/messages_page.dart';
 import 'firebase_options.dart';
+import 'home_page.dart';
 import 'injector.dart' as Injector;
 import 'l10n/l10n.dart';
 
@@ -63,7 +62,7 @@ class ChatApp extends StatelessWidget {
           create: (_) => Injector.sLocator<SendMessageBloc>(),
         ),
         BlocProvider(
-          create: (_) => Injector.sLocator<PickAttachmentsBloc>(),
+          create: (_) => Injector.sLocator<AttachmentsBloc>(),
         ),
       ],
       child: MaterialApp(

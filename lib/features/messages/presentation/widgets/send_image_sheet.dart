@@ -1,4 +1,4 @@
-import '../../../../core/common_features/attachment/presentations/bloc/pick_attachments_bloc.dart';
+import '../../../../core/common_features/attachment/presentations/bloc/attachments_bloc.dart';
 import '../../../../core/common_widgets/image_gallery.dart';
 import '../../../../core/common_widgets/image_preview.dart';
 import '../../../../core/common_widgets/radiating_action_button.dart';
@@ -25,7 +25,7 @@ class SendImageSheet extends StatelessWidget {
       child: Column(children: [
         IconButton(
           onPressed: () {
-            context.read<PickAttachmentsBloc>().add(ResetAttachmentEvent());
+            context.read<AttachmentsBloc>().add(ResetAttachmentEvent());
             Navigator.pop(context);
           },
           splashRadius: 8,

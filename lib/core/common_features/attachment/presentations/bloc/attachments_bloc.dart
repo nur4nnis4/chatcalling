@@ -4,16 +4,15 @@ import '../../domain/usecases/get_lost_attachments.dart';
 import '../../domain/usecases/pick_attachments.dart';
 import 'package:equatable/equatable.dart';
 
-part 'pick_attachments_event.dart';
-part 'pick_attachments_state.dart';
+part 'attachments_event.dart';
+part 'attachments_state.dart';
 
-class PickAttachmentsBloc
-    extends Bloc<PickAttachmentsEvent, PickAttachmentsState> {
+class AttachmentsBloc extends Bloc<AttachmentsEvent, AttachmentsState> {
   final PickAttachments pickAttachments;
   final GetLostAttachments getLostAttachments;
-  PickAttachmentsBloc(
+  AttachmentsBloc(
       {required this.pickAttachments, required this.getLostAttachments})
-      : super(PickAttachmentsEmpty()) {
+      : super(AttachmentsEmpty()) {
     on<AttachMultipleImagesEvent>((event, emit) async {
       await _onEvent(emit, AttachmentType.multipleImages);
     });
@@ -36,17 +35,17 @@ class PickAttachmentsBloc
 
     on<ResetAttachmentEvent>(
       (event, emit) async {
-        emit(PickAttachmentsEmpty());
+        emit(AttachmentsEmpty());
       },
     );
   }
 
   Future<void> _onEvent(
-      Emitter<PickAttachmentsState> emit, AttachmentType attachmentType) async {
+      Emitter<AttachmentsState> emit, AttachmentType attachmentType) async {
     final result = await pickAttachments(attachmentType: attachmentType);
     result.fold(
-        (error) => emit(PickAttachmentsError(errorMessage: error.message)),
+        (error) => emit(AttachmentsError(errorMessage: error.message)),
         (attachments) =>
-            emit(MultipleImagesLoaded.copyWith(attachments: attachments)));
+            emit(AttachmentsLoaded.copyWith(attachments: attachments)));
   }
 }

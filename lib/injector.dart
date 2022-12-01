@@ -1,8 +1,3 @@
-import 'package:chatcalling/core/common_features/user/domain/usecases/get_personal_information.dart';
-import 'package:chatcalling/core/common_features/user/domain/usecases/search_user.dart';
-import 'package:chatcalling/core/common_features/user/presentation/bloc/other_user_bloc/other_user_bloc.dart';
-import 'package:chatcalling/core/common_features/user/presentation/bloc/personal_information_bloc/personal_information_bloc.dart';
-import 'package:chatcalling/core/common_features/user/presentation/bloc/search_user_bloc/search_user_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
@@ -13,13 +8,18 @@ import 'core/common_features/attachment/data/repositories/attachment_repository_
 import 'core/common_features/attachment/domain/repositories/attachment_repository.dart';
 import 'core/common_features/attachment/domain/usecases/get_lost_attachments.dart';
 import 'core/common_features/attachment/domain/usecases/pick_attachments.dart';
-import 'core/common_features/attachment/presentations/bloc/pick_attachments_bloc.dart';
+import 'core/common_features/attachment/presentations/bloc/attachments_bloc.dart';
 import 'core/common_features/user/data/datasources/user_remote_datasource.dart';
 import 'core/common_features/user/data/repositories/user_repository_impl.dart';
 import 'core/common_features/user/domain/repositories/user_repository.dart';
 import 'core/common_features/user/domain/usecases/get_friend_list.dart';
+import 'core/common_features/user/domain/usecases/get_personal_information.dart';
 import 'core/common_features/user/domain/usecases/get_user_data.dart';
+import 'core/common_features/user/domain/usecases/search_user.dart';
 import 'core/common_features/user/presentation/bloc/friend_list_bloc/friend_list_bloc.dart';
+import 'core/common_features/user/presentation/bloc/other_user_bloc/other_user_bloc.dart';
+import 'core/common_features/user/presentation/bloc/personal_information_bloc/personal_information_bloc.dart';
+import 'core/common_features/user/presentation/bloc/search_user_bloc/search_user_bloc.dart';
 import 'core/common_features/user/presentation/bloc/user_bloc/user_bloc.dart';
 import 'core/helpers/check_platform.dart';
 import 'core/helpers/time.dart';
@@ -64,7 +64,7 @@ void init() {
 
 void initAttachment() {
   // Bloc
-  sLocator.registerFactory(() => PickAttachmentsBloc(
+  sLocator.registerFactory(() => AttachmentsBloc(
       pickAttachments: sLocator(), getLostAttachments: sLocator()));
 
   // Use case

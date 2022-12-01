@@ -1,4 +1,4 @@
-import '../../../../core/common_features/attachment/presentations/bloc/pick_attachments_bloc.dart';
+import '../../../../core/common_features/attachment/presentations/bloc/attachments_bloc.dart';
 import '../../../../core/common_widgets/custom_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,14 +35,14 @@ class _SendMessageBarState extends State<SendMessageBar> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<PickAttachmentsBloc, PickAttachmentsState>(
+    return BlocListener<AttachmentsBloc, AttachmentsState>(
       listener: (_, state) {
-        if (state is PickAttachmentsError) {
+        if (state is AttachmentsError) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Oops! Something went wrong.'),
             duration: Duration(seconds: 1),
           ));
-        } else if (state is PickAttachmentsLoaded) {
+        } else if (state is AttachmentsLoaded) {
           Scaffold.of(context).showBottomSheet((_) => SendImageSheet(
               receiverId: widget.receiverId,
               pickedImageList: state.attachments));
@@ -138,7 +138,7 @@ class _SendMessageBarState extends State<SendMessageBar> {
               onTap: () {
                 Navigator.pop(context);
                 context
-                    .read<PickAttachmentsBloc>()
+                    .read<AttachmentsBloc>()
                     .add(AttachMultipleImagesEvent());
               },
             ),
@@ -147,21 +147,21 @@ class _SendMessageBarState extends State<SendMessageBar> {
               color: Theme.of(context).colorScheme.secondary,
               onTap: () {
                 Navigator.pop(context);
-                context.read<PickAttachmentsBloc>().add(TakeCameraImageEvent());
+                context.read<AttachmentsBloc>().add(TakeCameraImageEvent());
               },
             ),
             RoundedIconButton(
               icon: FontAwesomeIcons.video,
               onTap: () {
                 Navigator.pop(context);
-                context.read<PickAttachmentsBloc>().add(AttachVideoEvent());
+                context.read<AttachmentsBloc>().add(AttachVideoEvent());
               },
             ),
             RoundedIconButton(
               icon: FontAwesomeIcons.recordVinyl,
               color: Theme.of(context).colorScheme.secondary,
               onTap: () => context
-                  .read<PickAttachmentsBloc>()
+                  .read<AttachmentsBloc>()
                   .add(AttachMultipleImagesEvent()),
             ),
           ]),

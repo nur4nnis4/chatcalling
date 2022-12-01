@@ -1,14 +1,14 @@
-import 'package:chatcalling/core/common_features/user/presentation/bloc/friend_list_bloc/friend_list_bloc.dart';
-import 'package:chatcalling/core/common_features/user/presentation/bloc/personal_information_bloc/personal_information_bloc.dart';
-import 'package:chatcalling/core/common_features/user/presentation/pages/friends_page.dart';
-import 'package:chatcalling/core/common_features/user/presentation/pages/user_account_page.dart';
-import 'package:chatcalling/features/messages/presentation/bloc/conversation_list_bloc/conversation_list_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'core/common_features/user/presentation/bloc/friend_list_bloc/friend_list_bloc.dart';
+import 'core/common_features/user/presentation/bloc/personal_information_bloc/personal_information_bloc.dart';
 import 'core/common_features/user/presentation/bloc/user_bloc/user_bloc.dart';
+import 'core/common_features/user/presentation/pages/friends_page.dart';
+import 'core/common_features/user/presentation/pages/user_account_page.dart';
 import 'core/common_widgets/radiating_action_button.dart';
+import 'features/messages/presentation/bloc/conversation_list_bloc/conversation_list_bloc.dart';
 import 'features/messages/presentation/pages/messages_page.dart';
 import 'l10n/l10n.dart';
 
@@ -20,7 +20,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedPageIndex = 0;
+  int _selectedPageIndex = 3;
 
   @override
   void initState() {
@@ -33,6 +33,12 @@ class _HomePageState extends State<HomePage> {
       BlocProvider.of<ConversationListBloc>(context)
           .add(ConversationListEvent());
     });
+  }
+
+  @override
+  void dispose() {
+    // TODO: update isOnline to false
+    super.dispose();
   }
 
   final List<Widget> _pages = [
