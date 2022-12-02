@@ -24,7 +24,7 @@ class SearchBar extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 17),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(9),
+        borderRadius: BorderRadius.circular(6),
         color: Theme.of(context).colorScheme.primaryContainer,
       ),
       child: AnimatedBuilder(
@@ -39,12 +39,15 @@ class SearchBar extends StatelessWidget {
               onChanged: onChanged ?? (value) {},
               onTap: onTap ?? () {},
               style: TextStyle(fontSize: 14),
+              textAlignVertical: TextAlignVertical.center,
               decoration: InputDecoration(
                 isDense: true,
                 hintText: "${L10n.of(context).search}...",
+                hintStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.onPrimaryContainer),
                 border: InputBorder.none,
                 suffixIconConstraints:
-                    BoxConstraints(minHeight: 35, maxWidth: 35),
+                    BoxConstraints(minHeight: 43, maxWidth: 43),
                 suffixIcon: controller.text.isEmpty
                     ? Icon(
                         FontAwesomeIcons.magnifyingGlass,

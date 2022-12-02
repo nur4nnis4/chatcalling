@@ -30,7 +30,7 @@ class _FriendsPageState extends State<FriendsPage> {
         children: [
           _buildAppBar(widget.title ?? 'Friends'),
           Padding(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.fromLTRB(10, 17, 10, 5),
             child: GestureDetector(
               onTap: () => Navigator.push(
                   context,

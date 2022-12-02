@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
 final ThemeData light = ThemeData(
-    scaffoldBackgroundColor: Color.fromARGB(255, 248, 248, 248),
+    scaffoldBackgroundColor: Color.fromARGB(255, 245, 245, 245),
     fontFamily: 'Poppins',
-    dividerColor: Color.fromARGB(255, 245, 245, 245),
+    dividerColor: Color.fromARGB(255, 238, 238, 238),
     appBarTheme: AppBarTheme(
       elevation: 0,
       foregroundColor: Colors.black87,
-      backgroundColor: Color.fromARGB(255, 248, 248, 248),
+      backgroundColor: Color.fromARGB(255, 245, 245, 245),
       centerTitle: true,
     ),
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor: Colors.white,
     ),
     colorScheme: ColorScheme.light(
-      background: Color.fromARGB(255, 248, 248, 248),
+      background: Color.fromARGB(255, 245, 245, 245),
       onBackground: Color.fromARGB(255, 60, 60, 60),
       primary: Color.fromARGB(255, 23, 81, 165),
       onPrimary: Colors.white,
@@ -44,7 +44,7 @@ final ThemeData dark = ThemeData(
   colorScheme: ColorScheme.dark(
     background: Color.fromARGB(255, 24, 24, 24),
     onBackground: Color.fromARGB(255, 218, 218, 218),
-    primary: Color.fromARGB(255, 23, 86, 175),
+    primary: Color.fromARGB(255, 23, 81, 165),
     onPrimary: Colors.white,
     secondary: Color.fromARGB(255, 94, 0, 218),
     onSecondary: Colors.white,

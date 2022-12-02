@@ -20,7 +20,7 @@ class LoadedUserListTile extends StatelessWidget {
           horizontalTitleGap: 10,
           contentPadding: EdgeInsets.symmetric(horizontal: 10),
           leading: CircleAvatar(
-              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+              backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
               foregroundImage: NetworkImage(user.profilePhotoUrl)),
           title: Text(
             user.displayName,

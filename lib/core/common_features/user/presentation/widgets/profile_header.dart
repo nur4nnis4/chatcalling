@@ -30,25 +30,27 @@ class ProfileHeader extends StatelessWidget {
                 )
               : null),
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ImageGallery(galleryItems: [
-                  Attachment(
-                      url: user.profilePhotoUrl, contentType: 'Image/jpg')
-                ]),
-              ),
-            );
-          },
-          child: CircleAvatar(
-            radius: 35,
-            backgroundColor:
-                Theme.of(context).colorScheme.onPrimary.withAlpha(200),
-            foregroundImage: user.profilePhotoUrl.isNotEmpty
-                ? NetworkImage(user.profilePhotoUrl)
-                : null,
+        SafeArea(
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ImageGallery(galleryItems: [
+                    Attachment(
+                        url: user.profilePhotoUrl, contentType: 'Image/jpg')
+                  ]),
+                ),
+              );
+            },
+            child: CircleAvatar(
+              radius: 35,
+              backgroundColor:
+                  Theme.of(context).colorScheme.onPrimary.withAlpha(200),
+              foregroundImage: user.profilePhotoUrl.isNotEmpty
+                  ? NetworkImage(user.profilePhotoUrl)
+                  : null,
+            ),
           ),
         ),
         SizedBox(height: 10),

@@ -35,12 +35,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  @override
-  void dispose() {
-    // TODO: update isOnline to false
-    super.dispose();
-  }
-
   final List<Widget> _pages = [
     MessagesPage(),
     MessagesPage(), //Todo: Change to CallPage
@@ -106,7 +100,7 @@ class _HomePageState extends State<HomePage> {
         icon: BlocBuilder<UserBloc, UserState>(
           builder: (context, state) {
             return CircleAvatar(
-              maxRadius: _selectedPageIndex == _pages.length - 1 ? 11 : 10,
+              maxRadius: _selectedPageIndex == _pages.length - 1 ? 12 : 10,
               backgroundColor: Theme.of(context).colorScheme.primary,
               child: CircleAvatar(
                 maxRadius: 10,

@@ -21,65 +21,70 @@ class _SearchUserPageState extends State<SearchUserPage> {
     late TextEditingController _searchController = TextEditingController();
     late FocusNode _searchFNode = FocusNode();
 
-    return Scaffold(
-        appBar: AppBar(
-          leadingWidth: 25,
-          title: SearchBar(
-            controller: _searchController,
-            focusNode: _searchFNode,
-            autofocus: true,
-            onChanged: (value) => context
-                .read<SearchUserBloc>()
-                .add(SearchUserEvent(query: value)),
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+          appBar: AppBar(
+            leadingWidth: 35,
+            title: SearchBar(
+              controller: _searchController,
+              focusNode: _searchFNode,
+              autofocus: true,
+              onChanged: (value) => context
+                  .read<SearchUserBloc>()
+                  .add(SearchUserEvent(query: value)),
+            ),
           ),
-        ),
-        body: Padding(
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-          child: BlocBuilder<SearchUserBloc, SearchUserState>(
-            builder: (context, state) {
-              if (state is SearchUserLoaded) {
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: state.matchedUserList.length,
-                  itemBuilder: (context, i) => LoadedUserListTile(
-                    user: state.matchedUserList[i],
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => widget.title ==
-                                      'Send Message'
-                                  ? MessageRoomPage(
-                                      friendId: state.matchedUserList[i].userId,
-                                      friendUser: state.matchedUserList[i],
-                                    )
-                                  : ProfilePage(
-                                      user: state.matchedUserList[i])));
-                    },
-                  ),
-                );
-              } else if (state is SearchUserLoading) {
-                return Shimmer.fromColors(
-                  baseColor: Theme.of(context).colorScheme.onTertiaryContainer,
-                  highlightColor:
-                      Theme.of(context).colorScheme.tertiaryContainer,
-                  enabled: true,
-                  child: ListView.builder(
-                    scrollDirection: Axis.vertical,
+          body: Padding(
+            padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+            child: BlocBuilder<SearchUserBloc, SearchUserState>(
+              builder: (context, state) {
+                if (state is SearchUserLoaded) {
+                  return ListView.builder(
                     shrinkWrap: true,
-                    itemCount: 1,
-                    itemBuilder: (_, __) => LoadingUserListTile(),
-                  ),
-                );
-              } else if (state is SearchUserError) {
-                return Center(
-                  child: Text("OOPS! Something went wrong."),
-                );
-              } else {
-                return Container();
-              }
-            },
-          ),
-        ));
+                    itemCount: state.matchedUserList.length,
+                    itemBuilder: (context, i) => LoadedUserListTile(
+                      user: state.matchedUserList[i],
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => widget.title ==
+                                        'Send Message'
+                                    ? MessageRoomPage(
+                                        friendId:
+                                            state.matchedUserList[i].userId,
+                                        friendUser: state.matchedUserList[i],
+                                      )
+                                    : ProfilePage(
+                                        user: state.matchedUserList[i])));
+                      },
+                    ),
+                  );
+                } else if (state is SearchUserLoading) {
+                  return Shimmer.fromColors(
+                    baseColor:
+                        Theme.of(context).colorScheme.onTertiaryContainer,
+                    highlightColor:
+                        Theme.of(context).colorScheme.tertiaryContainer,
+                    enabled: true,
+                    child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: 1,
+                      itemBuilder: (_, __) => LoadingUserListTile(),
+                    ),
+                  );
+                } else if (state is SearchUserError) {
+                  return Center(
+                    child: Text("OOPS! Something went wrong."),
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            ),
+          )),
+    );
   }
 }

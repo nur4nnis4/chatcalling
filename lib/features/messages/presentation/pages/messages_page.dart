@@ -1,3 +1,4 @@
+import 'package:chatcalling/core/style/consts.dart';
 import 'package:chatcalling/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,6 +35,12 @@ class _MessagesPageState extends State<MessagesPage> {
                   fontWeight: FontWeight.w600,
                   fontSize: 18)),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(18),
+            child: Image.asset(LAUNCHER_ICON_PATH),
+          )
+        ],
       ),
       body: BlocBuilder<ConversationListBloc, ConversationListState>(
         builder: (context, state) {

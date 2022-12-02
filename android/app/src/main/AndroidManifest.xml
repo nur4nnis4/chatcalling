@@ -21,7 +21,7 @@
     <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="33" />
    <application
         android:label="ChatCalling"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

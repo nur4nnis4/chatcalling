@@ -1,4 +1,5 @@
 import 'package:chatcalling/core/common_features/user/presentation/bloc/other_user_bloc/other_user_bloc.dart';
+import 'package:chatcalling/features/messages/presentation/pages/message_room_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -27,7 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(child: BlocBuilder<OtherUserBloc, OtherUserState>(
+      body: BlocBuilder<OtherUserBloc, OtherUserState>(
         builder: (context, state) {
           if (state is OtherUserLoaded) {
             user = state.userData;
@@ -39,16 +40,19 @@ class _ProfilePageState extends State<ProfilePage> {
               Stack(
                 children: [
                   ProfileHeader(user: user),
-                  Padding(
-                      padding: const EdgeInsets.all(0),
-                      child: SizedBox.square(
-                          dimension: 40,
-                          child: SolidIconButton(
-                            onTap: () => Navigator.pop(context),
-                            icon: FontAwesomeIcons.angleLeft,
-                            color: Colors.transparent,
-                            iconColor: Theme.of(context).colorScheme.onPrimary,
-                          ))),
+                  SafeArea(
+                    child: Padding(
+                        padding: const EdgeInsets.all(0),
+                        child: SizedBox.square(
+                            dimension: 40,
+                            child: SolidIconButton(
+                              onTap: () => Navigator.pop(context),
+                              icon: FontAwesomeIcons.angleLeft,
+                              color: Colors.transparent,
+                              iconColor:
+                                  Theme.of(context).colorScheme.onPrimary,
+                            ))),
+                  ),
                 ],
               ),
               SizedBox(height: 20),
@@ -60,19 +64,16 @@ class _ProfilePageState extends State<ProfilePage> {
                     Offstage(
                       offstage: user.about.isEmpty,
                       child: Card(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .background
-                            .withAlpha(248),
+                        color: Theme.of(context).colorScheme.primaryContainer,
                         margin: EdgeInsets.all(0),
-                        elevation: 0.4,
+                        elevation: 0.6,
                         child: SizedBox(
                           width: double.infinity,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 17),
                             child: Text(
-                              user.about,
+                              "\"${user.about}\"",
                               style: TextStyle(
                                 color:
                                     Theme.of(context).colorScheme.onBackground,
@@ -82,34 +83,31 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 17),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: _button(context, child: Text('Add Friend')),
-                        ),
-                        SizedBox(width: 17),
-                        Expanded(
-                            child: _button(context,
-                                foregroundColor: Theme.of(context)
-                                    .colorScheme
-                                    .secondary
-                                    .withAlpha(200),
-                                child: Text('Send Message'))),
-                      ],
-                    ),
+                    SizedBox(height: 20),
+                    _button(
+                        foregroundColor: Theme.of(context)
+                            .colorScheme
+                            .secondary
+                            .withAlpha(200),
+                        onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MessageRoomPage(
+                                      friendId: user.userId,
+                                      friendUser: user,
+                                    ))),
+                        child: Text('Send Message')),
                   ],
                 ),
               ),
             ],
           );
         },
-      )),
+      ),
     );
   }
 
-  OutlinedButton _button(BuildContext context,
+  OutlinedButton _button(
       {Color? foregroundColor, Widget? child, Function()? onPressed}) {
     return OutlinedButton(
       style: ButtonStyle(
@@ -118,10 +116,11 @@ class _ProfilePageState extends State<ProfilePage> {
             color: foregroundColor ?? Theme.of(context).colorScheme.primary)),
         foregroundColor: MaterialStateProperty.all(
             foregroundColor ?? Theme.of(context).colorScheme.primary),
+        minimumSize: MaterialStateProperty.all(Size(double.infinity, 0)),
       ),
       onPressed: onPressed ?? () {},
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.symmetric(vertical: 14),
         child: child ?? Text(''),
       ),
     );

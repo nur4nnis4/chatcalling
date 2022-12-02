@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:chatcalling/core/common_features/user/domain/entities/user.dart';
 import 'package:chatcalling/core/common_features/user/presentation/bloc/other_user_bloc/other_user_bloc.dart';
 import 'package:chatcalling/core/common_features/user/presentation/pages/profile_page.dart';
+import 'package:chatcalling/core/helpers/time.dart';
+import 'package:chatcalling/injector.dart';
+import 'package:chatcalling/l10n/l10n.dart';
 
 import '../../../../core/common_widgets/custom_icon_button.dart';
 import '../bloc/message_list_bloc.dart/message_list_bloc.dart';
@@ -104,7 +107,7 @@ class _MessageRoomPageState extends State<MessageRoomPage> {
                   maxRadius: 17,
                   foregroundImage: NetworkImage(friendUser.profilePhotoUrl),
                   backgroundColor:
-                      Theme.of(context).colorScheme.primaryContainer,
+                      Theme.of(context).colorScheme.onPrimaryContainer,
                 ),
               ),
               SizedBox(width: 12),
@@ -121,7 +124,9 @@ class _MessageRoomPageState extends State<MessageRoomPage> {
                           color: Theme.of(context).colorScheme.onBackground),
                     ),
                     Text(
-                      user.isOnline ? 'Online' : 'Last seen ${user.lastOnline}',
+                      user.isOnline
+                          ? 'Online'
+                          : '${L10n.of(context).lastSeen} ${sLocator.get<TimeFormat>().simplify(user.lastOnline, L10n.getLocalLanguageCode(context))}',
                       style: TextStyle(
                           fontSize: 11,
                           color: Theme.of(context).colorScheme.primary),

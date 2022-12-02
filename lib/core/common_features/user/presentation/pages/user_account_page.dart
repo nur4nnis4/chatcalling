@@ -118,7 +118,7 @@ class UserTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2.5),
+      padding: const EdgeInsets.symmetric(vertical: 2),
       child: Card(
         elevation: 0.4,
         color: Theme.of(context).colorScheme.primaryContainer,

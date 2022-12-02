@@ -68,7 +68,7 @@ class ChatApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'ChatCalling',
-        theme: Theme.dark,
+        theme: Theme.light,
         darkTheme: Theme.dark,
         supportedLocales: L10n.all,
         localizationsDelegates: [

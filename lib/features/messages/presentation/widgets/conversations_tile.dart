@@ -38,7 +38,7 @@ class LoadedConversationsTile extends StatelessWidget {
                   CircleAvatar(
                     maxRadius: 24,
                     backgroundColor:
-                        Theme.of(context).colorScheme.primaryContainer,
+                        Theme.of(context).colorScheme.onPrimaryContainer,
                     foregroundImage:
                         NetworkImage(conversation.friendUser.profilePhotoUrl),
                   ),
