@@ -20,7 +20,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedPageIndex = 3;
+  int _selectedPageIndex = 0;
 
   @override
   void initState() {
@@ -106,11 +106,15 @@ class _HomePageState extends State<HomePage> {
         icon: BlocBuilder<UserBloc, UserState>(
           builder: (context, state) {
             return CircleAvatar(
-              maxRadius: 11,
-              backgroundColor: Theme.of(context).colorScheme.onTertiary,
-              foregroundImage: state is UserLoaded
-                  ? NetworkImage(state.userData.profilePhotoUrl)
-                  : null,
+              maxRadius: _selectedPageIndex == _pages.length - 1 ? 11 : 10,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              child: CircleAvatar(
+                maxRadius: 10,
+                backgroundColor: Theme.of(context).colorScheme.onTertiary,
+                foregroundImage: state is UserLoaded
+                    ? NetworkImage(state.userData.profilePhotoUrl)
+                    : null,
+              ),
             );
           },
         ),

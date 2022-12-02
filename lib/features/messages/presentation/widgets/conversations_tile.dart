@@ -8,10 +8,10 @@ import '../../../../l10n/l10n.dart';
 
 import 'package:flutter/material.dart';
 
-class ConversationsTile extends StatelessWidget {
+class LoadedConversationsTile extends StatelessWidget {
   final Conversation conversation;
 
-  const ConversationsTile({required this.conversation});
+  const LoadedConversationsTile({required this.conversation});
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +33,24 @@ class ConversationsTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 18),
           child: Row(
             children: [
-              CircleAvatar(
-                maxRadius: 24,
-                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                foregroundImage:
-                    NetworkImage(conversation.friendUser.profilePhotoUrl),
+              Stack(
+                children: [
+                  CircleAvatar(
+                    maxRadius: 24,
+                    backgroundColor:
+                        Theme.of(context).colorScheme.primaryContainer,
+                    foregroundImage:
+                        NetworkImage(conversation.friendUser.profilePhotoUrl),
+                  ),
+                  Offstage(
+                    offstage: !conversation.friendUser.isOnline,
+                    child: Icon(
+                      FontAwesomeIcons.solidCircle,
+                      color: Theme.of(context).colorScheme.secondary,
+                      size: 7,
+                    ),
+                  )
+                ],
               ),
               Expanded(
                 child: Padding(
@@ -143,5 +156,51 @@ class ConversationsTile extends StatelessWidget {
         )
       ]),
     );
+  }
+}
+
+class LoadingConversationsTile extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 18),
+        child: Row(
+          children: [
+            CircleAvatar(
+              maxRadius: 24,
+              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      height: 12,
+                      color: Theme.of(context).colorScheme.primaryContainer,
+                    ),
+                    SizedBox(height: 16),
+                    Container(
+                      width: double.infinity,
+                      height: 10,
+                      color: Theme.of(context).colorScheme.primaryContainer,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      Divider(
+        color: Theme.of(context).dividerColor,
+        thickness: 1,
+        height: 0,
+      )
+    ]);
   }
 }

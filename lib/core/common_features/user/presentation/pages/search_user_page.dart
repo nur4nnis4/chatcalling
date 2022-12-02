@@ -1,10 +1,11 @@
 import 'package:chatcalling/core/common_features/user/presentation/bloc/search_user_bloc/search_user_bloc.dart';
 import 'package:chatcalling/core/common_features/user/presentation/pages/profile_page.dart';
-import 'package:chatcalling/core/common_features/user/presentation/widgets/user_list_view_tile.dart';
+import 'package:chatcalling/core/common_features/user/presentation/widgets/user_list_tile.dart';
 import 'package:chatcalling/core/common_widgets/custom_search_bar.dart';
 import 'package:chatcalling/features/messages/presentation/pages/message_room_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 
 class SearchUserPage extends StatefulWidget {
   final String? title;
@@ -40,7 +41,7 @@ class _SearchUserPageState extends State<SearchUserPage> {
                 return ListView.builder(
                   shrinkWrap: true,
                   itemCount: state.matchedUserList.length,
-                  itemBuilder: (context, i) => UserListViewTile(
+                  itemBuilder: (context, i) => LoadedUserListTile(
                     user: state.matchedUserList[i],
                     onTap: () {
                       Navigator.push(
@@ -58,7 +59,18 @@ class _SearchUserPageState extends State<SearchUserPage> {
                   ),
                 );
               } else if (state is SearchUserLoading) {
-                return Center(child: CircularProgressIndicator());
+                return Shimmer.fromColors(
+                  baseColor: Theme.of(context).colorScheme.onTertiaryContainer,
+                  highlightColor:
+                      Theme.of(context).colorScheme.tertiaryContainer,
+                  enabled: true,
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: 1,
+                    itemBuilder: (_, __) => LoadingUserListTile(),
+                  ),
+                );
               } else if (state is SearchUserError) {
                 return Center(
                   child: Text("OOPS! Something went wrong."),
