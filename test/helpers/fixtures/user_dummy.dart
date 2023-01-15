@@ -42,6 +42,44 @@ final tUserModel2 = UserModel(
   friendList: ['user1Id'],
 );
 
+final tNewUserModel = UserModel(
+  userId: 'newUserId',
+  username: 'newUsername',
+  displayName: 'newDisplayName',
+  signUpTime: DateTime.parse("2022-08-12 16:37:47.475845Z").toLocal(),
+  isOnline: false,
+  lastOnline: DateTime.parse("2022-08-12 16:37:47.475845Z").toLocal(),
+  about: 'Busy',
+  profilePhotoUrl: 'http//:newUser.jpg',
+  coverPhotoUrl: 'http//:newUser.jpg',
+  friendList: [],
+);
+
+final tNewUserWithoutUserId = User(
+  userId: '',
+  username: 'newUsername',
+  displayName: 'newDisplayName',
+  signUpTime: DateTime.parse("2022-08-12 16:37:47.475845Z").toLocal(),
+  isOnline: false,
+  lastOnline: DateTime.parse("2022-08-12 16:37:47.475845Z").toLocal(),
+  about: 'Busy',
+  profilePhotoUrl: 'http//:newUser.jpg',
+  coverPhotoUrl: 'http//:newUser.jpg',
+  friendList: [],
+);
+
+final tUpdateUserModel = UserModel(
+  userId: 'user1Id',
+  username: 'updateUsername',
+  displayName: 'updateDisplayName',
+  signUpTime: DateTime.parse("2022-08-12 16:37:47.475845Z").toLocal(),
+  isOnline: false,
+  lastOnline: DateTime.parse("2022-08-12 16:37:47.475845Z").toLocal(),
+  about: 'Busy',
+  profilePhotoUrl: 'http//:updateUser.jpg',
+  coverPhotoUrl: 'http//:updateUser.jpg',
+  friendList: [],
+);
 final Map<String, dynamic> tUserJson = {
   "userId": "user1Id",
   "username": "username",

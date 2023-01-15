@@ -1,4 +1,6 @@
+import 'package:chatcalling/core/cubit/current_page_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EmptyConversation extends StatelessWidget {
   const EmptyConversation({Key? key}) : super(key: key);
@@ -26,14 +28,18 @@ class EmptyConversation extends StatelessWidget {
           ),
           SizedBox(height: 25),
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              context.read<CurrentPageCubit>().goToPage(2);
+            },
             style: ButtonStyle(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(
-                            width: 1.7,
-                            color: Theme.of(context).colorScheme.primary)))),
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  side: BorderSide(
+                      width: 1.7, color: Theme.of(context).colorScheme.primary),
+                ),
+              ),
+            ),
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
               child: Text(

@@ -73,7 +73,7 @@ class DefaultFirebaseOptions {
     projectId: 'chatcalling-63eb0',
     databaseURL: 'https://chatcalling-63eb0-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'chatcalling-63eb0.appspot.com',
-    androidClientId: '820559575255-b0m5kdhal8826dvt37djs6kkqj51hj9k.apps.googleusercontent.com',
+    androidClientId: '820559575255-pd03pqt5p8978n7ke8g8sbgqkh6hs6ek.apps.googleusercontent.com',
     iosClientId: '820559575255-puk04rcamkqh4prt67fll9b3635c3jd4.apps.googleusercontent.com',
     iosBundleId: 'com.example.chatApp',
   );

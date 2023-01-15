@@ -15,6 +15,27 @@ final tPersonalInformationModel = PersonalInformationModel(
     gender: 'gender',
     dateOfBirth: DateTime.parse('2022-07-18T16:37:47.475845Z').toLocal());
 
+final tNewPersonalInformationModel = PersonalInformationModel(
+    userId: 'newUserId',
+    email: 'email',
+    phoneNumber: 'phoneNumber',
+    gender: 'gender',
+    dateOfBirth: DateTime.parse('2022-07-18T16:37:47.475845Z').toLocal());
+
+final tNewPersonalInformationWithoutUserId = PersonalInformation(
+    userId: '',
+    email: 'email',
+    phoneNumber: 'phoneNumber',
+    gender: 'gender',
+    dateOfBirth: DateTime.parse('2022-07-18T16:37:47.475845Z').toLocal());
+
+final tUpdatePersonalInformationModel = PersonalInformationModel(
+    userId: 'user1Id',
+    email: 'email',
+    phoneNumber: 'updatePhoneNumber',
+    gender: 'gender',
+    dateOfBirth: DateTime.parse('2022-07-18T16:37:47.475845Z').toLocal());
+
 final tPersonalInformationJson = {
   'userId': 'user1Id',
   'email': 'email',

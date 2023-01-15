@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:chatcalling/core/helpers/temp.dart';
+import 'package:chatcalling/core/common_features/user/domain/usecases/auth_usecases/get_current_user_id.dart';
 import 'package:chatcalling/features/messages/data/models/message_model.dart';
 import '../../../../../core/common_features/attachment/domain/entities/attachment.dart';
 import '../../../domain/usecases/send_message.dart';
@@ -12,14 +12,17 @@ part 'send_message_state.dart';
 class SendMessageBloc extends Bloc<SendMessageEvent, SendMessageState> {
   final SendMessage sendMessage;
   final MessageInputConverter messageInputConverter;
+  final GetCurrentUserId getCurrentUserId;
 
   SendMessageBloc(
-      {required this.sendMessage, required this.messageInputConverter})
+      {required this.sendMessage,
+      required this.messageInputConverter,
+      required this.getCurrentUserId})
       : super(SendMessageInitial()) {
     on<SendMessageEvent>((event, emit) async {
       final message = messageInputConverter.toMessage(
           text: event.text,
-          userId: Temp.userId,
+          userId: await getCurrentUserId(),
           receiverId: event.receiverId,
           attachments: event.attachments);
       emit(SendMessageLoading(message: MessageModel.fromEntity(message)));

@@ -54,4 +54,16 @@ class UserModel extends User {
         "coverPhotoUrl": coverPhotoUrl,
         "friendList": friendList,
       };
+
+  factory UserModel.fromEntity(User user, String userId) => UserModel(
+      userId: userId,
+      username: user.username,
+      displayName: user.displayName,
+      signUpTime: user.signUpTime,
+      isOnline: user.isOnline,
+      lastOnline: user.lastOnline,
+      about: user.about,
+      profilePhotoUrl: user.profilePhotoUrl,
+      coverPhotoUrl: user.coverPhotoUrl,
+      friendList: user.friendList);
 }

@@ -2,66 +2,96 @@
 // in chatcalling/test/helpers/mocks/test.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i10;
+import 'dart:async' as _i13;
 
 import 'package:chatcalling/core/common_features/attachment/data/datasources/attachment_local_datasource.dart'
-    as _i22;
+    as _i37;
 import 'package:chatcalling/core/common_features/attachment/domain/entities/attachment.dart'
-    as _i21;
+    as _i36;
 import 'package:chatcalling/core/common_features/attachment/domain/repositories/attachment_repository.dart'
-    as _i4;
+    as _i9;
 import 'package:chatcalling/core/common_features/attachment/domain/usecases/get_lost_attachments.dart'
-    as _i23;
+    as _i38;
 import 'package:chatcalling/core/common_features/attachment/domain/usecases/pick_attachments.dart'
-    as _i24;
-import 'package:chatcalling/core/common_features/user/data/datasources/user_remote_datasource.dart'
-    as _i14;
-import 'package:chatcalling/core/common_features/user/data/models/personal_information_model.dart'
-    as _i16;
-import 'package:chatcalling/core/common_features/user/data/models/user_model.dart'
-    as _i15;
-import 'package:chatcalling/core/common_features/user/domain/entities/personal_information.dart'
-    as _i13;
-import 'package:chatcalling/core/common_features/user/domain/entities/user.dart'
-    as _i12;
-import 'package:chatcalling/core/common_features/user/domain/repositories/user_repository.dart'
-    as _i2;
-import 'package:chatcalling/core/common_features/user/domain/usecases/get_friend_list.dart'
-    as _i19;
-import 'package:chatcalling/core/common_features/user/domain/usecases/get_personal_information.dart'
-    as _i20;
-import 'package:chatcalling/core/common_features/user/domain/usecases/get_user_data.dart'
-    as _i17;
-import 'package:chatcalling/core/common_features/user/domain/usecases/search_user.dart'
-    as _i18;
-import 'package:chatcalling/core/error/failures.dart' as _i11;
-import 'package:chatcalling/core/helpers/check_platform.dart' as _i34;
-import 'package:chatcalling/core/helpers/time.dart' as _i7;
-import 'package:chatcalling/core/helpers/unique_id.dart' as _i6;
-import 'package:chatcalling/features/messages/data/datasources/message_remote_datasource.dart'
-    as _i26;
-import 'package:chatcalling/features/messages/data/models/conversation_model.dart'
-    as _i28;
-import 'package:chatcalling/features/messages/data/models/message_model.dart'
-    as _i27;
-import 'package:chatcalling/features/messages/domain/entities/conversation.dart'
+    as _i39;
+import 'package:chatcalling/core/common_features/user/data/datasources/auth_remote_datasource.dart'
     as _i25;
-import 'package:chatcalling/features/messages/domain/entities/message.dart'
+import 'package:chatcalling/core/common_features/user/data/datasources/user_remote_datasource.dart'
+    as _i15;
+import 'package:chatcalling/core/common_features/user/data/models/personal_information_model.dart'
+    as _i17;
+import 'package:chatcalling/core/common_features/user/data/models/user_full_info_model.dart'
+    as _i26;
+import 'package:chatcalling/core/common_features/user/data/models/user_model.dart'
+    as _i16;
+import 'package:chatcalling/core/common_features/user/data/utils/auth_error_message.dart'
+    as _i27;
+import 'package:chatcalling/core/common_features/user/domain/entities/personal_information.dart'
     as _i8;
-import 'package:chatcalling/features/messages/domain/repositories/message_repository.dart'
-    as _i5;
-import 'package:chatcalling/features/messages/domain/usecases/get_conversations.dart'
+import 'package:chatcalling/core/common_features/user/domain/entities/user.dart'
+    as _i7;
+import 'package:chatcalling/core/common_features/user/domain/repositories/auth_repository.dart'
+    as _i4;
+import 'package:chatcalling/core/common_features/user/domain/repositories/user_repository.dart'
+    as _i3;
+import 'package:chatcalling/core/common_features/user/domain/usecases/auth_usecases/get_current_user_id.dart'
+    as _i28;
+import 'package:chatcalling/core/common_features/user/domain/usecases/auth_usecases/is_signed_in.dart'
     as _i29;
-import 'package:chatcalling/features/messages/domain/usecases/get_messages.dart'
-    as _i30;
-import 'package:chatcalling/features/messages/domain/usecases/send_message.dart'
+import 'package:chatcalling/core/common_features/user/domain/usecases/auth_usecases/sign_in_with_email.dart'
     as _i31;
-import 'package:chatcalling/features/messages/domain/usecases/update_read_status.dart'
+import 'package:chatcalling/core/common_features/user/domain/usecases/auth_usecases/sign_in_with_google.dart'
     as _i32;
-import 'package:chatcalling/features/messages/presentation/utils/message_input_converter.dart'
+import 'package:chatcalling/core/common_features/user/domain/usecases/auth_usecases/sign_out.dart'
     as _i33;
-import 'package:dartz/dartz.dart' as _i3;
-import 'package:image_picker/image_picker.dart' as _i9;
+import 'package:chatcalling/core/common_features/user/domain/usecases/auth_usecases/sign_up_with_email.dart'
+    as _i30;
+import 'package:chatcalling/core/common_features/user/domain/usecases/user_usercases/check_username_availability.dart'
+    as _i24;
+import 'package:chatcalling/core/common_features/user/domain/usecases/user_usercases/get_friend_list.dart'
+    as _i20;
+import 'package:chatcalling/core/common_features/user/domain/usecases/user_usercases/get_personal_information.dart'
+    as _i21;
+import 'package:chatcalling/core/common_features/user/domain/usecases/user_usercases/get_user_data.dart'
+    as _i18;
+import 'package:chatcalling/core/common_features/user/domain/usecases/user_usercases/search_user.dart'
+    as _i19;
+import 'package:chatcalling/core/common_features/user/domain/usecases/user_usercases/update_personal_information.dart'
+    as _i23;
+import 'package:chatcalling/core/common_features/user/domain/usecases/user_usercases/update_user_data.dart'
+    as _i22;
+import 'package:chatcalling/core/common_features/user/presentation/utils/form_validator.dart'
+    as _i34;
+import 'package:chatcalling/core/common_features/user/presentation/utils/user_input_converter.dart'
+    as _i35;
+import 'package:chatcalling/core/error/failures.dart' as _i14;
+import 'package:chatcalling/core/helpers/check_platform.dart' as _i49;
+import 'package:chatcalling/core/helpers/time.dart' as _i6;
+import 'package:chatcalling/core/helpers/unique_id.dart' as _i5;
+import 'package:chatcalling/features/messages/data/datasources/message_remote_datasource.dart'
+    as _i41;
+import 'package:chatcalling/features/messages/data/models/conversation_model.dart'
+    as _i43;
+import 'package:chatcalling/features/messages/data/models/message_model.dart'
+    as _i42;
+import 'package:chatcalling/features/messages/domain/entities/conversation.dart'
+    as _i40;
+import 'package:chatcalling/features/messages/domain/entities/message.dart'
+    as _i11;
+import 'package:chatcalling/features/messages/domain/repositories/message_repository.dart'
+    as _i10;
+import 'package:chatcalling/features/messages/domain/usecases/get_conversations.dart'
+    as _i44;
+import 'package:chatcalling/features/messages/domain/usecases/get_messages.dart'
+    as _i45;
+import 'package:chatcalling/features/messages/domain/usecases/send_message.dart'
+    as _i46;
+import 'package:chatcalling/features/messages/domain/usecases/update_read_status.dart'
+    as _i47;
+import 'package:chatcalling/features/messages/presentation/utils/message_input_converter.dart'
+    as _i48;
+import 'package:dartz/dartz.dart' as _i2;
+import 'package:image_picker/image_picker.dart' as _i12;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -74,482 +104,908 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 
-class _FakeUserRepository_0 extends _i1.Fake implements _i2.UserRepository {}
+class _FakeEither_0<L, R> extends _i1.Fake implements _i2.Either<L, R> {}
 
-class _FakeEither_1<L, R> extends _i1.Fake implements _i3.Either<L, R> {}
+class _FakeUserRepository_1 extends _i1.Fake implements _i3.UserRepository {}
 
-class _FakeAttachmentRepository_2 extends _i1.Fake
-    implements _i4.AttachmentRepository {}
+class _FakeAuthRepository_2 extends _i1.Fake implements _i4.AuthRepository {}
 
-class _FakeMessageRepository_3 extends _i1.Fake
-    implements _i5.MessageRepository {}
+class _FakeUniqueId_3 extends _i1.Fake implements _i5.UniqueId {}
 
-class _FakeUniqueId_4 extends _i1.Fake implements _i6.UniqueId {}
+class _FakeTime_4 extends _i1.Fake implements _i6.Time {}
 
-class _FakeTime_5 extends _i1.Fake implements _i7.Time {}
+class _FakeUser_5 extends _i1.Fake implements _i7.User {}
 
-class _FakeMessage_6 extends _i1.Fake implements _i8.Message {}
+class _FakePersonalInformation_6 extends _i1.Fake
+    implements _i8.PersonalInformation {}
 
-class _FakeDateTime_7 extends _i1.Fake implements DateTime {}
+class _FakeAttachmentRepository_7 extends _i1.Fake
+    implements _i9.AttachmentRepository {}
 
-class _FakeLostData_8 extends _i1.Fake implements _i9.LostData {}
+class _FakeMessageRepository_8 extends _i1.Fake
+    implements _i10.MessageRepository {}
 
-class _FakeLostDataResponse_9 extends _i1.Fake implements _i9.LostDataResponse {
-}
+class _FakeMessage_9 extends _i1.Fake implements _i11.Message {}
+
+class _FakeDateTime_10 extends _i1.Fake implements DateTime {}
+
+class _FakeLostData_11 extends _i1.Fake implements _i12.LostData {}
+
+class _FakeLostDataResponse_12 extends _i1.Fake
+    implements _i12.LostDataResponse {}
 
 /// A class which mocks [UserRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUserRepository extends _i1.Mock implements _i2.UserRepository {
+class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
   MockUserRepository() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i10.Stream<_i3.Either<_i11.Failure, _i12.User>> getUserData(
-          String? userId) =>
+  _i13.Stream<_i2.Either<_i14.Failure, _i7.User>> getUserData(String? userId) =>
       (super.noSuchMethod(Invocation.method(#getUserData, [userId]),
-              returnValue: Stream<_i3.Either<_i11.Failure, _i12.User>>.empty())
-          as _i10.Stream<_i3.Either<_i11.Failure, _i12.User>>);
+              returnValue: Stream<_i2.Either<_i14.Failure, _i7.User>>.empty())
+          as _i13.Stream<_i2.Either<_i14.Failure, _i7.User>>);
   @override
-  _i10.Stream<_i3.Either<_i11.Failure, List<_i12.User>>> getFriendList(
+  _i13.Stream<_i2.Either<_i14.Failure, List<_i7.User>>> getFriendList(
           String? userId) =>
       (super.noSuchMethod(Invocation.method(#getFriendList, [userId]),
               returnValue:
-                  Stream<_i3.Either<_i11.Failure, List<_i12.User>>>.empty())
-          as _i10.Stream<_i3.Either<_i11.Failure, List<_i12.User>>>);
+                  Stream<_i2.Either<_i14.Failure, List<_i7.User>>>.empty())
+          as _i13.Stream<_i2.Either<_i14.Failure, List<_i7.User>>>);
   @override
-  _i10.Stream<_i3.Either<_i11.Failure, List<_i12.User>>> searchUser(
+  _i13.Stream<_i2.Either<_i14.Failure, List<_i7.User>>> searchUser(
           String? query) =>
       (super.noSuchMethod(Invocation.method(#searchUser, [query]),
               returnValue:
-                  Stream<_i3.Either<_i11.Failure, List<_i12.User>>>.empty())
-          as _i10.Stream<_i3.Either<_i11.Failure, List<_i12.User>>>);
+                  Stream<_i2.Either<_i14.Failure, List<_i7.User>>>.empty())
+          as _i13.Stream<_i2.Either<_i14.Failure, List<_i7.User>>>);
   @override
-  _i10.Stream<_i3.Either<_i11.Failure, _i13.PersonalInformation>>
+  _i13.Stream<_i2.Either<_i14.Failure, _i8.PersonalInformation>>
       getPersonalInformation(String? userId) => (super.noSuchMethod(
               Invocation.method(#getPersonalInformation, [userId]),
               returnValue: Stream<
-                  _i3.Either<_i11.Failure, _i13.PersonalInformation>>.empty())
-          as _i10.Stream<_i3.Either<_i11.Failure, _i13.PersonalInformation>>);
+                  _i2.Either<_i14.Failure, _i8.PersonalInformation>>.empty())
+          as _i13.Stream<_i2.Either<_i14.Failure, _i8.PersonalInformation>>);
+  @override
+  _i13.Future<_i2.Either<_i14.Failure, String>> updateUserData(
+          _i7.User? user) =>
+      (super.noSuchMethod(Invocation.method(#updateUserData, [user]),
+              returnValue: Future<_i2.Either<_i14.Failure, String>>.value(
+                  _FakeEither_0<_i14.Failure, String>()))
+          as _i13.Future<_i2.Either<_i14.Failure, String>>);
+  @override
+  _i13.Future<_i2.Either<_i14.Failure, String>> updatePersonalInformation(
+          _i8.PersonalInformation? personalInformation) =>
+      (super.noSuchMethod(
+          Invocation.method(#updatePersonalInformation, [personalInformation]),
+          returnValue: Future<_i2.Either<_i14.Failure, String>>.value(
+              _FakeEither_0<_i14.Failure, String>())) as _i13
+          .Future<_i2.Either<_i14.Failure, String>>);
+  @override
+  _i13.Future<_i2.Either<_i14.Failure, bool>> checkUsernameAvailability(
+          String? username) =>
+      (super.noSuchMethod(
+              Invocation.method(#checkUsernameAvailability, [username]),
+              returnValue: Future<_i2.Either<_i14.Failure, bool>>.value(
+                  _FakeEither_0<_i14.Failure, bool>()))
+          as _i13.Future<_i2.Either<_i14.Failure, bool>>);
 }
 
 /// A class which mocks [UserRemoteDatasource].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockUserRemoteDatasource extends _i1.Mock
-    implements _i14.UserRemoteDatasource {
+    implements _i15.UserRemoteDatasource {
   MockUserRemoteDatasource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i10.Stream<_i15.UserModel> getUserData(String? userId) =>
+  _i13.Stream<_i16.UserModel> getUserData(String? userId) =>
       (super.noSuchMethod(Invocation.method(#getUserData, [userId]),
-              returnValue: Stream<_i15.UserModel>.empty())
-          as _i10.Stream<_i15.UserModel>);
+              returnValue: Stream<_i16.UserModel>.empty())
+          as _i13.Stream<_i16.UserModel>);
   @override
-  _i10.Stream<List<_i15.UserModel>> getFriendList(String? userId) =>
+  _i13.Stream<List<_i16.UserModel>> getFriendList(String? userId) =>
       (super.noSuchMethod(Invocation.method(#getFriendList, [userId]),
-              returnValue: Stream<List<_i15.UserModel>>.empty())
-          as _i10.Stream<List<_i15.UserModel>>);
+              returnValue: Stream<List<_i16.UserModel>>.empty())
+          as _i13.Stream<List<_i16.UserModel>>);
   @override
-  _i10.Stream<List<_i15.UserModel>> searchUser(String? query) =>
+  _i13.Stream<List<_i16.UserModel>> searchUser(String? query) =>
       (super.noSuchMethod(Invocation.method(#searchUser, [query]),
-              returnValue: Stream<List<_i15.UserModel>>.empty())
-          as _i10.Stream<List<_i15.UserModel>>);
+              returnValue: Stream<List<_i16.UserModel>>.empty())
+          as _i13.Stream<List<_i16.UserModel>>);
   @override
-  _i10.Stream<_i16.PersonalInformationModel> getPersonalInformation(
+  _i13.Stream<_i17.PersonalInformationModel> getPersonalInformation(
           String? userId) =>
       (super.noSuchMethod(Invocation.method(#getPersonalInformation, [userId]),
-              returnValue: Stream<_i16.PersonalInformationModel>.empty())
-          as _i10.Stream<_i16.PersonalInformationModel>);
+              returnValue: Stream<_i17.PersonalInformationModel>.empty())
+          as _i13.Stream<_i17.PersonalInformationModel>);
+  @override
+  _i13.Future<void> addUserData(_i16.UserModel? userModel) =>
+      (super.noSuchMethod(Invocation.method(#addUserData, [userModel]),
+              returnValue: Future<void>.value(),
+              returnValueForMissingStub: Future<void>.value())
+          as _i13.Future<void>);
+  @override
+  _i13.Future<void> addPersonalInformation(
+          _i17.PersonalInformationModel? personalInformationModel) =>
+      (super.noSuchMethod(
+              Invocation.method(
+                  #addPersonalInformation, [personalInformationModel]),
+              returnValue: Future<void>.value(),
+              returnValueForMissingStub: Future<void>.value())
+          as _i13.Future<void>);
+  @override
+  _i13.Future<void> updateUserData(_i16.UserModel? userModel) =>
+      (super.noSuchMethod(Invocation.method(#updateUserData, [userModel]),
+              returnValue: Future<void>.value(),
+              returnValueForMissingStub: Future<void>.value())
+          as _i13.Future<void>);
+  @override
+  _i13.Future<void> updatePersonalInformation(
+          _i17.PersonalInformationModel? personalInformationModel) =>
+      (super.noSuchMethod(
+              Invocation.method(
+                  #updatePersonalInformation, [personalInformationModel]),
+              returnValue: Future<void>.value(),
+              returnValueForMissingStub: Future<void>.value())
+          as _i13.Future<void>);
+  @override
+  _i13.Future<bool> isUsernameAvailable(String? username) =>
+      (super.noSuchMethod(Invocation.method(#isUsernameAvailable, [username]),
+          returnValue: Future<bool>.value(false)) as _i13.Future<bool>);
 }
 
 /// A class which mocks [GetUserData].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGetUserData extends _i1.Mock implements _i17.GetUserData {
+class MockGetUserData extends _i1.Mock implements _i18.GetUserData {
   MockGetUserData() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i2.UserRepository get repository =>
+  _i3.UserRepository get repository =>
       (super.noSuchMethod(Invocation.getter(#repository),
-          returnValue: _FakeUserRepository_0()) as _i2.UserRepository);
+          returnValue: _FakeUserRepository_1()) as _i3.UserRepository);
   @override
-  _i10.Stream<_i3.Either<_i11.Failure, _i12.User>> call({String? userId}) =>
+  _i13.Stream<_i2.Either<_i14.Failure, _i7.User>> call({String? userId}) =>
       (super.noSuchMethod(Invocation.method(#call, [], {#userId: userId}),
-              returnValue: Stream<_i3.Either<_i11.Failure, _i12.User>>.empty())
-          as _i10.Stream<_i3.Either<_i11.Failure, _i12.User>>);
+              returnValue: Stream<_i2.Either<_i14.Failure, _i7.User>>.empty())
+          as _i13.Stream<_i2.Either<_i14.Failure, _i7.User>>);
 }
 
-/// A class which mocks [matchedUserList].
+/// A class which mocks [SearchUser].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockSearchUser extends _i1.Mock implements _i18.SearchUser {
+class MockSearchUser extends _i1.Mock implements _i19.SearchUser {
   MockSearchUser() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i2.UserRepository get repository =>
+  _i3.UserRepository get repository =>
       (super.noSuchMethod(Invocation.getter(#repository),
-          returnValue: _FakeUserRepository_0()) as _i2.UserRepository);
+          returnValue: _FakeUserRepository_1()) as _i3.UserRepository);
   @override
-  _i10.Stream<_i3.Either<_i11.Failure, List<_i12.User>>> call(
-          {String? query}) =>
+  _i13.Stream<_i2.Either<_i14.Failure, List<_i7.User>>> call({String? query}) =>
       (super.noSuchMethod(Invocation.method(#call, [], {#query: query}),
               returnValue:
-                  Stream<_i3.Either<_i11.Failure, List<_i12.User>>>.empty())
-          as _i10.Stream<_i3.Either<_i11.Failure, List<_i12.User>>>);
+                  Stream<_i2.Either<_i14.Failure, List<_i7.User>>>.empty())
+          as _i13.Stream<_i2.Either<_i14.Failure, List<_i7.User>>>);
 }
 
 /// A class which mocks [GetFriendList].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGetFriendList extends _i1.Mock implements _i19.GetFriendList {
+class MockGetFriendList extends _i1.Mock implements _i20.GetFriendList {
   MockGetFriendList() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i2.UserRepository get repository =>
+  _i3.UserRepository get repository =>
       (super.noSuchMethod(Invocation.getter(#repository),
-          returnValue: _FakeUserRepository_0()) as _i2.UserRepository);
+          returnValue: _FakeUserRepository_1()) as _i3.UserRepository);
   @override
-  _i10.Stream<_i3.Either<_i11.Failure, List<_i12.User>>> call(
+  _i13.Stream<_i2.Either<_i14.Failure, List<_i7.User>>> call(
           {String? userId}) =>
       (super.noSuchMethod(Invocation.method(#call, [], {#userId: userId}),
               returnValue:
-                  Stream<_i3.Either<_i11.Failure, List<_i12.User>>>.empty())
-          as _i10.Stream<_i3.Either<_i11.Failure, List<_i12.User>>>);
+                  Stream<_i2.Either<_i14.Failure, List<_i7.User>>>.empty())
+          as _i13.Stream<_i2.Either<_i14.Failure, List<_i7.User>>>);
 }
 
 /// A class which mocks [GetPersonalInformation].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockGetPersonalInformation extends _i1.Mock
-    implements _i20.GetPersonalInformation {
+    implements _i21.GetPersonalInformation {
   MockGetPersonalInformation() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i2.UserRepository get repository =>
+  _i3.UserRepository get repository =>
       (super.noSuchMethod(Invocation.getter(#repository),
-          returnValue: _FakeUserRepository_0()) as _i2.UserRepository);
+          returnValue: _FakeUserRepository_1()) as _i3.UserRepository);
   @override
-  _i10.Stream<_i3.Either<_i11.Failure, _i13.PersonalInformation>> call(
+  _i13.Stream<_i2.Either<_i14.Failure, _i8.PersonalInformation>> call(
           {String? userId}) =>
       (super.noSuchMethod(Invocation.method(#call, [], {#userId: userId}),
               returnValue: Stream<
-                  _i3.Either<_i11.Failure, _i13.PersonalInformation>>.empty())
-          as _i10.Stream<_i3.Either<_i11.Failure, _i13.PersonalInformation>>);
+                  _i2.Either<_i14.Failure, _i8.PersonalInformation>>.empty())
+          as _i13.Stream<_i2.Either<_i14.Failure, _i8.PersonalInformation>>);
+}
+
+/// A class which mocks [UpdateUserData].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockUpdateUserData extends _i1.Mock implements _i22.UpdateUserData {
+  MockUpdateUserData() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i3.UserRepository get repository =>
+      (super.noSuchMethod(Invocation.getter(#repository),
+          returnValue: _FakeUserRepository_1()) as _i3.UserRepository);
+  @override
+  _i13.Future<_i2.Either<_i14.Failure, String>> call({_i7.User? user}) =>
+      (super.noSuchMethod(Invocation.method(#call, [], {#user: user}),
+              returnValue: Future<_i2.Either<_i14.Failure, String>>.value(
+                  _FakeEither_0<_i14.Failure, String>()))
+          as _i13.Future<_i2.Either<_i14.Failure, String>>);
+}
+
+/// A class which mocks [UpdatePersonalInformation].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockUpdatePersonalInformation extends _i1.Mock
+    implements _i23.UpdatePersonalInformation {
+  MockUpdatePersonalInformation() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i3.UserRepository get repository =>
+      (super.noSuchMethod(Invocation.getter(#repository),
+          returnValue: _FakeUserRepository_1()) as _i3.UserRepository);
+  @override
+  _i13.Future<_i2.Either<_i14.Failure, String>> call(
+          {_i8.PersonalInformation? personalInformation}) =>
+      (super.noSuchMethod(
+              Invocation.method(
+                  #call, [], {#personalInformation: personalInformation}),
+              returnValue: Future<_i2.Either<_i14.Failure, String>>.value(
+                  _FakeEither_0<_i14.Failure, String>()))
+          as _i13.Future<_i2.Either<_i14.Failure, String>>);
+}
+
+/// A class which mocks [CheckUsernameAvailability].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCheckUsernameAvailability extends _i1.Mock
+    implements _i24.CheckUsernameAvailability {
+  MockCheckUsernameAvailability() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i3.UserRepository get repository =>
+      (super.noSuchMethod(Invocation.getter(#repository),
+          returnValue: _FakeUserRepository_1()) as _i3.UserRepository);
+  @override
+  _i13.Future<_i2.Either<_i14.Failure, bool>> call({String? username}) =>
+      (super.noSuchMethod(Invocation.method(#call, [], {#username: username}),
+              returnValue: Future<_i2.Either<_i14.Failure, bool>>.value(
+                  _FakeEither_0<_i14.Failure, bool>()))
+          as _i13.Future<_i2.Either<_i14.Failure, bool>>);
+}
+
+/// A class which mocks [AuthRemoteDatasource].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockAuthRemoteDatasource extends _i1.Mock
+    implements _i25.AuthRemoteDatasource {
+  MockAuthRemoteDatasource() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i13.Future<String> getCurrentUserId() =>
+      (super.noSuchMethod(Invocation.method(#getCurrentUserId, []),
+          returnValue: Future<String>.value('')) as _i13.Future<String>);
+  @override
+  _i13.Stream<bool> isSignedIn() =>
+      (super.noSuchMethod(Invocation.method(#isSignedIn, []),
+          returnValue: Stream<bool>.empty()) as _i13.Stream<bool>);
+  @override
+  bool isEmailVerified() =>
+      (super.noSuchMethod(Invocation.method(#isEmailVerified, []),
+          returnValue: false) as bool);
+  @override
+  _i13.Future<_i26.UserFullInfoModel?> signInWithGoogle() =>
+      (super.noSuchMethod(Invocation.method(#signInWithGoogle, []),
+              returnValue: Future<_i26.UserFullInfoModel?>.value())
+          as _i13.Future<_i26.UserFullInfoModel?>);
+  @override
+  _i13.Future<void> signInWithEmail(String? email, String? password) => (super
+          .noSuchMethod(Invocation.method(#signInWithEmail, [email, password]),
+              returnValue: Future<void>.value(),
+              returnValueForMissingStub: Future<void>.value())
+      as _i13.Future<void>);
+  @override
+  _i13.Future<void> signUpWithEmail(String? email, String? password) => (super
+          .noSuchMethod(Invocation.method(#signUpWithEmail, [email, password]),
+              returnValue: Future<void>.value(),
+              returnValueForMissingStub: Future<void>.value())
+      as _i13.Future<void>);
+  @override
+  _i13.Future<void> sendEmailVerification() => (super.noSuchMethod(
+      Invocation.method(#sendEmailVerification, []),
+      returnValue: Future<void>.value(),
+      returnValueForMissingStub: Future<void>.value()) as _i13.Future<void>);
+  @override
+  _i13.Future<void> signOut() => (super.noSuchMethod(
+      Invocation.method(#signOut, []),
+      returnValue: Future<void>.value(),
+      returnValueForMissingStub: Future<void>.value()) as _i13.Future<void>);
+  @override
+  _i13.Future<void> updatePassword(String? newPassword) => (super.noSuchMethod(
+      Invocation.method(#updatePassword, [newPassword]),
+      returnValue: Future<void>.value(),
+      returnValueForMissingStub: Future<void>.value()) as _i13.Future<void>);
+}
+
+/// A class which mocks [AuthErrorMessage].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockAuthErrorMessage extends _i1.Mock implements _i27.AuthErrorMessage {
+  MockAuthErrorMessage() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  String toSentence(String? errorMessage) =>
+      (super.noSuchMethod(Invocation.method(#toSentence, [errorMessage]),
+          returnValue: '') as String);
+}
+
+/// A class which mocks [AuthRepository].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockAuthRepository extends _i1.Mock implements _i4.AuthRepository {
+  MockAuthRepository() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i13.Future<_i2.Either<_i14.Failure, String>> signUpWithEmail(_i7.User? user,
+          _i8.PersonalInformation? personalInformation, String? password) =>
+      (super.noSuchMethod(
+              Invocation.method(
+                  #signUpWithEmail, [user, personalInformation, password]),
+              returnValue: Future<_i2.Either<_i14.Failure, String>>.value(
+                  _FakeEither_0<_i14.Failure, String>()))
+          as _i13.Future<_i2.Either<_i14.Failure, String>>);
+  @override
+  _i13.Future<_i2.Either<_i14.Failure, String>> signInWithEmail(
+          String? email, String? password) =>
+      (super.noSuchMethod(
+              Invocation.method(#signInWithEmail, [email, password]),
+              returnValue: Future<_i2.Either<_i14.Failure, String>>.value(
+                  _FakeEither_0<_i14.Failure, String>()))
+          as _i13.Future<_i2.Either<_i14.Failure, String>>);
+  @override
+  _i13.Future<_i2.Either<_i14.Failure, String>> signInWithGoogle() =>
+      (super.noSuchMethod(Invocation.method(#signInWithGoogle, []),
+              returnValue: Future<_i2.Either<_i14.Failure, String>>.value(
+                  _FakeEither_0<_i14.Failure, String>()))
+          as _i13.Future<_i2.Either<_i14.Failure, String>>);
+  @override
+  _i13.Future<_i2.Either<_i14.Failure, String>> signOut() =>
+      (super.noSuchMethod(Invocation.method(#signOut, []),
+              returnValue: Future<_i2.Either<_i14.Failure, String>>.value(
+                  _FakeEither_0<_i14.Failure, String>()))
+          as _i13.Future<_i2.Either<_i14.Failure, String>>);
+  @override
+  _i13.Future<String> getCurrentUserId() =>
+      (super.noSuchMethod(Invocation.method(#getCurrentUserId, []),
+          returnValue: Future<String>.value('')) as _i13.Future<String>);
+  @override
+  _i13.Stream<bool> isSignedIn() =>
+      (super.noSuchMethod(Invocation.method(#isSignedIn, []),
+          returnValue: Stream<bool>.empty()) as _i13.Stream<bool>);
+}
+
+/// A class which mocks [GetCurrentUserId].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetCurrentUserId extends _i1.Mock implements _i28.GetCurrentUserId {
+  MockGetCurrentUserId() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.AuthRepository get repository =>
+      (super.noSuchMethod(Invocation.getter(#repository),
+          returnValue: _FakeAuthRepository_2()) as _i4.AuthRepository);
+  @override
+  _i13.Future<String> call() =>
+      (super.noSuchMethod(Invocation.method(#call, []),
+          returnValue: Future<String>.value('')) as _i13.Future<String>);
+}
+
+/// A class which mocks [IsSignedIn].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockIsSignedIn extends _i1.Mock implements _i29.IsSignedIn {
+  MockIsSignedIn() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.AuthRepository get repository =>
+      (super.noSuchMethod(Invocation.getter(#repository),
+          returnValue: _FakeAuthRepository_2()) as _i4.AuthRepository);
+  @override
+  _i13.Stream<bool> call() => (super.noSuchMethod(Invocation.method(#call, []),
+      returnValue: Stream<bool>.empty()) as _i13.Stream<bool>);
+}
+
+/// A class which mocks [SignUpWithEmail].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockSignUpWithEmail extends _i1.Mock implements _i30.SignUpWithEmail {
+  MockSignUpWithEmail() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.AuthRepository get repository =>
+      (super.noSuchMethod(Invocation.getter(#repository),
+          returnValue: _FakeAuthRepository_2()) as _i4.AuthRepository);
+  @override
+  _i13.Future<_i2.Either<_i14.Failure, String>> call(
+          {_i7.User? user,
+          _i8.PersonalInformation? personalInformation,
+          String? password}) =>
+      (super.noSuchMethod(
+              Invocation.method(#call, [], {
+                #user: user,
+                #personalInformation: personalInformation,
+                #password: password
+              }),
+              returnValue: Future<_i2.Either<_i14.Failure, String>>.value(
+                  _FakeEither_0<_i14.Failure, String>()))
+          as _i13.Future<_i2.Either<_i14.Failure, String>>);
+}
+
+/// A class which mocks [SignInWithEmail].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockSignInWithEmail extends _i1.Mock implements _i31.SignInWithEmail {
+  MockSignInWithEmail() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.AuthRepository get repository =>
+      (super.noSuchMethod(Invocation.getter(#repository),
+          returnValue: _FakeAuthRepository_2()) as _i4.AuthRepository);
+  @override
+  _i13.Future<_i2.Either<_i14.Failure, String>> call(
+          {String? email, String? password}) =>
+      (super.noSuchMethod(
+          Invocation.method(#call, [], {#email: email, #password: password}),
+          returnValue: Future<_i2.Either<_i14.Failure, String>>.value(
+              _FakeEither_0<_i14.Failure, String>())) as _i13
+          .Future<_i2.Either<_i14.Failure, String>>);
+}
+
+/// A class which mocks [SignInWithGoogle].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockSignInWithGoogle extends _i1.Mock implements _i32.SignInWithGoogle {
+  MockSignInWithGoogle() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.AuthRepository get repository =>
+      (super.noSuchMethod(Invocation.getter(#repository),
+          returnValue: _FakeAuthRepository_2()) as _i4.AuthRepository);
+  @override
+  _i13.Future<_i2.Either<_i14.Failure, String>> call() =>
+      (super.noSuchMethod(Invocation.method(#call, []),
+              returnValue: Future<_i2.Either<_i14.Failure, String>>.value(
+                  _FakeEither_0<_i14.Failure, String>()))
+          as _i13.Future<_i2.Either<_i14.Failure, String>>);
+}
+
+/// A class which mocks [SignOut].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockSignOut extends _i1.Mock implements _i33.SignOut {
+  MockSignOut() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.AuthRepository get repository =>
+      (super.noSuchMethod(Invocation.getter(#repository),
+          returnValue: _FakeAuthRepository_2()) as _i4.AuthRepository);
+  @override
+  _i13.Future<_i2.Either<_i14.Failure, String>> call() =>
+      (super.noSuchMethod(Invocation.method(#call, []),
+              returnValue: Future<_i2.Either<_i14.Failure, String>>.value(
+                  _FakeEither_0<_i14.Failure, String>()))
+          as _i13.Future<_i2.Either<_i14.Failure, String>>);
+}
+
+/// A class which mocks [FormValidator].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFormValidator extends _i1.Mock implements _i34.FormValidator {
+  MockFormValidator() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.Either<_i14.Failure, bool> validate(
+          {String? username,
+          String? displayName,
+          String? email,
+          String? password}) =>
+      (super.noSuchMethod(
+              Invocation.method(#validate, [], {
+                #username: username,
+                #displayName: displayName,
+                #email: email,
+                #password: password
+              }),
+              returnValue: _FakeEither_0<_i14.Failure, bool>())
+          as _i2.Either<_i14.Failure, bool>);
+}
+
+/// A class which mocks [UserInputConverter].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockUserInputConverter extends _i1.Mock
+    implements _i35.UserInputConverter {
+  MockUserInputConverter() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.UniqueId get uniqueId => (super.noSuchMethod(Invocation.getter(#uniqueId),
+      returnValue: _FakeUniqueId_3()) as _i5.UniqueId);
+  @override
+  _i6.Time get time =>
+      (super.noSuchMethod(Invocation.getter(#time), returnValue: _FakeTime_4())
+          as _i6.Time);
+  @override
+  _i7.User toUser({String? username, String? displayName}) =>
+      (super.noSuchMethod(
+          Invocation.method(
+              #toUser, [], {#username: username, #displayName: displayName}),
+          returnValue: _FakeUser_5()) as _i7.User);
+  @override
+  _i8.PersonalInformation toPersonalInformation({String? email}) =>
+      (super.noSuchMethod(
+              Invocation.method(#toPersonalInformation, [], {#email: email}),
+              returnValue: _FakePersonalInformation_6())
+          as _i8.PersonalInformation);
 }
 
 /// A class which mocks [AttachmentRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockAttachmentRepository extends _i1.Mock
-    implements _i4.AttachmentRepository {
+    implements _i9.AttachmentRepository {
   MockAttachmentRepository() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i10.Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>> pickAttachments(
-          _i21.AttachmentType? attachmentType) =>
+  _i13.Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>> pickAttachments(
+          _i36.AttachmentType? attachmentType) =>
       (super.noSuchMethod(Invocation.method(#pickAttachments, [attachmentType]),
               returnValue:
-                  Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>.value(
-                      _FakeEither_1<_i11.Failure, List<_i21.Attachment>>()))
-          as _i10.Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>);
+                  Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>.value(
+                      _FakeEither_0<_i14.Failure, List<_i36.Attachment>>()))
+          as _i13.Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>);
   @override
-  _i10.Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>
+  _i13.Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>
       getLostAttachments() => (super.noSuchMethod(
               Invocation.method(#getLostAttachments, []),
               returnValue:
-                  Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>.value(
-                      _FakeEither_1<_i11.Failure, List<_i21.Attachment>>()))
-          as _i10.Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>);
+                  Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>.value(
+                      _FakeEither_0<_i14.Failure, List<_i36.Attachment>>()))
+          as _i13.Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>);
 }
 
 /// A class which mocks [AttachmentLocalDatasource].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockAttachmentLocalDatasource extends _i1.Mock
-    implements _i22.AttachmentLocalDatasource {
+    implements _i37.AttachmentLocalDatasource {
   MockAttachmentLocalDatasource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i10.Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>
+  _i13.Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>
       pickLocalImages() => (super.noSuchMethod(
               Invocation.method(#pickLocalImages, []),
               returnValue:
-                  Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>.value(
-                      _FakeEither_1<_i11.Failure, List<_i21.Attachment>>()))
-          as _i10.Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>);
+                  Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>.value(
+                      _FakeEither_0<_i14.Failure, List<_i36.Attachment>>()))
+          as _i13.Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>);
   @override
-  _i10.Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>
+  _i13.Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>
       pickCameraImage() => (super.noSuchMethod(
               Invocation.method(#pickCameraImage, []),
               returnValue:
-                  Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>.value(
-                      _FakeEither_1<_i11.Failure, List<_i21.Attachment>>()))
-          as _i10.Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>);
+                  Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>.value(
+                      _FakeEither_0<_i14.Failure, List<_i36.Attachment>>()))
+          as _i13.Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>);
   @override
-  _i10.Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>
+  _i13.Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>
       pickLocalVideo() => (super.noSuchMethod(
               Invocation.method(#pickLocalVideo, []),
               returnValue:
-                  Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>.value(
-                      _FakeEither_1<_i11.Failure, List<_i21.Attachment>>()))
-          as _i10.Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>);
+                  Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>.value(
+                      _FakeEither_0<_i14.Failure, List<_i36.Attachment>>()))
+          as _i13.Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>);
   @override
-  _i10.Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>
+  _i13.Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>
       pickCameraVideo() => (super.noSuchMethod(
               Invocation.method(#pickCameraVideo, []),
               returnValue:
-                  Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>.value(
-                      _FakeEither_1<_i11.Failure, List<_i21.Attachment>>()))
-          as _i10.Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>);
+                  Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>.value(
+                      _FakeEither_0<_i14.Failure, List<_i36.Attachment>>()))
+          as _i13.Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>);
   @override
-  _i10.Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>
+  _i13.Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>
       retrieveLostAttachments() => (super.noSuchMethod(
               Invocation.method(#retrieveLostAttachments, []),
               returnValue:
-                  Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>.value(
-                      _FakeEither_1<_i11.Failure, List<_i21.Attachment>>()))
-          as _i10.Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>);
+                  Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>.value(
+                      _FakeEither_0<_i14.Failure, List<_i36.Attachment>>()))
+          as _i13.Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>);
 }
 
 /// A class which mocks [GetLostAttachments].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockGetLostAttachments extends _i1.Mock
-    implements _i23.GetLostAttachments {
+    implements _i38.GetLostAttachments {
   MockGetLostAttachments() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.AttachmentRepository get repository => (super.noSuchMethod(
+  _i9.AttachmentRepository get repository => (super.noSuchMethod(
       Invocation.getter(#repository),
-      returnValue: _FakeAttachmentRepository_2()) as _i4.AttachmentRepository);
+      returnValue: _FakeAttachmentRepository_7()) as _i9.AttachmentRepository);
   @override
-  _i10.Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>> call() =>
+  _i13.Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>> call() =>
       (super.noSuchMethod(Invocation.method(#call, []),
               returnValue:
-                  Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>.value(
-                      _FakeEither_1<_i11.Failure, List<_i21.Attachment>>()))
-          as _i10.Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>);
+                  Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>.value(
+                      _FakeEither_0<_i14.Failure, List<_i36.Attachment>>()))
+          as _i13.Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>);
 }
 
 /// A class which mocks [PickAttachments].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockPickAttachments extends _i1.Mock implements _i24.PickAttachments {
+class MockPickAttachments extends _i1.Mock implements _i39.PickAttachments {
   MockPickAttachments() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.AttachmentRepository get repository => (super.noSuchMethod(
+  _i9.AttachmentRepository get repository => (super.noSuchMethod(
       Invocation.getter(#repository),
-      returnValue: _FakeAttachmentRepository_2()) as _i4.AttachmentRepository);
+      returnValue: _FakeAttachmentRepository_7()) as _i9.AttachmentRepository);
   @override
-  _i10.Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>> call(
-          {_i21.AttachmentType? attachmentType}) =>
+  _i13.Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>> call(
+          {_i36.AttachmentType? attachmentType}) =>
       (super.noSuchMethod(
               Invocation.method(#call, [], {#attachmentType: attachmentType}),
               returnValue:
-                  Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>.value(
-                      _FakeEither_1<_i11.Failure, List<_i21.Attachment>>()))
-          as _i10.Future<_i3.Either<_i11.Failure, List<_i21.Attachment>>>);
+                  Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>.value(
+                      _FakeEither_0<_i14.Failure, List<_i36.Attachment>>()))
+          as _i13.Future<_i2.Either<_i14.Failure, List<_i36.Attachment>>>);
 }
 
 /// A class which mocks [MessageRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockMessageRepository extends _i1.Mock implements _i5.MessageRepository {
+class MockMessageRepository extends _i1.Mock implements _i10.MessageRepository {
   MockMessageRepository() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i10.Stream<_i3.Either<_i11.Failure, List<_i8.Message>>> getMessages(
+  _i13.Stream<_i2.Either<_i14.Failure, List<_i11.Message>>> getMessages(
           String? conversationId) =>
       (super.noSuchMethod(Invocation.method(#getMessages, [conversationId]),
               returnValue:
-                  Stream<_i3.Either<_i11.Failure, List<_i8.Message>>>.empty())
-          as _i10.Stream<_i3.Either<_i11.Failure, List<_i8.Message>>>);
+                  Stream<_i2.Either<_i14.Failure, List<_i11.Message>>>.empty())
+          as _i13.Stream<_i2.Either<_i14.Failure, List<_i11.Message>>>);
   @override
-  _i10.Future<_i3.Either<_i11.Failure, String>> sendMessage(
-          _i8.Message? message) =>
+  _i13.Future<_i2.Either<_i14.Failure, String>> sendMessage(
+          _i11.Message? message) =>
       (super.noSuchMethod(Invocation.method(#sendMessage, [message]),
-              returnValue: Future<_i3.Either<_i11.Failure, String>>.value(
-                  _FakeEither_1<_i11.Failure, String>()))
-          as _i10.Future<_i3.Either<_i11.Failure, String>>);
+              returnValue: Future<_i2.Either<_i14.Failure, String>>.value(
+                  _FakeEither_0<_i14.Failure, String>()))
+          as _i13.Future<_i2.Either<_i14.Failure, String>>);
   @override
-  _i10.Stream<_i3.Either<_i11.Failure, List<_i25.Conversation>>>
+  _i13.Stream<_i2.Either<_i14.Failure, List<_i40.Conversation>>>
       getConversations(String? userId) => (super.noSuchMethod(
               Invocation.method(#getConversations, [userId]),
               returnValue: Stream<
-                  _i3.Either<_i11.Failure, List<_i25.Conversation>>>.empty())
-          as _i10.Stream<_i3.Either<_i11.Failure, List<_i25.Conversation>>>);
+                  _i2.Either<_i14.Failure, List<_i40.Conversation>>>.empty())
+          as _i13.Stream<_i2.Either<_i14.Failure, List<_i40.Conversation>>>);
   @override
-  _i10.Future<_i3.Either<_i11.Failure, String>> updateReadStatus(
+  _i13.Future<_i2.Either<_i14.Failure, String>> updateReadStatus(
           String? userId, String? conversationId) =>
       (super.noSuchMethod(
               Invocation.method(#updateReadStatus, [userId, conversationId]),
-              returnValue: Future<_i3.Either<_i11.Failure, String>>.value(
-                  _FakeEither_1<_i11.Failure, String>()))
-          as _i10.Future<_i3.Either<_i11.Failure, String>>);
+              returnValue: Future<_i2.Either<_i14.Failure, String>>.value(
+                  _FakeEither_0<_i14.Failure, String>()))
+          as _i13.Future<_i2.Either<_i14.Failure, String>>);
 }
 
 /// A class which mocks [MessageRemoteDatasource].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockMessageRemoteDatasource extends _i1.Mock
-    implements _i26.MessageRemoteDatasource {
+    implements _i41.MessageRemoteDatasource {
   MockMessageRemoteDatasource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i10.Future<String> sendMessage(_i27.MessageModel? message) =>
+  _i13.Future<void> sendMessage(_i42.MessageModel? message) =>
       (super.noSuchMethod(Invocation.method(#sendMessage, [message]),
-          returnValue: Future<String>.value('')) as _i10.Future<String>);
+              returnValue: Future<void>.value(),
+              returnValueForMissingStub: Future<void>.value())
+          as _i13.Future<void>);
   @override
-  _i10.Stream<List<_i28.ConversationModel>> getConversations(String? userId) =>
+  _i13.Stream<List<_i43.ConversationModel>> getConversations(String? userId) =>
       (super.noSuchMethod(Invocation.method(#getConversations, [userId]),
-              returnValue: Stream<List<_i28.ConversationModel>>.empty())
-          as _i10.Stream<List<_i28.ConversationModel>>);
+              returnValue: Stream<List<_i43.ConversationModel>>.empty())
+          as _i13.Stream<List<_i43.ConversationModel>>);
   @override
-  _i10.Stream<List<_i27.MessageModel>> getMessages(String? conversationId) =>
+  _i13.Stream<List<_i42.MessageModel>> getMessages(String? conversationId) =>
       (super.noSuchMethod(Invocation.method(#getMessages, [conversationId]),
-              returnValue: Stream<List<_i27.MessageModel>>.empty())
-          as _i10.Stream<List<_i27.MessageModel>>);
+              returnValue: Stream<List<_i42.MessageModel>>.empty())
+          as _i13.Stream<List<_i42.MessageModel>>);
   @override
-  _i10.Future<String> updateReadStatus(
-          String? userId, String? conversationId) =>
+  _i13.Future<void> updateReadStatus(String? userId, String? conversationId) =>
       (super.noSuchMethod(
-          Invocation.method(#updateReadStatus, [userId, conversationId]),
-          returnValue: Future<String>.value('')) as _i10.Future<String>);
+              Invocation.method(#updateReadStatus, [userId, conversationId]),
+              returnValue: Future<void>.value(),
+              returnValueForMissingStub: Future<void>.value())
+          as _i13.Future<void>);
 }
 
 /// A class which mocks [GetConversations].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGetConversations extends _i1.Mock implements _i29.GetConversations {
+class MockGetConversations extends _i1.Mock implements _i44.GetConversations {
   MockGetConversations() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i5.MessageRepository get repository =>
+  _i10.MessageRepository get repository =>
       (super.noSuchMethod(Invocation.getter(#repository),
-          returnValue: _FakeMessageRepository_3()) as _i5.MessageRepository);
+          returnValue: _FakeMessageRepository_8()) as _i10.MessageRepository);
   @override
-  _i10.Stream<_i3.Either<_i11.Failure, List<_i25.Conversation>>> call(
+  _i13.Stream<_i2.Either<_i14.Failure, List<_i40.Conversation>>> call(
           {String? userId}) =>
       (super.noSuchMethod(Invocation.method(#call, [], {#userId: userId}),
               returnValue: Stream<
-                  _i3.Either<_i11.Failure, List<_i25.Conversation>>>.empty())
-          as _i10.Stream<_i3.Either<_i11.Failure, List<_i25.Conversation>>>);
+                  _i2.Either<_i14.Failure, List<_i40.Conversation>>>.empty())
+          as _i13.Stream<_i2.Either<_i14.Failure, List<_i40.Conversation>>>);
 }
 
 /// A class which mocks [GetMessages].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGetMessages extends _i1.Mock implements _i30.GetMessages {
+class MockGetMessages extends _i1.Mock implements _i45.GetMessages {
   MockGetMessages() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i5.MessageRepository get repository =>
+  _i10.MessageRepository get repository =>
       (super.noSuchMethod(Invocation.getter(#repository),
-          returnValue: _FakeMessageRepository_3()) as _i5.MessageRepository);
+          returnValue: _FakeMessageRepository_8()) as _i10.MessageRepository);
   @override
-  _i10.Stream<_i3.Either<_i11.Failure, List<_i8.Message>>> call(
+  _i13.Stream<_i2.Either<_i14.Failure, List<_i11.Message>>> call(
           {String? conversationId}) =>
       (super.noSuchMethod(
               Invocation.method(#call, [], {#conversationId: conversationId}),
               returnValue:
-                  Stream<_i3.Either<_i11.Failure, List<_i8.Message>>>.empty())
-          as _i10.Stream<_i3.Either<_i11.Failure, List<_i8.Message>>>);
+                  Stream<_i2.Either<_i14.Failure, List<_i11.Message>>>.empty())
+          as _i13.Stream<_i2.Either<_i14.Failure, List<_i11.Message>>>);
 }
 
 /// A class which mocks [SendMessage].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockSendMessage extends _i1.Mock implements _i31.SendMessage {
+class MockSendMessage extends _i1.Mock implements _i46.SendMessage {
   MockSendMessage() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i5.MessageRepository get repository =>
+  _i10.MessageRepository get repository =>
       (super.noSuchMethod(Invocation.getter(#repository),
-          returnValue: _FakeMessageRepository_3()) as _i5.MessageRepository);
+          returnValue: _FakeMessageRepository_8()) as _i10.MessageRepository);
   @override
-  _i10.Future<_i3.Either<_i11.Failure, String>> call({_i8.Message? message}) =>
+  _i13.Future<_i2.Either<_i14.Failure, String>> call({_i11.Message? message}) =>
       (super.noSuchMethod(Invocation.method(#call, [], {#message: message}),
-              returnValue: Future<_i3.Either<_i11.Failure, String>>.value(
-                  _FakeEither_1<_i11.Failure, String>()))
-          as _i10.Future<_i3.Either<_i11.Failure, String>>);
+              returnValue: Future<_i2.Either<_i14.Failure, String>>.value(
+                  _FakeEither_0<_i14.Failure, String>()))
+          as _i13.Future<_i2.Either<_i14.Failure, String>>);
 }
 
 /// A class which mocks [UpdateReadStatus].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUpdateReadStatus extends _i1.Mock implements _i32.UpdateReadStatus {
+class MockUpdateReadStatus extends _i1.Mock implements _i47.UpdateReadStatus {
   MockUpdateReadStatus() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i5.MessageRepository get repository =>
+  _i10.MessageRepository get repository =>
       (super.noSuchMethod(Invocation.getter(#repository),
-          returnValue: _FakeMessageRepository_3()) as _i5.MessageRepository);
+          returnValue: _FakeMessageRepository_8()) as _i10.MessageRepository);
   @override
-  _i10.Future<_i3.Either<_i11.Failure, String>> call(
+  _i13.Future<_i2.Either<_i14.Failure, String>> call(
           {String? userId, String? conversationId}) =>
       (super.noSuchMethod(
           Invocation.method(
               #call, [], {#userId: userId, #conversationId: conversationId}),
-          returnValue: Future<_i3.Either<_i11.Failure, String>>.value(
-              _FakeEither_1<_i11.Failure, String>())) as _i10
-          .Future<_i3.Either<_i11.Failure, String>>);
+          returnValue: Future<_i2.Either<_i14.Failure, String>>.value(
+              _FakeEither_0<_i14.Failure, String>())) as _i13
+          .Future<_i2.Either<_i14.Failure, String>>);
 }
 
 /// A class which mocks [MessageInputConverter].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockMessageInputConverter extends _i1.Mock
-    implements _i33.MessageInputConverter {
+    implements _i48.MessageInputConverter {
   MockMessageInputConverter() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i6.UniqueId get uniqueId => (super.noSuchMethod(Invocation.getter(#uniqueId),
-      returnValue: _FakeUniqueId_4()) as _i6.UniqueId);
+  _i5.UniqueId get uniqueId => (super.noSuchMethod(Invocation.getter(#uniqueId),
+      returnValue: _FakeUniqueId_3()) as _i5.UniqueId);
   @override
-  _i7.Time get time =>
-      (super.noSuchMethod(Invocation.getter(#time), returnValue: _FakeTime_5())
-          as _i7.Time);
+  _i6.Time get time =>
+      (super.noSuchMethod(Invocation.getter(#time), returnValue: _FakeTime_4())
+          as _i6.Time);
   @override
-  _i8.Message toMessage(
+  _i11.Message toMessage(
           {String? text,
           String? userId,
           String? receiverId,
-          List<_i21.Attachment>? attachments}) =>
+          List<_i36.Attachment>? attachments}) =>
       (super.noSuchMethod(
           Invocation.method(#toMessage, [], {
             #text: text,
@@ -557,26 +1013,26 @@ class MockMessageInputConverter extends _i1.Mock
             #receiverId: receiverId,
             #attachments: attachments
           }),
-          returnValue: _FakeMessage_6()) as _i8.Message);
+          returnValue: _FakeMessage_9()) as _i11.Message);
 }
 
 /// A class which mocks [Time].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTime extends _i1.Mock implements _i7.Time {
+class MockTime extends _i1.Mock implements _i6.Time {
   MockTime() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
   DateTime now() => (super.noSuchMethod(Invocation.method(#now, []),
-      returnValue: _FakeDateTime_7()) as DateTime);
+      returnValue: _FakeDateTime_10()) as DateTime);
 }
 
 /// A class which mocks [UniqueId].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUniqueId extends _i1.Mock implements _i6.UniqueId {
+class MockUniqueId extends _i1.Mock implements _i5.UniqueId {
   MockUniqueId() {
     _i1.throwOnMissingStub(this);
   }
@@ -594,7 +1050,7 @@ class MockUniqueId extends _i1.Mock implements _i6.UniqueId {
 /// A class which mocks [CheckPlatform].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockCheckPlatform extends _i1.Mock implements _i34.CheckPlatform {
+class MockCheckPlatform extends _i1.Mock implements _i49.CheckPlatform {
   MockCheckPlatform() {
     _i1.throwOnMissingStub(this);
   }
@@ -608,18 +1064,18 @@ class MockCheckPlatform extends _i1.Mock implements _i34.CheckPlatform {
 /// A class which mocks [ImagePicker].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockImagePicker extends _i1.Mock implements _i9.ImagePicker {
+class MockImagePicker extends _i1.Mock implements _i12.ImagePicker {
   MockImagePicker() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i10.Future<_i9.PickedFile?> getImage(
-          {_i9.ImageSource? source,
+  _i13.Future<_i12.PickedFile?> getImage(
+          {_i12.ImageSource? source,
           double? maxWidth,
           double? maxHeight,
           int? imageQuality,
-          _i9.CameraDevice? preferredCameraDevice = _i9.CameraDevice.rear}) =>
+          _i12.CameraDevice? preferredCameraDevice = _i12.CameraDevice.rear}) =>
       (super.noSuchMethod(
               Invocation.method(#getImage, [], {
                 #source: source,
@@ -628,10 +1084,10 @@ class MockImagePicker extends _i1.Mock implements _i9.ImagePicker {
                 #imageQuality: imageQuality,
                 #preferredCameraDevice: preferredCameraDevice
               }),
-              returnValue: Future<_i9.PickedFile?>.value())
-          as _i10.Future<_i9.PickedFile?>);
+              returnValue: Future<_i12.PickedFile?>.value())
+          as _i13.Future<_i12.PickedFile?>);
   @override
-  _i10.Future<List<_i9.PickedFile>?> getMultiImage(
+  _i13.Future<List<_i12.PickedFile>?> getMultiImage(
           {double? maxWidth, double? maxHeight, int? imageQuality}) =>
       (super.noSuchMethod(
               Invocation.method(#getMultiImage, [], {
@@ -639,12 +1095,12 @@ class MockImagePicker extends _i1.Mock implements _i9.ImagePicker {
                 #maxHeight: maxHeight,
                 #imageQuality: imageQuality
               }),
-              returnValue: Future<List<_i9.PickedFile>?>.value())
-          as _i10.Future<List<_i9.PickedFile>?>);
+              returnValue: Future<List<_i12.PickedFile>?>.value())
+          as _i13.Future<List<_i12.PickedFile>?>);
   @override
-  _i10.Future<_i9.PickedFile?> getVideo(
-          {_i9.ImageSource? source,
-          _i9.CameraDevice? preferredCameraDevice = _i9.CameraDevice.rear,
+  _i13.Future<_i12.PickedFile?> getVideo(
+          {_i12.ImageSource? source,
+          _i12.CameraDevice? preferredCameraDevice = _i12.CameraDevice.rear,
           Duration? maxDuration}) =>
       (super.noSuchMethod(
               Invocation.method(#getVideo, [], {
@@ -652,31 +1108,32 @@ class MockImagePicker extends _i1.Mock implements _i9.ImagePicker {
                 #preferredCameraDevice: preferredCameraDevice,
                 #maxDuration: maxDuration
               }),
-              returnValue: Future<_i9.PickedFile?>.value())
-          as _i10.Future<_i9.PickedFile?>);
+              returnValue: Future<_i12.PickedFile?>.value())
+          as _i13.Future<_i12.PickedFile?>);
   @override
-  _i10.Future<_i9.LostData> getLostData() =>
+  _i13.Future<_i12.LostData> getLostData() =>
       (super.noSuchMethod(Invocation.method(#getLostData, []),
-              returnValue: Future<_i9.LostData>.value(_FakeLostData_8()))
-          as _i10.Future<_i9.LostData>);
+              returnValue: Future<_i12.LostData>.value(_FakeLostData_11()))
+          as _i13.Future<_i12.LostData>);
   @override
-  _i10.Future<_i9.XFile?> pickImage(
-          {_i9.ImageSource? source,
+  _i13.Future<_i12.XFile?> pickImage(
+          {_i12.ImageSource? source,
           double? maxWidth,
           double? maxHeight,
           int? imageQuality,
-          _i9.CameraDevice? preferredCameraDevice = _i9.CameraDevice.rear}) =>
+          _i12.CameraDevice? preferredCameraDevice = _i12.CameraDevice.rear}) =>
       (super.noSuchMethod(
-          Invocation.method(#pickImage, [], {
-            #source: source,
-            #maxWidth: maxWidth,
-            #maxHeight: maxHeight,
-            #imageQuality: imageQuality,
-            #preferredCameraDevice: preferredCameraDevice
-          }),
-          returnValue: Future<_i9.XFile?>.value()) as _i10.Future<_i9.XFile?>);
+              Invocation.method(#pickImage, [], {
+                #source: source,
+                #maxWidth: maxWidth,
+                #maxHeight: maxHeight,
+                #imageQuality: imageQuality,
+                #preferredCameraDevice: preferredCameraDevice
+              }),
+              returnValue: Future<_i12.XFile?>.value())
+          as _i13.Future<_i12.XFile?>);
   @override
-  _i10.Future<List<_i9.XFile>?> pickMultiImage(
+  _i13.Future<List<_i12.XFile>?> pickMultiImage(
           {double? maxWidth, double? maxHeight, int? imageQuality}) =>
       (super.noSuchMethod(
               Invocation.method(#pickMultiImage, [], {
@@ -684,24 +1141,25 @@ class MockImagePicker extends _i1.Mock implements _i9.ImagePicker {
                 #maxHeight: maxHeight,
                 #imageQuality: imageQuality
               }),
-              returnValue: Future<List<_i9.XFile>?>.value())
-          as _i10.Future<List<_i9.XFile>?>);
+              returnValue: Future<List<_i12.XFile>?>.value())
+          as _i13.Future<List<_i12.XFile>?>);
   @override
-  _i10.Future<_i9.XFile?> pickVideo(
-          {_i9.ImageSource? source,
-          _i9.CameraDevice? preferredCameraDevice = _i9.CameraDevice.rear,
+  _i13.Future<_i12.XFile?> pickVideo(
+          {_i12.ImageSource? source,
+          _i12.CameraDevice? preferredCameraDevice = _i12.CameraDevice.rear,
           Duration? maxDuration}) =>
       (super.noSuchMethod(
-          Invocation.method(#pickVideo, [], {
-            #source: source,
-            #preferredCameraDevice: preferredCameraDevice,
-            #maxDuration: maxDuration
-          }),
-          returnValue: Future<_i9.XFile?>.value()) as _i10.Future<_i9.XFile?>);
+              Invocation.method(#pickVideo, [], {
+                #source: source,
+                #preferredCameraDevice: preferredCameraDevice,
+                #maxDuration: maxDuration
+              }),
+              returnValue: Future<_i12.XFile?>.value())
+          as _i13.Future<_i12.XFile?>);
   @override
-  _i10.Future<_i9.LostDataResponse> retrieveLostData() =>
-      (super.noSuchMethod(Invocation.method(#retrieveLostData, []),
-              returnValue:
-                  Future<_i9.LostDataResponse>.value(_FakeLostDataResponse_9()))
-          as _i10.Future<_i9.LostDataResponse>);
+  _i13.Future<_i12.LostDataResponse> retrieveLostData() => (super.noSuchMethod(
+          Invocation.method(#retrieveLostData, []),
+          returnValue:
+              Future<_i12.LostDataResponse>.value(_FakeLostDataResponse_12()))
+      as _i13.Future<_i12.LostDataResponse>);
 }

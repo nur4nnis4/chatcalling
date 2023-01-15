@@ -1,3 +1,6 @@
+import 'package:chatcalling/core/common_features/user/data/models/personal_information_model.dart';
+import 'package:chatcalling/core/common_features/user/data/models/user_model.dart';
+import 'package:chatcalling/core/error/exceptions.dart';
 import 'package:dartz/dartz.dart';
 
 import '../../../../error/failures.dart';
@@ -53,6 +56,44 @@ class UserRepositoryImpl extends UserRepository {
           .map((event) => Right(event));
     } catch (e) {
       yield Left(PlatformFailure(''));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> checkUsernameAvailability(
+      String username) async {
+    try {
+      final result = await userRemoteDatasource.isUsernameAvailable(username);
+
+      return Right(result);
+    } on PlatformException catch (e) {
+      return Left(PlatformFailure(e.message));
+    } catch (e) {
+      return Left(PlatformFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> updatePersonalInformation(
+      PersonalInformation personalInformation) async {
+    try {
+      await userRemoteDatasource.updatePersonalInformation(
+          PersonalInformationModel.fromEntity(
+              personalInformation, personalInformation.userId));
+      return Right('Success');
+    } catch (e) {
+      return Left(PlatformFailure(''));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> updateUserData(User user) async {
+    try {
+      await userRemoteDatasource
+          .updateUserData(UserModel.fromEntity(user, user.userId));
+      return Right('Success');
+    } catch (e) {
+      return Left(PlatformFailure(''));
     }
   }
 }

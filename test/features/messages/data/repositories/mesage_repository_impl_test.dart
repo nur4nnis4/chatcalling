@@ -29,7 +29,7 @@ void main() {
     final List<MessageModel> tMessageModelList = [tMessageModel];
 
     test(
-        'should return remote data when the call to remote data source is successful',
+        'should emit remote data when the call to remote data source is successful',
         () async {
       // Arrange
       when(mockMessageRemoteDatasource.getMessages(any)).thenAnswer((_) async* {
@@ -46,11 +46,11 @@ void main() {
     });
 
     test(
-        'should return platform failure when the call to remote data source is unsuccessful',
+        'should emit platform failure when the call to remote data source is unsuccessful',
         () async {
       // Arrange
       when(mockMessageRemoteDatasource.getMessages(any))
-          .thenThrow(PlatformException());
+          .thenThrow(PlatformException(message: ''));
       // Act
       final result =
           repository.getMessages(tConversationId).asBroadcastStream();
@@ -67,7 +67,7 @@ void main() {
     final List<ConversationModel> tConversationModelList = [tConversationModel];
 
     test(
-        'should return remote data when the call to remote data source is successful',
+        'should emit remote data when the call to remote data source is successful',
         () async {
       // Arrange
       when(mockMessageRemoteDatasource.getConversations(any))
@@ -83,11 +83,11 @@ void main() {
       expect(result, emits(Right(tConversationModelList)));
     });
     test(
-        'should return platform failure when the call to remote data source is unsuccessful',
+        'should emit platform failure when the call to remote data source is unsuccessful',
         () async {
       // Arrange
       when(mockMessageRemoteDatasource.getConversations(any))
-          .thenThrow(PlatformException());
+          .thenThrow(PlatformException(message: ''));
       // Act
       final result = repository.getConversations(tUserId).asBroadcastStream();
       // Assert
@@ -102,8 +102,6 @@ void main() {
     test(
         'Should return success message when sending data to remote database is successful',
         () async {
-      when(mockMessageRemoteDatasource.sendMessage(tMessageModel))
-          .thenAnswer((_) async => '');
       // Act
       final result = await repository.sendMessage(tMessageModel);
       // Assert
@@ -116,7 +114,7 @@ void main() {
         () async {
       //Arrange
       when(mockMessageRemoteDatasource.sendMessage(tMessageModel))
-          .thenThrow(PlatformException());
+          .thenThrow(PlatformException(message: ''));
       // Act
       final result = await repository.sendMessage(tMessageModel);
       // Assert
@@ -130,11 +128,8 @@ void main() {
     String tConversationId = 'user1Id-user2Id';
 
     test(
-        'Should return success message when sending data to remote database is successful',
+        'Should return success message when sending updating data on remote database is successful',
         () async {
-      when(mockMessageRemoteDatasource.updateReadStatus(
-              tUserId, tConversationId))
-          .thenAnswer((_) async => '');
       // Act
       final result =
           await repository.updateReadStatus(tUserId, tConversationId);
@@ -144,11 +139,11 @@ void main() {
       expect(result, Right('Message read status has been updated'));
     });
     test(
-        'Should return platform failure when sending data to remote database is unsuccessful',
+        'Should return platform failure when updating data on remote database is unsuccessful',
         () async {
       when(mockMessageRemoteDatasource.updateReadStatus(
               tUserId, tConversationId))
-          .thenThrow(PlatformException());
+          .thenThrow(PlatformException(message: ''));
       // Act
       final result =
           await repository.updateReadStatus(tUserId, tConversationId);

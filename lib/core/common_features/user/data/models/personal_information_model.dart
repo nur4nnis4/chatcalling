@@ -32,4 +32,13 @@ class PersonalInformationModel extends PersonalInformation {
       'dateOfBirth': dateOfBirth.toUtc().toIso8601String(),
     };
   }
+
+  factory PersonalInformationModel.fromEntity(
+          PersonalInformation personalInformation, String userId) =>
+      PersonalInformationModel(
+          userId: userId,
+          email: personalInformation.email,
+          phoneNumber: personalInformation.phoneNumber,
+          gender: personalInformation.gender,
+          dateOfBirth: personalInformation.dateOfBirth);
 }

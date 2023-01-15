@@ -13,10 +13,10 @@ import '../models/conversation_model.dart';
 import '../models/message_model.dart';
 
 abstract class MessageRemoteDatasource {
-  Future<String> sendMessage(MessageModel message);
+  Future<void> sendMessage(MessageModel message);
   Stream<List<ConversationModel>> getConversations(String userId);
   Stream<List<MessageModel>> getMessages(String conversationId);
-  Future<String> updateReadStatus(String userId, String conversationId);
+  Future<void> updateReadStatus(String userId, String conversationId);
 }
 
 class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
@@ -51,47 +51,52 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
   @override
   Stream<List<ConversationModel>> getConversations(String userId) async* {
     final conversationRef = firebaseFirestore.collection('conversations');
+
     yield* conversationRef
         .where('members', arrayContains: userId)
         .orderBy('lastMessageTime', descending: true)
         .snapshots()
-        .flatMap((snapshot) => Rx.combineLatestList(snapshot.docs.map((doc) {
-              final String friendId =
-                  doc.data()['member_details'][userId]['friendId'] as String;
-              final String conversationId =
-                  doc.data()['conversationId'] as String;
-              final String lastMessageId =
-                  doc.data()['lastMessageId'] as String;
-              final int totalUnreadMessages =
-                  doc.data()['member_details'][userId]['totalUnread'];
+        .flatMap((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        return Rx.combineLatestList(snapshot.docs.map((doc) {
+          final String friendId =
+              doc.data()['member_details'][userId]['friendId'] as String;
+          final String conversationId = doc.data()['conversationId'] as String;
+          final String lastMessageId = doc.data()['lastMessageId'] as String;
+          final int totalUnreadMessages =
+              doc.data()['member_details'][userId]['totalUnread'];
 
-              final friendUserStream = firebaseFirestore
-                  .collection('users')
-                  .doc(friendId)
-                  .snapshots()
-                  .map((event) => event.data());
+          final friendUserStream = firebaseFirestore
+              .collection('users')
+              .doc(friendId)
+              .snapshots()
+              .map((event) => event.data());
 
-              final lastMessageStream = conversationRef
-                  .doc(conversationId)
-                  .collection('messages')
-                  .doc(lastMessageId)
-                  .snapshots()
-                  .map((event) => event.data());
+          final lastMessageStream = conversationRef
+              .doc(conversationId)
+              .collection('messages')
+              .doc(lastMessageId)
+              .snapshots()
+              .map((event) => event.data());
 
-              return Rx.combineLatest2(friendUserStream, lastMessageStream,
-                  (Map<String, dynamic>? friendUser,
-                      Map<String, dynamic>? message) {
-                return ConversationModel(
-                    conversationId: conversationId,
-                    lastMessage: MessageModel.fromJson(message),
-                    friendUser: UserModel.fromJson(friendUser),
-                    totalUnreadMessages: totalUnreadMessages);
-              });
-            }).toList()));
+          return Rx.combineLatest2(friendUserStream, lastMessageStream,
+              (Map<String, dynamic>? friendUser,
+                  Map<String, dynamic>? message) {
+            return ConversationModel(
+                conversationId: conversationId,
+                lastMessage: MessageModel.fromJson(message),
+                friendUser: UserModel.fromJson(friendUser),
+                totalUnreadMessages: totalUnreadMessages);
+          });
+        }).toList());
+      } else {
+        return Stream.value([]);
+      }
+    });
   }
 
   @override
-  Future<String> updateReadStatus(String userId, String conversationId) async {
+  Future<void> updateReadStatus(String userId, String conversationId) async {
     final conversationDocRef =
         firebaseFirestore.collection('conversations').doc(conversationId);
 
@@ -110,16 +115,12 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
       });
       conversationDocRef.update({'member_details.$userId.totalUnread': 0});
     }
-
-    return '';
   }
 
   @override
-  Future<String> sendMessage(MessageModel message) async {
-    await updateOrAddConversation(message);
+  Future<void> sendMessage(MessageModel message) async {
     await addMessage(message);
-
-    return '';
+    await updateOrAddConversation(message);
   }
 
   Future<void> updateOrAddConversation(MessageModel message) async {

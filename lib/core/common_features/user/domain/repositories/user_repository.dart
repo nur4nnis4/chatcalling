@@ -9,4 +9,8 @@ abstract class UserRepository {
   Stream<Either<Failure, List<User>>> searchUser(String query);
   Stream<Either<Failure, PersonalInformation>> getPersonalInformation(
       String userId);
+  Future<Either<Failure, String>> updateUserData(User user);
+  Future<Either<Failure, String>> updatePersonalInformation(
+      PersonalInformation personalInformation);
+  Future<Either<Failure, bool>> checkUsernameAvailability(String username);
 }

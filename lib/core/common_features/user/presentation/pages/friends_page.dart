@@ -45,7 +45,7 @@ class _FriendsPageState extends State<FriendsPage> {
           ),
           Expanded(
             child: BlocBuilder<FriendListBloc, FriendListState>(
-              builder: (context, state) {
+              builder: (_, state) {
                 if (state is FriendListLoaded) {
                   return ListView.builder(
                     shrinkWrap: true,

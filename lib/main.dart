@@ -1,3 +1,7 @@
+import 'package:chatcalling/authenticate.dart';
+import 'package:chatcalling/core/common_features/user/presentation/cubit/obscure_cubit.dart';
+import 'package:chatcalling/core/common_features/user/presentation/pages/update_user_page.dart';
+import 'package:chatcalling/core/cubit/current_page_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,14 +14,16 @@ import 'core/common_features/user/presentation/bloc/other_user_bloc/other_user_b
 import 'core/common_features/user/presentation/bloc/personal_information_bloc/personal_information_bloc.dart';
 import 'core/common_features/user/presentation/bloc/search_user_bloc/search_user_bloc.dart';
 import 'core/common_features/user/presentation/bloc/user_bloc/user_bloc.dart';
-import 'core/common_features/user/presentation/pages/friends_page.dart';
+import 'core/common_features/user/presentation/bloc/sign_up_bloc/sign_up_bloc.dart';
+import 'core/common_features/user/presentation/bloc/sign_in_bloc/sign_in_bloc.dart';
+import 'core/common_features/user/presentation/bloc/sign_out_bloc/sign_out_bloc.dart';
+import 'package:chatcalling/core/common_features/user/presentation/bloc/sign_in_status_bloc/sign_in_status_bloc.dart';
+
 import 'core/style/theme.dart' as Theme;
 import 'features/messages/presentation/bloc/conversation_list_bloc/conversation_list_bloc.dart';
 import 'features/messages/presentation/bloc/message_list_bloc.dart/message_list_bloc.dart';
 import 'features/messages/presentation/bloc/send_message_bloc.dart/send_message_bloc.dart';
-import 'features/messages/presentation/pages/messages_page.dart';
 import 'firebase_options.dart';
-import 'home_page.dart';
 import 'injector.dart' as Injector;
 import 'l10n/l10n.dart';
 
@@ -38,6 +44,12 @@ class ChatApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          create: (_) => CurrentPageCubit(),
+        ),
+        BlocProvider(
+          create: (_) => ObscureCubit(),
+        ),
+        BlocProvider(
           create: (_) => Injector.sLocator<UserBloc>(),
         ),
         BlocProvider(
@@ -51,6 +63,18 @@ class ChatApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => Injector.sLocator<PersonalInformationBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => Injector.sLocator<SignUpBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => Injector.sLocator<SignInStatusBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => Injector.sLocator<SignInBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => Injector.sLocator<SignOutBloc>(),
         ),
         BlocProvider(
           create: (_) => Injector.sLocator<MessageListBloc>(),
@@ -77,25 +101,9 @@ class ChatApp extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        navigatorObservers: [RouteObserver<ModalRoute>()],
-        onGenerateRoute: (RouteSettings setting) {
-          switch (setting.name) {
-            case '/':
-              return MaterialPageRoute(builder: (context) => HomePage());
-            case '/messages_page':
-              return MaterialPageRoute(builder: (context) => MessagesPage());
-            case '/friends_page':
-              return MaterialPageRoute(builder: (context) => FriendsPage());
-            default:
-              return MaterialPageRoute(builder: (_) {
-                return Scaffold(
-                  body: Center(
-                    child: Text('Page not found :('),
-                  ),
-                );
-              });
-          }
-        },
+
+        home: Authenticate(),
+        // home: UpdateUserPage(),
       ),
     );
   }

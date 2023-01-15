@@ -10,14 +10,18 @@ import '../../../../helpers/mocks/test.mocks.dart';
 
 void main() {
   late MockGetConversations mockGetConversations;
+  late MockGetCurrentUserId mockGetCurrentUserId;
   late ConversationListBloc conversationListBloc;
-
   final String tUserId = 'user1Id';
 
   setUp(() {
     mockGetConversations = MockGetConversations();
-    conversationListBloc =
-        ConversationListBloc(getConversations: mockGetConversations);
+    mockGetCurrentUserId = MockGetCurrentUserId();
+    conversationListBloc = ConversationListBloc(
+        getConversations: mockGetConversations,
+        getCurrentUserId: mockGetCurrentUserId);
+
+    when(mockGetCurrentUserId()).thenAnswer((_) async => tUserId);
   });
 
   test('Initial state should be empty', () {
@@ -27,11 +31,12 @@ void main() {
 
   group('getConversationsEvent', () {
     blocTest<ConversationListBloc, ConversationListState>(
-        'should emit [Loading,ConversationListLoaded] when data is gotten successfully and is not empty.',
+        'should emit [ConversationListLoading,ConversationListLoaded] when data is gotten successfully and is not empty.',
         build: () {
           when(mockGetConversations(userId: tUserId)).thenAnswer((_) async* {
             yield Right([tConversation]);
           });
+
           return conversationListBloc;
         },
         act: (bloc) => bloc.add(ConversationListEvent()),
@@ -42,11 +47,12 @@ void main() {
             ],
         verify: (_) => verify(mockGetConversations(userId: tUserId)));
     blocTest<ConversationListBloc, ConversationListState>(
-        'emits [Loading, Empty] when data is gotten successfully and is empty',
+        'emits [ConversationListLoading, ConversationListEmpty] when data is gotten successfully and is empty',
         build: () {
           when(mockGetConversations(userId: tUserId)).thenAnswer((_) async* {
             yield Right([]);
           });
+
           return conversationListBloc;
         },
         act: (bloc) => bloc.add(ConversationListEvent()),
@@ -57,11 +63,12 @@ void main() {
         verify: (_) => verify(mockGetConversations(userId: tUserId)));
 
     blocTest<ConversationListBloc, ConversationListState>(
-        'emits [Loading, Error] when getting data fails',
+        'emits [ConversationListLoading, ConversationListError] when getting data fails',
         build: () {
           when(mockGetConversations(userId: tUserId)).thenAnswer((_) async* {
             yield Left(PlatformFailure('Platform Failure'));
           });
+
           return conversationListBloc;
         },
         act: (bloc) => bloc.add(ConversationListEvent()),

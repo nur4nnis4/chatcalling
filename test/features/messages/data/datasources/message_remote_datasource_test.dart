@@ -54,7 +54,7 @@ void main() {
 
   group('getMessages', () {
     test(
-        'Should returns Stream containing List of MessageModel objects ordered by timeStamp',
+        'Should emit stream containing List of MessageModel objects ordered by timeStamp',
         () async {
       // Act
       final actualMessageList =
@@ -67,7 +67,7 @@ void main() {
 
   group('getConversation', () {
     test(
-        'Should returns stream containing List of ConversationModel objects ordered by lastMessageTime',
+        'Should emit stream containing List of ConversationModel objects ordered by lastMessageTime',
         () async {
       // Act
       final actualConversationList = dataSource.getConversations(tUserId);
@@ -92,9 +92,7 @@ void main() {
 
       final expectedConversationMap =
           tNewMessageModel2.toConversationJson(receiverTotalUnread: 1);
-      // MessageModel
-      // ConversationModel.fromMessage(message: tNewMessageModel2)
-      //     .toJson(userId: tUserId, friendTotalUnread: 1);
+
       // Assert
       expect(actualConversationMap, expectedConversationMap);
     });

@@ -12,23 +12,28 @@ import '../../../../helpers/mocks/test.mocks.dart';
 void main() {
   late MockSendMessage mockSendMessage;
   late MockMessageInputConverter mockMessageInputConverter;
+  late MockGetCurrentUserId mockGetCurrentUserId;
+
   late SendMessageBloc sendMessageBloc;
 
   setUp(() {
     mockSendMessage = MockSendMessage();
     mockMessageInputConverter = MockMessageInputConverter();
+    mockGetCurrentUserId = MockGetCurrentUserId();
     sendMessageBloc = SendMessageBloc(
         sendMessage: mockSendMessage,
-        messageInputConverter: mockMessageInputConverter);
+        messageInputConverter: mockMessageInputConverter,
+        getCurrentUserId: mockGetCurrentUserId);
     when(mockMessageInputConverter.toMessage(
             text: tMessage.text,
             userId: tMessage.senderId,
             receiverId: tMessage.receiverId,
             attachments: tMessage.attachments))
         .thenReturn(tMessage);
+    when(mockGetCurrentUserId()).thenAnswer((_) async => tMessage.senderId);
   });
   blocTest<SendMessageBloc, SendMessageState>(
-    'emits [Loading, MessagesSucces] when message is sent successfully.',
+    'emits [SendMessageLoading, SendMessageSuccess] when message is sent successfully.',
     build: () {
       when(mockSendMessage(message: tMessage))
           .thenAnswer((_) async => Right('Success'));
@@ -53,7 +58,7 @@ void main() {
   );
 
   blocTest<SendMessageBloc, SendMessageState>(
-    'emits [Loading, MessageSucces] when sending message fails.',
+    'emits [SendMessageLoading, SendMessageError] when sending message fails.',
     build: () {
       when(mockSendMessage(message: tMessage))
           .thenAnswer((_) async => Left(PlatformFailure('PlatformFailure')));

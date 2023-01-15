@@ -11,6 +11,8 @@ import '../../../../helpers/mocks/test.mocks.dart';
 void main() {
   late MockGetMessages mockGetMessages;
   late MockUpdateReadStatus mockUpdateReadStatus;
+  late MockGetCurrentUserId mockGetCurrentUserId;
+
   late MockUniqueId mockUniqueId;
 
   late MessageListBloc messagesBloc;
@@ -22,12 +24,15 @@ void main() {
   setUp(() {
     mockGetMessages = MockGetMessages();
     mockUpdateReadStatus = MockUpdateReadStatus();
+    mockGetCurrentUserId = MockGetCurrentUserId();
     mockUniqueId = MockUniqueId();
     messagesBloc = MessageListBloc(
-      getMessages: mockGetMessages,
-      updateReadStatus: mockUpdateReadStatus,
-      uniqueId: mockUniqueId,
-    );
+        getMessages: mockGetMessages,
+        updateReadStatus: mockUpdateReadStatus,
+        uniqueId: mockUniqueId,
+        getCurrentUserId: mockGetCurrentUserId);
+
+    when(mockGetCurrentUserId()).thenAnswer((_) async => tUserId);
   });
 
   test('Initial state should be empty', () {
@@ -40,7 +45,7 @@ void main() {
       when(mockUniqueId.concat(any, any)).thenReturn(tConversationId);
     });
     blocTest<MessageListBloc, MessageListState>(
-        'should emit [Loading,MessagesLoaded] when data is gotten successfully and is not empty.',
+        'should emit [MessagesLoading,MessagesLoaded] when data is gotten successfully and is not empty.',
         build: () {
           when(mockGetMessages(conversationId: tConversationId))
               .thenAnswer((_) async* {
@@ -58,7 +63,7 @@ void main() {
               mockUniqueId.concat(tUserId, tFriendId),
             ]);
     blocTest<MessageListBloc, MessageListState>(
-        'emits [Loading, Empty] when data is gotten successfully and is empty',
+        'emits [MessagesLoading, MessagesEmpty] when data is gotten successfully and is empty',
         build: () {
           when(mockGetMessages(conversationId: tConversationId))
               .thenAnswer((_) async* {
@@ -77,7 +82,7 @@ void main() {
             ]);
 
     blocTest<MessageListBloc, MessageListState>(
-        'emits [Loading, Error] when getting data fails',
+        'emits [MessagesLoading, MessagesError] when getting data fails',
         build: () {
           when(mockGetMessages(conversationId: tConversationId))
               .thenAnswer((_) async* {

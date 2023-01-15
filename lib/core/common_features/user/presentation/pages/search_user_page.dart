@@ -16,11 +16,11 @@ class SearchUserPage extends StatefulWidget {
 }
 
 class _SearchUserPageState extends State<SearchUserPage> {
+  late TextEditingController _searchController = TextEditingController();
+  late FocusNode _searchFNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
-    late TextEditingController _searchController = TextEditingController();
-    late FocusNode _searchFNode = FocusNode();
-
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(

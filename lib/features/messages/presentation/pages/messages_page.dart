@@ -44,9 +44,7 @@ class _MessagesPageState extends State<MessagesPage> {
       ),
       body: BlocBuilder<ConversationListBloc, ConversationListState>(
         builder: (context, state) {
-          if (state is ConversationListEmpty) {
-            return EmptyConversation();
-          } else if (state is ConversationListLoading) {
+          if (state is ConversationListLoading) {
             return Shimmer.fromColors(
               baseColor: Theme.of(context).colorScheme.onTertiaryContainer,
               highlightColor: Theme.of(context).colorScheme.tertiaryContainer,
@@ -59,11 +57,7 @@ class _MessagesPageState extends State<MessagesPage> {
                 itemBuilder: (_, __) => LoadingConversationsTile(),
               ),
             );
-          } else if (state is ConversationListError) {
-            return Container(
-              child: Text("ERROR : ${state.errorMessage}"),
-            );
-          } else if (state is ConversationListLoaded)
+          } else if (state is ConversationListLoaded) {
             return ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
@@ -72,7 +66,10 @@ class _MessagesPageState extends State<MessagesPage> {
               itemBuilder: (_, index) => LoadedConversationsTile(
                   conversation: state.conversationList[index]),
             );
-          else {
+          }
+          if (state is ConversationListEmpty) {
+            return EmptyConversation();
+          } else {
             return Center(
               child: Text('Something went wrong...'),
             );
