@@ -3,7 +3,7 @@
 
 ## Description
 
-Flutter Chat App implementing Clean Architecture, TDD and Firebase. 
+Flutter based real-time chat application implementing Clean Architecture, TDD and Firebase. 
 
 
 ### Dependencies
