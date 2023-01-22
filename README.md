@@ -5,6 +5,32 @@
 
 Flutter Chat App implementing Clean Architecture, TDD and Firebase. 
 
+
+### Dependencies
+
+
+1. [firebase_auth](https://pub.dev/packages/firebase_auth)
+1. [firebase_core](https://pub.dev/packages/firebase_core)
+1. [cloud_firestore](https://pub.dev/packages/cloud_firestore)
+1. [firebase_storage](https://pub.dev/packages/firebase_storage)
+1. [google_sign_in](https://pub.dev/packages/google_sign_in)
+1. [connectivity_plus](https://pub.dev/packages/connectivity_plus)
+1. [flutter_bloc](https://pub.dev/packages/flutter_bloc)
+1. [rxdart](https://pub.dev/packages/rxdart)
+1. [shimmer](https://pub.dev/packages/shimmer)
+1. [grouped_list](https://pub.dev/packages/grouped_list)
+1. [image_picker](https://pub.dev/packages/image_picker)
+1. [photo_view](https://pub.dev/packages/photo_view)
+1. [mockito](https://pub.dev/packages/mockito)
+1. [bloc_test](https://pub.dev/packages/bloc_test)
+1. [flutter_native_splash](https://pub.dev/packages/flutter_native_splash)
+1. [flutter_launcher_icons](https://pub.dev/packages/flutter_launcher_icons)
+
+
+
+
+
+
 ## Screenshots
 
 * ### Authentication pages
