@@ -16,6 +16,7 @@ class FriendListBloc extends Bloc<FriendListEvent, FriendListState> {
       : super(FriendListEmpty()) {
     on<GetFriendListEvent>((event, emit) async {
       emit(FriendListLoading());
+
       final friendListStream =
           getFriendList(userId: await getCurrentUserId()).asBroadcastStream();
 

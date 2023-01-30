@@ -1,18 +1,19 @@
 import 'package:equatable/equatable.dart';
 
+// ignore: must_be_immutable
 class User extends Equatable {
   final String userId;
-  final String username;
-  final String displayName;
-  final DateTime signUpTime;
-  final bool isOnline;
-  final DateTime lastOnline;
-  final String about;
-  final String profilePhotoUrl;
-  final String coverPhotoUrl;
-  final List<String> friendList;
+  String username;
+  String displayName;
+  DateTime signUpTime;
+  bool isOnline;
+  DateTime lastOnline;
+  String about;
+  String profilePhotoUrl;
+  String coverPhotoUrl;
+  List<String> friendList;
 
-  const User({
+  User({
     required this.userId,
     required this.username,
     required this.displayName,

@@ -51,7 +51,7 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
   @override
   Stream<List<ConversationModel>> getConversations(String userId) async* {
     final conversationRef = firebaseFirestore.collection('conversations');
-
+    print('userId: ' + userId);
     yield* conversationRef
         .where('members', arrayContains: userId)
         .orderBy('lastMessageTime', descending: true)

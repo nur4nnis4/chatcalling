@@ -1,15 +1,15 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 
-// TODO: Change internet connection checker library
 abstract class NetworkInfo {
   Stream<bool> get isConnected;
 }
 
 class NetworkInfoImpl implements NetworkInfo {
-  NetworkInfoImpl();
+  final Connectivity connectivity;
+
+  NetworkInfoImpl({required this.connectivity});
 
   @override
-  Stream<bool> get isConnected => Connectivity()
-      .onConnectivityChanged
+  Stream<bool> get isConnected => connectivity.onConnectivityChanged
       .map((event) => event != ConnectivityResult.none);
 }

@@ -15,6 +15,13 @@ final tPersonalInformationModel = PersonalInformationModel(
     gender: 'gender',
     dateOfBirth: DateTime.parse('2022-07-18T16:37:47.475845Z').toLocal());
 
+final tPersonalInformationModelNullDOB = PersonalInformationModel(
+  userId: 'user1Id',
+  email: 'email',
+  phoneNumber: 'phoneNumber',
+  gender: 'gender',
+);
+
 final tNewPersonalInformationModel = PersonalInformationModel(
     userId: 'newUserId',
     email: 'email',
@@ -42,4 +49,11 @@ final tPersonalInformationJson = {
   'phoneNumber': 'phoneNumber',
   'gender': 'gender',
   'dateOfBirth': '2022-07-18T16:37:47.475845Z'
+};
+final tPersonalInformationJsonEmptyDOB = {
+  'userId': 'user1Id',
+  'email': 'email',
+  'phoneNumber': 'phoneNumber',
+  'gender': 'gender',
+  'dateOfBirth': ''
 };

@@ -1,12 +1,13 @@
 import '../../domain/entities/personal_information.dart';
 
+// ignore: must_be_immutable
 class PersonalInformationModel extends PersonalInformation {
   PersonalInformationModel(
       {required String userId,
       required String email,
       required String phoneNumber,
       required String gender,
-      required DateTime dateOfBirth})
+      DateTime? dateOfBirth})
       : super(
             userId: userId,
             email: email,
@@ -20,7 +21,9 @@ class PersonalInformationModel extends PersonalInformation {
         email: json?['email'],
         phoneNumber: json?['phoneNumber'],
         gender: json?['gender'],
-        dateOfBirth: DateTime.parse(json?['dateOfBirth']).toLocal(),
+        dateOfBirth: (json?['dateOfBirth'] as String).isNotEmpty
+            ? DateTime.parse(json?['dateOfBirth']).toLocal()
+            : null,
       );
 
   Map<String, dynamic> toJson() {
@@ -29,7 +32,8 @@ class PersonalInformationModel extends PersonalInformation {
       'email': email,
       'phoneNumber': phoneNumber,
       'gender': gender,
-      'dateOfBirth': dateOfBirth.toUtc().toIso8601String(),
+      'dateOfBirth':
+          dateOfBirth != null ? dateOfBirth!.toUtc().toIso8601String() : '',
     };
   }
 

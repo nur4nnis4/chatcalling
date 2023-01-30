@@ -1,18 +1,19 @@
 import 'package:equatable/equatable.dart';
 
+// ignore: must_be_immutable
 class PersonalInformation extends Equatable {
   final String userId;
-  final String email;
-  final String phoneNumber;
-  final String gender;
-  final DateTime dateOfBirth;
+  String email;
+  String phoneNumber;
+  String gender;
+  DateTime? dateOfBirth;
 
-  const PersonalInformation({
+  PersonalInformation({
     required this.userId,
     required this.email,
     required this.phoneNumber,
     required this.gender,
-    required this.dateOfBirth,
+    this.dateOfBirth,
   });
 
   @override

@@ -46,7 +46,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   }
 
   @override
-  Future<String> getCurrentUserId() {
+  Future<String> getCurrentUserId() async {
     return firebaseAuth
         .authStateChanges()
         .map((currentUser) => currentUser!.uid)
@@ -118,8 +118,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
             userId: googleUser.uid,
             email: googleUser.email ?? '',
             phoneNumber: googleUser.phoneNumber ?? '',
-            gender: '',
-            dateOfBirth: DateTime(0000, 0, 0));
+            gender: 'Prefer not to say');
         final user = UserModel(
             userId: googleUser.uid,
             username: googleUser.uid,

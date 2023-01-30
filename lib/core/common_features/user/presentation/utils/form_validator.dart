@@ -3,7 +3,11 @@ import 'package:dartz/dartz.dart';
 
 abstract class FormValidator {
   Either<Failure, bool> validate(
-      {String? username, String? displayName, String? email, String? password});
+      {String? username,
+      String? displayName,
+      String? email,
+      String? password,
+      String? phoneNumber});
 }
 
 class FormValidatorImpl implements FormValidator {
@@ -12,7 +16,8 @@ class FormValidatorImpl implements FormValidator {
       {String? username,
       String? displayName,
       String? email,
-      String? password}) {
+      String? password,
+      String? phoneNumber}) {
     try {
       // Validate Username
       if (username != null) {
@@ -50,6 +55,13 @@ class FormValidatorImpl implements FormValidator {
         if (password.length < 8)
           throw FormatException(
               'Password should contain at least 8 characters');
+      }
+
+      //Validate phoneNumber
+
+      if (phoneNumber != null) {
+        if (phoneNumber.contains(RegExp(r'\D')))
+          throw FormatException('Please input a valid phone number');
       }
 
       return Right(true);

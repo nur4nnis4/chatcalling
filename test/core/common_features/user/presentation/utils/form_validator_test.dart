@@ -141,4 +141,27 @@ void main() {
               'Password should contain at least 8 characters')));
     });
   });
+
+  group('Phone number validator', () {
+    test('Should return true when phone number is valid', () async {
+      // Act
+      final result1 = formValidator.validate(phoneNumber: '0816782998');
+      // Assert
+      expect(result1, Right(true));
+    });
+
+    test('Should return failure when phone number is invalid', () async {
+      // Act
+      final result1 = formValidator.validate(phoneNumber: '037384jhdhs');
+      final result2 = formValidator.validate(phoneNumber: '037384 7773');
+      final result3 = formValidator.validate(phoneNumber: '0_wewew');
+      // Assert
+      expect(result1,
+          Left(InvalidInputFailure('Please input a valid phone number')));
+      expect(result2,
+          Left(InvalidInputFailure('Please input a valid phone number')));
+      expect(result3,
+          Left(InvalidInputFailure('Please input a valid phone number')));
+    });
+  });
 }
