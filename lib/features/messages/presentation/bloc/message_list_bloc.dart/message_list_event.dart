@@ -15,12 +15,3 @@ class GetMessagesEvent extends MessageListEvent {
   @override
   List<Object> get props => [friendId];
 }
-
-class UpdateReadStatusEvent extends MessageListEvent {
-  final String friendId;
-
-  UpdateReadStatusEvent(this.friendId);
-
-  @override
-  List<Object> get props => [friendId];
-}

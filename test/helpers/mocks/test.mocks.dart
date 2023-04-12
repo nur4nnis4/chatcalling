@@ -660,13 +660,15 @@ class MockFormValidator extends _i1.Mock implements _i34.FormValidator {
           {String? username,
           String? displayName,
           String? email,
-          String? password}) =>
+          String? password,
+          String? phoneNumber}) =>
       (super.noSuchMethod(
               Invocation.method(#validate, [], {
                 #username: username,
                 #displayName: displayName,
                 #email: email,
-                #password: password
+                #password: password,
+                #phoneNumber: phoneNumber
               }),
               returnValue: _FakeEither_0<_i14.Failure, bool>())
           as _i2.Either<_i14.Failure, bool>);

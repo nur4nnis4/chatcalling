@@ -33,5 +33,5 @@ class UserInputConverter {
           email: email,
           phoneNumber: '',
           gender: 'Prefer not to say',
-          dateOfBirth: DateTime(0000, 00, 00));
+          dateOfBirth: DateTime(1900, 01, 01));
 }

@@ -18,10 +18,6 @@ class FriendsPage extends StatefulWidget {
 
 class _FriendsPageState extends State<FriendsPage> {
   late TextEditingController _searchController = TextEditingController();
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,16 +52,17 @@ class _FriendsPageState extends State<FriendsPage> {
                         user: state.friendList[i],
                         onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => widget.title ==
-                                          'Send Message'
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  widget.title == 'Send Message'
                                       ? MessageRoomPage(
                                           friendId: state.friendList[i].userId,
                                           friendUser: state.friendList[i],
                                         )
-                                      : ProfilePage(
-                                          user: state.friendList[i])));
+                                      : ProfilePage(user: state.friendList[i]),
+                            ),
+                          );
                         },
                       ),
                     ),

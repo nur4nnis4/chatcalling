@@ -1,4 +1,5 @@
 import 'package:chatcalling/core/cubit/current_page_cubit.dart';
+import 'package:chatcalling/core/push_notification/firebase_notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -13,6 +14,8 @@ import 'features/messages/presentation/bloc/conversation_list_bloc/conversation_
 import 'features/messages/presentation/pages/messages_page.dart';
 import 'l10n/l10n.dart';
 
+import 'injector.dart' as Injector;
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -21,9 +24,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late FirebaseNotification notification =
+      Injector.sLocator<FirebaseNotification>();
   @override
   void initState() {
     super.initState();
+    notification.requestPermission();
     Future.microtask(() {
       BlocProvider.of<UserBloc>(context).add(GetUserEvent());
       BlocProvider.of<PersonalInformationBloc>(context)

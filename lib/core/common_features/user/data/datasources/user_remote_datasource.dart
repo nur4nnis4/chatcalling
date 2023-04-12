@@ -39,8 +39,10 @@ class UserRemoteDatasourceImpl implements UserRemoteDatasource {
 
   @override
   Stream<List<UserModel>> getFriendList(String userId) async* {
-    yield* getUserData(userId).flatMap((user) => CombineLatestStream.list(
-        user.friendList.map((friendId) => getUserData(friendId))));
+    yield* getUserData(userId).flatMap((user) => user.friendList.isNotEmpty
+        ? CombineLatestStream.list(
+            user.friendList.map((friendId) => getUserData(friendId)))
+        : Stream.value([]));
   }
 
   @override

@@ -12,19 +12,42 @@ void main() {
     expect(tPersonalInformationModel, isA<PersonalInformation>());
   });
 
-  test('fromJson Should return a valid model', () async {
-    // Act
-    final result = PersonalInformationModel.fromJson(tPersonalInformationJson);
+  group('fromJson', () {
+    test('Should return a valid model', () async {
+      // Act
+      final result =
+          PersonalInformationModel.fromJson(tPersonalInformationJson);
 
-    //Assert
-    expect(result, tPersonalInformationModel);
+      //Assert
+      expect(result, tPersonalInformationModel);
+    });
+    test('Should return a valid model when dateOfBirth is empty', () async {
+      // Act
+      final result =
+          PersonalInformationModel.fromJson(tPersonalInformationJsonEmptyDOB);
+
+      //Assert
+      expect(result, tPersonalInformationModelNullDOB);
+    });
   });
 
-  test('toJson Should retun JSON map containing proper data', () async {
-    // Act
-    final result = tPersonalInformationModel.toJson();
+  group('toJson', () {
+    test('Should retun JSON map containing proper data', () async {
+      // Act
+      final result = tPersonalInformationModel.toJson();
 
-    // Assert
-    expect(result, tPersonalInformationJson);
+      // Assert
+      expect(result, tPersonalInformationJson);
+    });
+
+    test(
+        'Should retun JSON map containing proper data when dateOfBirth is null',
+        () async {
+      // Act
+      final result = tPersonalInformationModelNullDOB.toJson();
+
+      // Assert
+      expect(result, tPersonalInformationJsonEmptyDOB);
+    });
   });
 }

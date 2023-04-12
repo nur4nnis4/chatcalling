@@ -10,7 +10,6 @@ import '../../../../helpers/mocks/test.mocks.dart';
 
 void main() {
   late MockGetMessages mockGetMessages;
-  late MockUpdateReadStatus mockUpdateReadStatus;
   late MockGetCurrentUserId mockGetCurrentUserId;
 
   late MockUniqueId mockUniqueId;
@@ -23,12 +22,10 @@ void main() {
 
   setUp(() {
     mockGetMessages = MockGetMessages();
-    mockUpdateReadStatus = MockUpdateReadStatus();
     mockGetCurrentUserId = MockGetCurrentUserId();
     mockUniqueId = MockUniqueId();
     messagesBloc = MessageListBloc(
         getMessages: mockGetMessages,
-        updateReadStatus: mockUpdateReadStatus,
         uniqueId: mockUniqueId,
         getCurrentUserId: mockGetCurrentUserId);
 
@@ -99,23 +96,5 @@ void main() {
               mockGetMessages(conversationId: tConversationId),
               mockUniqueId.concat(tUserId, tFriendId),
             ]);
-  });
-
-  group('updateReadStatusEvent', () {
-    blocTest<MessageListBloc, MessageListState>(
-      'Should call UpdateReadStatus usecase   ',
-      build: () {
-        when(mockUpdateReadStatus(
-                conversationId: tConversationId, userId: tUserId))
-            .thenAnswer((_) async => Right('Success'));
-        when(mockUniqueId.concat(any, any)).thenReturn(tConversationId);
-        return messagesBloc;
-      },
-      act: (bloc) => bloc.add(UpdateReadStatusEvent(tConversationId)),
-      verify: (bloc) => [
-        mockUpdateReadStatus(conversationId: tConversationId, userId: tUserId),
-        mockUniqueId.concat(tUserId, tFriendId),
-      ],
-    );
   });
 }

@@ -4,6 +4,7 @@ final ThemeData light = ThemeData(
     scaffoldBackgroundColor: Color.fromARGB(255, 245, 245, 245), //#F5F5F5
     fontFamily: 'Poppins',
     dividerColor: Color.fromARGB(255, 238, 238, 238),
+    disabledColor: Color.fromARGB(255, 92, 92, 92),
     appBarTheme: AppBarTheme(
       elevation: 0,
       foregroundColor: Colors.black87,
@@ -34,6 +35,7 @@ final ThemeData dark = ThemeData(
   scaffoldBackgroundColor: Color.fromRGBO(21, 21, 21, 1),
   fontFamily: 'Poppins',
   dividerColor: Color.fromARGB(20, 23, 86, 175),
+  disabledColor: Color.fromARGB(255, 189, 189, 189),
   appBarTheme: AppBarTheme(
       elevation: 0,
       color: Color.fromARGB(0, 255, 255, 255),

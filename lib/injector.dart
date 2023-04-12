@@ -9,14 +9,24 @@ import 'package:chatcalling/core/common_features/user/domain/usecases/auth_useca
 import 'package:chatcalling/core/common_features/user/domain/usecases/auth_usecases/sign_out.dart';
 import 'package:chatcalling/core/common_features/user/domain/usecases/auth_usecases/sign_up_with_email.dart';
 import 'package:chatcalling/core/common_features/user/domain/usecases/user_usercases/check_username_availability.dart';
+import 'package:chatcalling/core/common_features/user/domain/usecases/user_usercases/update_personal_information.dart';
+import 'package:chatcalling/core/common_features/user/domain/usecases/user_usercases/update_user_data.dart';
 import 'package:chatcalling/core/common_features/user/presentation/bloc/sign_in_bloc/sign_in_bloc.dart';
 import 'package:chatcalling/core/common_features/user/presentation/bloc/sign_in_status_bloc/sign_in_status_bloc.dart';
 import 'package:chatcalling/core/common_features/user/presentation/bloc/sign_out_bloc/sign_out_bloc.dart';
 import 'package:chatcalling/core/common_features/user/presentation/bloc/sign_up_bloc/sign_up_bloc.dart';
+import 'package:chatcalling/core/common_features/user/presentation/bloc/update_user_bloc/update_user_bloc.dart';
+import 'package:chatcalling/core/common_features/user/presentation/bloc/username_availability_bloc/username_availability_bloc.dart';
 import 'package:chatcalling/core/common_features/user/presentation/utils/form_validator.dart';
 import 'package:chatcalling/core/common_features/user/presentation/utils/user_input_converter.dart';
+import 'package:chatcalling/core/network/network_bloc/network_bloc.dart';
+import 'package:chatcalling/core/network/network_info.dart';
+import 'package:chatcalling/core/push_notification/firebase_notification.dart';
+import 'package:chatcalling/features/messages/presentation/bloc/update_read_status_bloc/update_read_status_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -71,13 +81,28 @@ void init() {
   sLocator.registerLazySingleton<Time>(() => TimeImpl());
   sLocator.registerLazySingleton<CheckPlatform>(() => CheckPlatformImpl());
 
+  // Core - Network
+  sLocator.registerFactory(() => NetworkBloc(networkInfo: sLocator()));
+
+  sLocator.registerLazySingleton<NetworkInfo>(
+      () => NetworkInfoImpl(connectivity: sLocator()));
+
+  // Core - Push Notification
+
+  sLocator.registerLazySingleton<FirebaseNotification>(
+      () => FirebaseNotificationImpl(messaging: sLocator()));
+
   // EXTERNAL
+
+  sLocator.registerLazySingleton(() => Connectivity());
 
   sLocator.registerLazySingleton<FirebaseFirestore>(
       () => FirebaseFirestore.instance);
   sLocator
       .registerLazySingleton<FirebaseStorage>(() => FirebaseStorage.instance);
   sLocator.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
+  sLocator.registerLazySingleton<FirebaseMessaging>(
+      () => FirebaseMessaging.instance);
   sLocator.registerLazySingleton(() => GoogleSignIn());
 
   sLocator.registerLazySingleton(() => ImagePicker());
@@ -105,7 +130,6 @@ void initMessage() {
   // Bloc
   sLocator.registerFactory(() => MessageListBloc(
       getMessages: sLocator(),
-      updateReadStatus: sLocator(),
       uniqueId: sLocator(),
       getCurrentUserId: sLocator()));
   sLocator.registerFactory(() => ConversationListBloc(
@@ -113,6 +137,11 @@ void initMessage() {
   sLocator.registerFactory(() => SendMessageBloc(
       sendMessage: sLocator(),
       messageInputConverter: sLocator(),
+      getCurrentUserId: sLocator()));
+
+  sLocator.registerFactory(() => UpdateReadStatusBloc(
+      updateReadStatus: sLocator(),
+      uniqueId: sLocator(),
       getCurrentUserId: sLocator()));
 
   // Use cases
@@ -146,6 +175,9 @@ void initUser() {
   sLocator.registerFactory(() => SearchUserBloc(searchUser: sLocator()));
   sLocator.registerFactory(() => SignInStatusBloc(isSignedIn: sLocator()));
   sLocator.registerFactory(() => SignOutBloc(signOut: sLocator()));
+  sLocator.registerFactory(
+      () => UsernameAvailabilityBloc(checkUsernameAvailability: sLocator()));
+
   sLocator.registerFactory(() =>
       FriendListBloc(getFriendList: sLocator(), getCurrentUserId: sLocator()));
   sLocator.registerFactory(() => PersonalInformationBloc(
@@ -157,6 +189,10 @@ void initUser() {
       userInputConverter: sLocator()));
   sLocator.registerFactory(() =>
       SignInBloc(signInWithEmail: sLocator(), signInWithGoogle: sLocator()));
+  sLocator.registerFactory(() => UpdateUserBloc(
+      formValidator: sLocator(),
+      updateUserData: sLocator(),
+      updatePersonalInformation: sLocator()));
 
   // User Use cases
   sLocator.registerLazySingleton(() => GetUserData(sLocator()));
@@ -164,6 +200,8 @@ void initUser() {
   sLocator.registerLazySingleton(() => GetFriendList(sLocator()));
   sLocator.registerLazySingleton(() => SearchUser(sLocator()));
   sLocator.registerLazySingleton(() => CheckUsernameAvailability(sLocator()));
+  sLocator.registerLazySingleton(() => UpdateUserData(sLocator()));
+  sLocator.registerLazySingleton(() => UpdatePersonalInformation(sLocator()));
 
   // Auth Use cases
   sLocator.registerLazySingleton(() => GetCurrentUserId(sLocator()));
@@ -177,7 +215,9 @@ void initUser() {
   sLocator.registerLazySingleton<UserRepository>(
       () => UserRepositoryImpl(userRemoteDatasource: sLocator()));
   sLocator.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(
-      userRemoteDatasource: sLocator(), authRemoteDatasource: sLocator()));
+        userRemoteDatasource: sLocator(),
+        authRemoteDatasource: sLocator(),
+      ));
 
   // Data sources
   sLocator.registerLazySingleton<UserRemoteDatasource>(

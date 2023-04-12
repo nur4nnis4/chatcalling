@@ -22,24 +22,27 @@ class TimeFormat {
     if (isSameYear) {
       if (isSameMonth) {
         if (isSameDay) {
-          return DateFormat.Hm(languageCode).format(date);
+          return DateFormat.Hm(languageCode).format(date); // 14:58
         } else
-          return DateFormat.E(languageCode).format(date);
+          return DateFormat.E(languageCode).format(date); // Tue
       } else
-        return DateFormat.MMMd(languageCode).format(date);
+        return DateFormat.MMMd(languageCode).format(date); // Jan 15
     } else
-      return DateFormat.yMd(languageCode).format(date);
+      return DateFormat.yMd(languageCode).format(date); // 1/15/1996
   }
 
+  /// Example [17:08]
   // ignore: non_constant_identifier_names
   String Hm(DateTime date) {
     return DateFormat.Hm().format(date);
   }
 
+  /// Example [1/15/1996]
   String yMd(DateTime date, String languageCode) {
     return DateFormat.yMd(languageCode).format(date);
   }
 
+  /// Example [July 10, 1996]
   String yMMMMd(DateTime date, String languageCode) {
     return DateFormat.yMMMMd(languageCode).format(date);
   }

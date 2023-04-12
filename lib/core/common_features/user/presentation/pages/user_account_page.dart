@@ -1,5 +1,6 @@
 import 'package:chatcalling/core/common_features/user/presentation/bloc/personal_information_bloc/personal_information_bloc.dart';
 import 'package:chatcalling/core/common_features/user/presentation/bloc/sign_out_bloc/sign_out_bloc.dart';
+import 'package:chatcalling/core/common_features/user/presentation/pages/update_user_page.dart';
 
 import '../bloc/user_bloc/user_bloc.dart';
 import '../widgets/profile_header.dart';
@@ -10,9 +11,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class UserAccountPage extends StatelessWidget {
+class UserAccountPage extends StatefulWidget {
   UserAccountPage({Key? key}) : super(key: key);
 
+  @override
+  State<UserAccountPage> createState() => _UserAccountPageState();
+}
+
+class _UserAccountPageState extends State<UserAccountPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,15 +26,15 @@ class UserAccountPage extends StatelessWidget {
         listener: (_, state) {},
         child: SingleChildScrollView(
           child: BlocBuilder<UserBloc, UserState>(
-            builder: (context, userData) {
+            builder: (context, userState) {
               return BlocBuilder<PersonalInformationBloc,
                   PersonalInformationState>(
-                builder: (context, userPI) {
-                  if (userData is UserLoaded &&
-                      userPI is PersonalInformationLoaded) {
+                builder: (context, personalInformationState) {
+                  if (userState is UserLoaded &&
+                      personalInformationState is PersonalInformationLoaded) {
                     return Column(
                       children: [
-                        ProfileHeader(user: userData.userData),
+                        ProfileHeader(user: userState.userData),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(10, 17, 10, 0),
                           child: Column(
@@ -46,7 +52,20 @@ class UserAccountPage extends StatelessWidget {
                                           fontWeight: FontWeight.w600),
                                     ),
                                     IconButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => UpdateUserPage(
+                                                  user: userState.userData,
+                                                  personalInformation:
+                                                      personalInformationState
+                                                          .personalInformation),
+                                            )).then((_) {
+                                          // To refresh page after updating user data
+                                          setState(() {});
+                                        });
+                                      },
                                       iconSize: 20,
                                       splashRadius: 22,
                                       padding: EdgeInsets.all(0),
@@ -63,26 +82,33 @@ class UserAccountPage extends StatelessWidget {
                               ),
                               UserTile(
                                 title: Text('About'),
-                                subtitle: userData.userData.about,
+                                subtitle: userState.userData.about,
                               ),
                               UserTile(
                                 title: Text('Gender'),
-                                subtitle: userPI.personalInformation.gender,
+                                subtitle: personalInformationState
+                                    .personalInformation.gender,
                               ),
                               UserTile(
                                 title: Text('DOB'),
-                                subtitle: sLocator.get<TimeFormat>().yMMMMd(
-                                    userPI.personalInformation.dateOfBirth,
-                                    L10n.getLocalLanguageCode(context)),
+                                subtitle: personalInformationState
+                                            .personalInformation.dateOfBirth !=
+                                        null
+                                    ? sLocator.get<TimeFormat>().yMMMMd(
+                                        personalInformationState
+                                            .personalInformation.dateOfBirth!,
+                                        L10n.getLocalLanguageCode(context))
+                                    : '',
                               ),
                               UserTile(
                                 title: Text('Phone'),
-                                subtitle:
-                                    userPI.personalInformation.phoneNumber,
+                                subtitle: personalInformationState
+                                    .personalInformation.phoneNumber,
                               ),
                               UserTile(
                                 title: Text('Email'),
-                                subtitle: userPI.personalInformation.email,
+                                subtitle: personalInformationState
+                                    .personalInformation.email,
                               ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -106,8 +132,11 @@ class UserAccountPage extends StatelessWidget {
                       ],
                     );
                   } else {
-                    return Center(
-                        child: Container(child: CircularProgressIndicator()));
+                    return Container(
+                        alignment: Alignment.center,
+                        height:
+                            MediaQuery.of(context).size.height - kToolbarHeight,
+                        child: CircularProgressIndicator());
                   }
                 },
               );

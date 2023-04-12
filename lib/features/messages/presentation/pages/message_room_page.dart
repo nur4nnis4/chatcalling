@@ -4,6 +4,7 @@ import 'package:chatcalling/core/common_features/user/domain/entities/user.dart'
 import 'package:chatcalling/core/common_features/user/presentation/bloc/other_user_bloc/other_user_bloc.dart';
 import 'package:chatcalling/core/common_features/user/presentation/pages/profile_page.dart';
 import 'package:chatcalling/core/helpers/time.dart';
+import 'package:chatcalling/features/messages/presentation/bloc/update_read_status_bloc/update_read_status_bloc.dart';
 import 'package:chatcalling/injector.dart';
 import 'package:chatcalling/l10n/l10n.dart';
 
@@ -36,7 +37,7 @@ class _MessageRoomPageState extends State<MessageRoomPage> {
     Future.microtask(() {
       Provider.of<MessageListBloc>(context, listen: false)
           .add(GetMessagesEvent(widget.friendId));
-      Provider.of<MessageListBloc>(context, listen: false)
+      Provider.of<UpdateReadStatusBloc>(context, listen: false)
           .add(UpdateReadStatusEvent(widget.friendId));
       BlocProvider.of<OtherUserBloc>(context)
           .add(GetOtherUserEvent(userId: widget.friendUser.userId));
@@ -59,6 +60,8 @@ class _MessageRoomPageState extends State<MessageRoomPage> {
                     child: CircularProgressIndicator(),
                   );
                 } else if (messageListState is MessagesLoaded) {
+                  print('Loaded');
+
                   return MessageListView(
                       messageList: messageListState.messageList,
                       userId: messageListState.userId);
