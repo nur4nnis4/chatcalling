@@ -31,6 +31,6 @@ class CustomSnackbar {
   static SnackBar errorSnackBar(BuildContext context, {String? text}) =>
       SnackBar(
         content: Text(text ?? 'Unknown error.'),
-        backgroundColor: Theme.of(context).errorColor,
+        backgroundColor: Theme.of(context).colorScheme.error,
       );
 }

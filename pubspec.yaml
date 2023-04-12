@@ -44,7 +44,7 @@ dependencies:
   file_picker: ^5.2.0+1
   photo_view: ^0.14.0
 
-dependency_overrides: 
+dependency_overrides:
   google_sign_in_web: ^0.10.2+1
 
 dev_dependencies:

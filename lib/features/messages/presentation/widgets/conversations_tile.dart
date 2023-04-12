@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../../core/helpers/time.dart';
 import '../../domain/entities/conversation.dart';
@@ -128,10 +128,10 @@ class LoadedConversationsTile extends StatelessWidget {
                     maintainSize: true,
                     maintainState: true,
                     maintainAnimation: true,
-                    child: Badge(
+                    child: badges.Badge(
                       toAnimate: false,
                       elevation: 0,
-                      shape: BadgeShape.square,
+                      shape: badges.BadgeShape.square,
                       borderRadius: BorderRadius.circular(45),
                       padding: EdgeInsets.symmetric(horizontal: 7, vertical: 2),
                       badgeColor: Theme.of(context).colorScheme.primary,
