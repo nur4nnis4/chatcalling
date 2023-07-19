@@ -2,14 +2,14 @@ import 'package:chatcalling/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class SearchBar extends StatelessWidget {
+class CustomSearchBar extends StatelessWidget {
   final TextEditingController controller;
   final FocusNode? focusNode;
   final bool? autofocus;
   final bool? enabled;
   final Function(String)? onChanged;
   final Function()? onTap;
-  const SearchBar(
+  const CustomSearchBar(
       {Key? key,
       required this.controller,
       this.onChanged,

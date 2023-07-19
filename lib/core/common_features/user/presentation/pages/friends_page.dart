@@ -33,7 +33,7 @@ class _FriendsPageState extends State<FriendsPage> {
                   MaterialPageRoute(
                     builder: (context) => SearchUserPage(title: widget.title),
                   )),
-              child: SearchBar(
+              child: CustomSearchBar(
                 controller: _searchController,
                 enabled: false,
               ),

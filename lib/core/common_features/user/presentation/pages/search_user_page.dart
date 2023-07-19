@@ -26,7 +26,7 @@ class _SearchUserPageState extends State<SearchUserPage> {
       child: Scaffold(
           appBar: AppBar(
             leadingWidth: 35,
-            title: SearchBar(
+            title: CustomSearchBar(
               controller: _searchController,
               focusNode: _searchFNode,
               autofocus: true,
